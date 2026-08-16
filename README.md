@@ -1,1 +1,81 @@
-# Ibov_predictions
+# TCC — Embeddings de notícias financeiras em português na previsão do retorno diário do Ibovespa
+
+Avaliação com validação walk-forward de se embeddings textuais de notícias
+financeiras (InfoMoney) melhoram a previsão do retorno diário (D+1) do
+Ibovespa frente a baselines financeiros clássicos e a um modelo tabular forte
+treinado apenas com preço.
+
+## Estrutura do repositório
+
+```
+colabs/     notebooks (00-06), adaptados para execução local
+scripts/    scripts de coleta (rodam uma vez, fora dos notebooks)
+data/raw/   dados brutos coletados (preços, corpus de notícias)
+data/processed/  features derivadas, embeddings, sequências para o LSTM
+models/     checkpoints (quando salvos)
+reports/    métricas, previsões e figuras geradas pelos notebooks
+utils/      tcc_utils.py — fonte única canônica das funções centrais
+```
+
+## Ambiente
+
+Windows, Python 3.11, GPU NVIDIA (usado: RTX 3070, 8 GB, driver CUDA 12.x+).
+
+```bash
+python -m venv .venv
+.venv\Scripts\pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124
+.venv\Scripts\pip install -r requirements.txt
+.venv\Scripts\python -m ipykernel install --user --name tcc_ibov --display-name "tcc_ibov (.venv)"
+```
+
+Verificar: `python -c "import torch; print(torch.cuda.is_available())"` deve
+imprimir `True`. Não instalar o build `+cpu` do torch — é um erro recorrente
+ao migrar de ambiente.
+
+## Ordem de execução
+
+**Coleta (uma vez só; dados já estão em `data/raw/` e `data/processed/` neste repositório — só reexecute se for recoletar do zero):**
+
+1. `colabs/02_coleta_noticias.ipynb` — descobre sitemaps, monta a fila de URLs (`fila_artigos.parquet`).
+2. `scripts/coleta_artigos.py` — baixa e extrai headline/datePublished de cada URL da fila (shards de 1000, retomável, 5 threads).
+3. `scripts/repesca.py` — refaz as URLs que falharam por erro de rede.
+4. `scripts/consolida_corpus.py` — junta shards, dedup, timezone, filtro de período → `infomoney_corpus.parquet`.
+5. `scripts/verifica_timezone.py` — checagem pontual (amostra) de que o JSON-LD usa UTC verdadeiro.
+6. `colabs/01_coleta_precos.ipynb` — limpeza da série de preços (Stooq).
+7. `scripts/coleta_copom.py` — comunicados do Copom via API de dados abertos do BCB (49 reuniões, 2018-2024) → `copom_comunicados.parquet`.
+
+**Pipeline de features e modelagem (nesta ordem — cada notebook depende do anterior):**
+
+0. `colabs/00_setup.ipynb` — grava `utils/tcc_utils.py` canônico (fonte única: `build_cutoffs`, `assign_trading_day`, `make_target`, `walk_forward_splits`). **Rode sempre primeiro** — os demais notebooks só importam, nunca reescrevem esse arquivo.
+1. `colabs/01_coleta_precos.ipynb` — `bvsp_clean.parquet`.
+2. `colabs/02_coleta_noticias.ipynb` — `corpus_bucketed.parquet` não é gerado aqui (ver notebook 03); este notebook só monta a fila de coleta.
+3. `colabs/03_features_texto.ipynb` — bucket de notícias por pregão, extração de embeddings BERTimbau e FinBERT-PT-BR (sentimento + embeddings), `features_preco.parquet`, `features_texto_bertimbau.parquet`, `features_texto_finbert.parquet`, `features_sentimento_finbert.parquet`.
+4. `colabs/04_baselines.ipynb` — Random Walk, ARIMA/ARIMAX, XGBoost. Usa a mesma geometria de fold canônica (`walk_forward_splits`, `n_splits+1`, `embargo=0`) do LSTM, para permitir comparação par-a-par.
+5. `scripts/features_copom.py` — classificação zero-shot hawkish/dovish dos comunicados do Copom (`MoritzLaurer/mDeBERTa-v3-base-mnli-xnli`, com seleção empírica de janela início/fim do texto por correlação com a decisão real de Selic) e construção de `features_copom.parquet` (forward-fill entre reuniões, mesmo corte de 17h das notícias).
+6. `colabs/05_lstm.ipynb` — LSTM só-preço (nível 4), LSTM+BERTimbau (nível 5/5b), LSTM+sentimento FinBERT (Via 2), LSTM+embeddings FinBERT (Via 1/1b), LSTM+Copom (Via 3).
+7. `colabs/06_avaliacao_final.ipynb` — testes estatísticos (Diebold-Mariano pareado, Pesaran-Timmermann pooled, correção de Holm), tabela comparativa consolidada dos modelos, e métricas financeiras (Sharpe, max drawdown, com e sem custo de transação).
+8. `colabs/07_ablacoes.ipynb` — robustez: texto do dia D vs. D-1, e sweep de janela de lookback {1,3,5,10} vs. o padrão 21.
+
+Cada notebook pode ser executado de ponta a ponta via:
+
+```bash
+jupyter nbconvert --to notebook --execute --inplace \
+  --ExecutePreprocessor.kernel_name=tcc_ibov \
+  --ExecutePreprocessor.timeout=3600 \
+  colabs/<notebook>.ipynb
+```
+
+## Reprodutibilidade
+
+- Sementes fixadas (`set_seed`) e determinismo CUDA travado (`cudnn.deterministic=True`) em todo treino de LSTM.
+- Modelos estocásticos (XGBoost N=10 sementes, LSTM N=5 sementes) reportam média ± desvio, nunca um único run.
+- Toda transformação dependente de dados (scaler, PCA, calibração isotônica, ordem do ARIMA) é ajustada **somente no treino de cada fold** do walk-forward — nunca na série inteira.
+- **Ressalva:** os resultados originais deste projeto foram gerados numa T4 do Google Colab; a migração para a RTX 3070 local reproduziu os mesmos números dentro da variação esperada entre sementes (diferenças de ponto flutuante entre GPUs/versões de CUDA não são bit-a-bit idênticas, mas não mudam nenhuma conclusão). Os números da RTX 3070 são os reportados como definitivos no texto do TCC.
+
+## Alvo e anti-vazamento
+
+O alvo (`y_t = ln(close_{t+1}/close_t)`) é gerado em um único ponto
+(`make_target`, `utils/tcc_utils.py`). A validação é sempre walk-forward
+temporal (`walk_forward_splits`), com `embargo=21` no LSTM (= lookback) para
+que nenhuma sequência de teste use dias que foram de treino; baselines usam
+`embargo=0`. Nenhum split é aleatório em nenhum ponto do projeto.
