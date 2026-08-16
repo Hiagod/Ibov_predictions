@@ -32,11 +32,15 @@ LSTM de forma estatisticamente significativa. Sob custo de transação de 5
 pontos-base por operação — estimativa condizente com o mercado brasileiro
 —, dez das onze estratégias mecânicas derivadas das previsões apresentam
 índice de Sharpe negativo ou nulo, e a única exceção observada é
-estatisticamente indistinguível de zero e instável entre partições.
-Conclui-se que, sob validação rigorosa e sem vazamento temporal de
-informação, embeddings de notícias financeiras em português não melhoram a
-previsão do retorno diário do Ibovespa, constituindo um resultado nulo
-obtido com rigor metodológico, e não uma limitação de implementação.
+estatisticamente indistinguível de zero e instável entre partições. Uma
+verificação de robustez, retreinando todos os modelos de texto sobre o
+corpo completo das matérias (56.819 textos, em vez de apenas a manchete),
+reproduz o mesmo padrão nulo, descartando a hipótese de que o resultado
+decorra do escopo textual restrito. Conclui-se que, sob validação
+rigorosa e sem vazamento temporal de informação, embeddings de notícias
+financeiras em português não melhoram a previsão do retorno diário do
+Ibovespa, constituindo um resultado nulo obtido com rigor metodológico, e
+não uma limitação de implementação.
 
 **Palavras-chave:** previsão de séries financeiras, embeddings de texto,
 BERTimbau, FinBERT, validação walk-forward, Ibovespa.
@@ -780,6 +784,71 @@ idênticos a zero. Esse conjunto de resultados corrobora, sob métrica de
 utilidade econômica direta, a conclusão obtida pelos testes estatísticos
 de acurácia: nenhum modelo produz vantagem operacionalizável.
 
+### 5.7 Robustez: corpo completo das matérias
+
+A análise apresentada nas seções anteriores utiliza exclusivamente a
+manchete de cada matéria, uma vez que o corpus original foi coletado por
+requisição em streaming interrompida antes do corpo do texto (Seção 7).
+Para testar diretamente se essa restrição de escopo explica a ausência de
+sinal preditivo, coletou-se o corpo completo das 57.611 matérias do
+corpus, via os mesmos parágrafos filhos diretos do elemento
+`article.im-article` do HTML, obtendo-se texto com sucesso para 56.819
+matérias (98,6%; mediana de 2.584 caracteres, percentil 90 em 7.540
+caracteres). Repetiu-se, sobre esse corpo completo, a extração de
+embeddings BERTimbau e FinBERT-PT-BR (mesmo *mean-pooling* mascarado,
+comprimento máximo de 512 tokens — o limite do modelo, contra os 64 usados
+para manchetes), a agregação diária por pregão e o retreinamento de todas
+as sete variantes de LSTM com texto (níveis 5 e 5b, vias 1, 1b e 2), sob
+protocolo idêntico ao original: mesmas sementes, mesmos folds
+walk-forward, mesmo embargo de 21 dias, PCA e normalização ajustados
+exclusivamente no treino de cada fold.
+
+| Modelo | MCC (manchete) | MCC (corpo completo) | Δ |
+|---|---|---|---|
+| LSTM + BERTimbau k=8 | −0,018 | −0,003 | +0,015 |
+| LSTM + BERTimbau k=30 | −0,009 | +0,001 | +0,009 |
+| LSTM + FinBERT emb. k=8 | −0,017 | −0,006 | +0,011 |
+| LSTM + FinBERT emb. k=30 | −0,012 | −0,004 | +0,008 |
+| LSTM + FinBERT sentimento | +0,004 | +0,002 | −0,002 |
+
+*(Fontes: `reports/lstm_*_full.parquet` em cada diretório. O desvio-padrão
+entre as cinco sementes, para cada modelo e em ambas as versões, situa-se
+entre 0,04 e 0,07 — uma ordem de grandeza acima de todos os Δ reportados.)*
+
+Os deltas são pequenos, sistematicamente positivos e, em todos os casos,
+inferiores ao desvio-padrão entre sementes (0,04–0,07), portanto
+estatisticamente indistinguíveis de ruído de amostragem. O teste de
+Pesaran-Timmermann pooled permanece não significativo para os onze
+modelos após correção de Holm, com acurácia direcional agregada
+praticamente idêntica à obtida com manchetes (por exemplo, LSTM-preço:
+DA=0,4864 em ambas as versões, por não depender do texto). No teste de
+Diebold-Mariano pareado, o padrão qualitativo se mantém: nenhuma
+comparação em que o texto (manchete ou corpo completo) supera
+significativamente o preço isolado ou o XGBoost; ao contrário, das
+comparações significativas após Holm-Bonferroni — quatro de treze com
+manchetes, duas de treze com corpo completo —, todas favorecem o modelo
+mais simples (XGBoost) sobre a variante de LSTM com texto, nunca o
+inverso.
+
+No plano financeiro, o LSTM+BERTimbau k=30 exibe Sharpe líquido de custos
+substancialmente mais alto com o corpo completo (+0,59, contra −0,02 com
+manchetes); dado que o MCC subjacente desse mesmo modelo variou apenas de
+−0,009 para +0,001 — modificação trivial, dentro do ruído entre sementes
+—, essa oscilação de Sharpe ilustra a sensibilidade já discutida na Seção
+5.6: métricas financeiras calculadas sobre uma única trajetória de
+backtest amplificam diferenças pequenas e estatisticamente não
+significativas nas previsões, e não devem ser lidas como evidência de
+ganho real proveniente do corpo do texto.
+
+Conclui-se que o resultado nulo não constitui artefato do uso exclusivo
+de manchetes: ampliar o texto disponível em cerca de trinta vezes (de
+dezenas de caracteres para milhares) não desloca o MCC, a acurácia
+direcional ou os testes de significância de forma perceptível. Esse
+achado reforça a interpretação mecanicista já estabelecida na Seção 5.5 —
+o texto financeiro carrega sinal contemporâneo, não preditivo — como
+explicação mais provável para a ausência de ganho do que a insuficiência
+de informação textual disponível ao modelo.
+
 ---
 
 ## 6. Discussão
@@ -871,27 +940,25 @@ consistente por nenhuma das arquiteturas aqui avaliadas.
   de mercado; não foi possível mitigá-lo, por exemplo mediante
   reponderação de classes ou comparação com outro modelo de sentimento,
   em razão de restrição de tempo.
-- **Apenas o título da matéria, não o corpo do texto.** Por desenho da
-  coleta — requisição em streaming, interrompida a aproximadamente 200KB
-  para capturar somente o bloco JSON-LD do cabeçalho HTML, sem baixar a
-  página completa — o corpus contém exclusivamente a manchete de cada
-  matéria; o corpo do texto nunca foi coletado (o schema do corpus não
-  possui sequer uma coluna de conteúdo). Essa é uma limitação de escopo
-  substancial, e não incidental: a Seção 5.4 identificou colunas-título
-  como "Os 5 assuntos que vão movimentar o mercado nesta [dia]", cujo
-  título é genérico por construção, mas cujo corpo presumivelmente lista
-  conteúdo específico do dia (nomes de empresas, eventos, números) — ou
-  seja, exatamente a informação que tornaria aquela manchete
-  informativa foi descartada antes mesmo de chegar ao modelo de linguagem.
-  O mesmo raciocínio, em grau menor, aplica-se a qualquer manchete: um
-  título é, por natureza, um resumo compacto de um texto mais rico, e não
-  é possível, com os dados aqui coletados, distinguir se a ausência de
-  sinal preditivo reflete a ausência real de informação explorável nas
-  notícias financeiras ou a perda de informação inerente ao uso exclusivo
-  de títulos. Um teste direto dessa hipótese — repetir a extração de
-  embeddings sobre o corpo completo das matérias — não foi realizado
-  nesta versão do trabalho, e constitui a extensão mais natural para
-  trabalhos futuros.
+- **Análise principal restrita à manchete; corpo completo truncado em 512
+  tokens na verificação de robustez.** Por desenho da coleta original —
+  requisição em streaming, interrompida a aproximadamente 200KB para
+  capturar somente o bloco JSON-LD do cabeçalho HTML — o corpus usado nas
+  Seções 5.1 a 5.6 contém exclusivamente a manchete de cada matéria. A
+  Seção 5.7 testou diretamente se essa restrição de escopo explicava o
+  resultado nulo, recoletando o corpo completo de 56.819 matérias (98,6%
+  do corpus) e retreinando todas as variantes de LSTM com texto sob
+  protocolo idêntico; os deltas de MCC observados (todos entre −0,002 e
+  +0,015) permaneceram muito inferiores ao desvio-padrão entre sementes, o
+  que indica que a ausência de sinal preditivo não decorre da limitação de
+  escopo do texto. Uma limitação residual permanece: o corpo completo,
+  com mediana de 2.584 caracteres, foi truncado em 512 tokens — o limite
+  de comprimento de contexto do BERTimbau e do FinBERT-PT-BR —, de modo
+  que artigos mais longos (o percentil 90 chega a 7.540 caracteres) têm
+  apenas sua porção inicial representada nos embeddings. Estratégias de
+  particionamento em blocos (*chunking*) com agregação posterior poderiam,
+  em princípio, capturar o texto integral, mas não foram testadas em razão
+  de restrição de tempo.
 - **Cobertura editorial única.** O corpus está restrito às seções
   *mercados* e *economia* de um único veículo (InfoMoney); vieses
   editoriais específicos desse veículo não foram controlados nem
