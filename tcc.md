@@ -743,8 +743,47 @@ resistiu ao teste de permutação (p=0,290) — resultado consistente com
 efeito de estatística de ordem sobre amostra pequena e múltiplos
 componentes testados, não com sinal real.
 
+Testou-se, por fim, uma hipótese estrutural mais radical: seria o próprio
+uso de uma representação densa e contextual — e não a anisotropia
+especificamente — o fator que suprime sinal? A literatura recente de
+avaliação de embeddings no domínio financeiro documenta que, em tarefas de
+similaridade semântica financeira, uma representação lexical simples de
+*bag-of-words* (BoW) supera embeddings densos sofisticados (TANG; YANG,
+2025), achado que motivou testar diretamente se o mesmo padrão se repete
+na tarefa de previsão de retorno deste trabalho. Substituiu-se o embedding
+do BERTimbau por uma representação TF-IDF do texto agregado do dia,
+reduzida por decomposição em valores singulares truncada (SVD) a $k$
+componentes — análogo esparso ao PCA já aplicado aos embeddings densos —,
+sob o mesmo protocolo (vocabulário do TF-IDF e SVD ajustados
+exclusivamente no treino de cada fold). Testaram-se $k=8$ e $k=30$, este
+último por precaução análoga à já aplicada ao BERTimbau: o SVD sobre o
+espaço lexical (vocabulário de até 5.000 termos, após remoção de
+*stopwords* do português) reteve apenas 6,6% ($k=8$) e 16,1% ($k=30$) da
+variância, proporção muito inferior à retida pelo BERTimbau nos mesmos $k$
+(45–55% e 65–70%, respectivamente) — reflexo da dispersão estrutural
+maior do espaço lexical frente ao denso.
+
+| Representação | MCC ($k=8$) | MCC ($k=30$) |
+|---|---|---|
+| BERTimbau (denso) | −0,018 ± 0,054 | −0,009 ± 0,060 |
+| BoW/TF-IDF (esparso) | −0,021 ± 0,063 | −0,016 ± 0,052 |
+
+*(Fonte: `reports/lstm_bow_k8_full.parquet`, `reports/lstm_bow_k30_full.parquet`.)*
+
+Em nenhuma configuração a representação lexical esparsa produziu MCC
+distinguível de zero, tampouco diferente do já obtido pela representação
+densa — o achado de Tang e Yang (2025) não se replica na tarefa de
+previsão de retorno diário aqui tratada. Combinado ao teste de anisotropia
+já apresentado, esse resultado indica que a escolha específica de
+representação textual — densa ou esparsa, corrigida ou não quanto à
+anisotropia — não constitui o fator limitante: o texto financeiro, em
+qualquer das representações testadas, carrega o mesmo sinal contemporâneo
+e não preditivo (Seção 5.5).
+
 O resultado nulo mostra-se, portanto, robusto tanto à anisotropia dos
-embeddings quanto a intervenções razoáveis de limpeza e filtragem textual.
+embeddings quanto a intervenções razoáveis de limpeza e filtragem textual,
+e também à substituição da própria representação densa por uma
+representação lexical esparsa.
 
 ### 5.5 Sentimento reativo versus sentimento preditivo
 
@@ -1187,6 +1226,9 @@ contribuição científica válida.
 - TORRES, R.; BONOMO, M.; FERNANDES, C. A Aleatoriedade do Passeio na
   Bovespa: Testando a Eficiência do Mercado Acionário Brasileiro. *Revista
   Brasileira de Economia*, v. 56, n. 2, 2002.
+- TANG, Y.; YANG, Y. FinMTEB: Finance Massive Text Embedding Benchmark. In:
+  *Proceedings of the 2025 Conference on Empirical Methods in Natural
+  Language Processing (EMNLP)*, 2025.
 
 ---
 

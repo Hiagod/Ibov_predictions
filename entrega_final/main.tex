@@ -222,7 +222,11 @@ FinBERT   & 0,082 & 0,079 & 0,215 & 0,189 \\
 \end{center}
 \end{table}
 
-Remo\c{c}\~ao de manchetes-template recorrentes (1,5\% do corpus) e isolamento de linguagem prospectiva (9,6\%) versus retrospectiva (0,4\%) tamb\'em n\~ao produziram correla\c{c}\~ao preditiva distingu\'ivel de ru\'ido ($p\in\{0{,}29$--$0{,}87\}$ em todos os casos). O resultado nulo mostra-se, portanto, robusto tanto \`a anisotropia dos embeddings quanto a interven\c{c}\~oes razo\'aveis de limpeza textual.
+Remo\c{c}\~ao de manchetes-template recorrentes (1,5\% do corpus) e isolamento de linguagem prospectiva (9,6\%) versus retrospectiva (0,4\%) tamb\'em n\~ao produziram correla\c{c}\~ao preditiva distingu\'ivel de ru\'ido ($p\in\{0{,}29$--$0{,}87\}$ em todos os casos).
+
+Testou-se ainda hip\'otese mais radical: seria a pr\'opria representa\c{c}\~ao densa, e n\~ao a anisotropia, o fator limitante? A literatura recente de embeddings financeiros documenta que um \emph{bag-of-words} (BoW) simples supera embeddings densos em similaridade sem\^antica financeira \cite{tangyang2025}. Substituiu-se o embedding do BERTimbau por TF-IDF do texto do dia reduzido via SVD truncada (an\'alogo esparso ao PCA), vocabul\'ario e SVD ajustados s\'o no treino de cada fold: MCC de $-0{,}021\pm0{,}063$ ($k$=8) e $-0{,}016\pm0{,}052$ ($k$=30) -- indistingu\'ivel do denso ($-0{,}018\pm0{,}054$ e $-0{,}009\pm0{,}060$, respectivamente) e de zero. O achado da literatura n\~ao se replica aqui.
+
+O resultado nulo mostra-se, portanto, robusto tanto \`a anisotropia dos embeddings quanto a interven\c{c}\~oes razo\'aveis de limpeza textual e \`a substitui\c{c}\~ao da representa\c{c}\~ao densa por uma esparsa.
 
 \subsection{Robustez: corpo completo das mat\'erias}
 \label{sec:corpo-completo}
@@ -324,6 +328,7 @@ Todo o c\'odigo, dados brutos, vari\'aveis derivadas e resultados reportados est
 \bibitem{gukellyxiu2020} S. Gu, B. Kelly, and D. Xiu, ``Empirical Asset Pricing via Machine Learning,'' \emph{The Review of Financial Studies}, vol. 33, no. 5, pp. 2223--2273, 2020.
 \bibitem{sirignanocont2019} J. Sirignano and R. Cont, ``Universal features of price formation in financial markets: perspectives from Deep Learning,'' \emph{Quantitative Finance}, vol. 19, no. 9, pp. 1449--1459, 2019.
 \bibitem{torres2002} R. Torres, M. Bonomo, and C. Fernandes, ``A Aleatoriedade do Passeio na Bovespa: Testando a Efici\^encia do Mercado Acion\'ario Brasileiro,'' \emph{Revista Brasileira de Economia}, vol. 56, no. 2, 2002.
+\bibitem{tangyang2025} Y. Tang and Y. Yang, ``FinMTEB: Finance Massive Text Embedding Benchmark,'' in \emph{Proc. 2025 Conf. on Empirical Methods in Natural Language Processing (EMNLP)}, 2025.
 \end{thebibliography}
 
 \end{document}
