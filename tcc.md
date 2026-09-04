@@ -146,7 +146,32 @@ propriedades (Seção 5.5): o FinBERT-PT-BR aqui utilizado produz sentimento
 fortemente correlacionado ao retorno contemporâneo, mas não ao retorno
 futuro, o que é consistente com a hipótese de eficiência informacional de
 mercado, segundo a qual a informação relevante já se encontra precificada
-no momento em que a notícia é publicada e indexada.
+no momento em que a notícia é publicada e indexada. Essa dificuldade em
+extrair sentimento genuinamente informativo de texto financeiro tem raiz
+documentada desde Loughran e McDonald (2011), que demonstraram que léxicos
+de sentimento genéricos classificam erroneamente parte substancial do
+vocabulário técnico financeiro como negativo — precisamente o padrão de
+viés observado no FinBERT-PT-BR nesta amostra (Seção 5.5).
+
+**Onde a previsão funciona: regimes estruturalmente distintos.** A
+literatura de aprendizado de máquina em finanças documenta sucesso
+preditivo genuíno e robusto, mas tipicamente fora do regime testado neste
+trabalho. Em corte transversal, com milhares de ativos e centenas de
+características fundamentalistas, árvores e redes neurais alcançam poder
+explicativo estatística e economicamente significativo sobre retornos
+mensais (GU; KELLY; XIU, 2020). Em alta frequência, tendo o livro de
+ofertas como fonte de informação, redes neurais preveem a direção do preço
+em horizonte de segundos, com acurácia estável entre ativos de diferentes
+setores (SIRIGNANO; CONT, 2019). Em ambos os casos, o que viabiliza a
+previsibilidade é estruturalmente distinto do problema aqui tratado: poder
+estatístico massivo obtido por meio de seção transversal, no primeiro
+caso; horizonte curto o bastante para que a informação pública ainda não
+tenha sido precificada, no segundo. Prever a direção de um único índice,
+em horizonte diário, a partir de texto de notícias públicas, combina
+justamente as três características menos favoráveis à previsibilidade sob
+a hipótese de eficiência de mercado — o que contextualiza o resultado
+nulo deste trabalho como esperado pela teoria, e não como anomalia a ser
+explicada por falha metodológica.
 
 ---
 
@@ -582,9 +607,9 @@ financeiras) trata desse ponto diretamente: mesmo o modelo de melhor
 desempenho relativo apresenta índice de Sharpe líquido próximo de zero ou
 negativo.
 
-### 5.3 Robustez: defasagem temporal e janela de lookback
+### 5.3 Robustez: defasagem temporal, janela de lookback e agregação por recência
 
-Duas verificações adicionais testam se o resultado nulo depende de
+Três verificações adicionais testam se o resultado nulo depende de
 escolhas arbitrárias de projeto.
 
 **Defasagem temporal (D versus D−1).** A substituição do texto do próprio
@@ -620,6 +645,26 @@ desvio-padrão entre sementes em torno de zero, e não se observa tendência
 monotônica discernível conforme a janela aumenta. O resultado nulo não
 constitui, portanto, artefato da escolha específica de 21 dias, tampouco
 da escolha de utilizar o texto do próprio dia em vez do dia anterior.
+
+**Agregação por recência (última manchete versus média do dia).** O
+pipeline principal agrega o dia por média de todas as manchetes até o
+corte das 17h. Como o achado central deste trabalho (Seção 5.5) é que o
+sinal textual correlaciona-se com o retorno do próprio dia, e não do
+seguinte, é plausível que a média dilua a manchete mais recente — mais
+próxima do fechamento, portanto potencialmente mais "fresca" — com
+notícias da manhã, já mais distantes do fechamento em termos relativos.
+Testou-se uma agregação alternativa, substituindo a média do dia pela
+manchete de maior timestamp dentro do próprio `trading_day` (a mais
+recente antes do corte), sem necessidade de nova coleta. O resultado não
+confirma a hipótese: MCC de −0,023 ± 0,052 para a última manchete, contra
+−0,018 ± 0,054 para a média do dia — dentro do mesmo intervalo de ruído
+entre sementes, e não mais próximo de zero. A correlação preditiva
+direta entre a última manchete (projetada em 8 componentes principais) e
+o retorno de D+1 tampouco se eleva (máximo de |r| = 0,057, na mesma faixa
+das demais verificações desta seção). Concentrar a agregação na
+informação mais recente do dia não destrava sinal preditivo adicional; a
+esse respeito, o resultado nulo é robusto também à estratégia de
+agregação intradiária.
 
 ### 5.4 Robustez: anisotropia dos embeddings e qualidade textual
 
@@ -849,6 +894,35 @@ o texto financeiro carrega sinal contemporâneo, não preditivo — como
 explicação mais provável para a ausência de ganho do que a insuficiência
 de informação textual disponível ao modelo.
 
+O corpo completo, contudo, ainda era truncado em 512 tokens (o limite de
+contexto do BERTimbau e do FinBERT-PT-BR), de modo que artigos mais longos
+que essa janela tinham apenas sua porção inicial representada. Para
+eliminar também essa fonte residual de perda de informação, o texto de
+cada matéria foi dividido em blocos (*chunking*) de até 512 tokens, cada
+bloco processado separadamente pelo modelo e os embeddings resultantes
+agregados por média — cobrindo o artigo inteiro, não apenas seu início
+(56.819 artigos, 123.570 blocos, média de 2,17 blocos por artigo). As três
+variantes de texto foram retreinadas sob o mesmo protocolo:
+
+| Modelo | Manchete | Corpo (truncado) | Corpo (*chunking*) |
+|---|---|---|---|
+| LSTM + BERTimbau k=8 | −0,018 | −0,003 | −0,015 |
+| LSTM + FinBERT emb. k=8 | −0,017 | −0,006 | −0,037 |
+| LSTM + FinBERT sentimento | +0,004 | +0,002 | −0,007 |
+
+*(Desvio-padrão entre sementes entre 0,037 e 0,067 em todas as células,
+sempre maior do que as diferenças entre colunas.)*
+
+Cobrir o artigo inteiro, sem qualquer truncamento, não desloca o MCC de
+forma perceptível em relação ao corpo truncado — em dois dos três casos, o
+valor com *chunking* fica, se algo, ligeiramente mais distante de zero, e
+não mais próximo, ainda que a diferença permaneça dentro do ruído entre
+sementes. Não há, portanto, indício de que a fração de texto não
+representada pelo truncamento continha sinal preditivo recuperável: o
+resultado nulo é robusto tanto à restrição de escopo (manchete versus
+corpo) quanto à restrição de comprimento de contexto dentro do próprio
+corpo completo.
+
 ---
 
 ## 6. Discussão
@@ -921,6 +995,15 @@ série, também observável no teste de Ljung-Box do retorno (Seção 4.3), tal
 estrutura não é suficientemente robusta para ser explorada de forma
 consistente por nenhuma das arquiteturas aqui avaliadas.
 
+Esse grau de eficiência é consistente com a evolução histórica documentada
+para o mercado acionário brasileiro: Torres, Bonomo e Fernandes (2002)
+rejeitaram a hipótese de passeio aleatório para a Bovespa diária e semanal
+entre 1986 e 1998, mas registraram que o grau de rejeição diminuía ao
+longo da amostra, sobretudo após o Plano Real — indício de eficiência
+crescente ao longo do tempo. A estrutura linear fraca (e não ausente)
+encontrada nesta amostra, duas décadas mais recente, é compatível com a
+continuidade dessa tendência, e não com sua reversão.
+
 ---
 
 ## 7. Limitações
@@ -932,33 +1015,52 @@ consistente por nenhuma das arquiteturas aqui avaliadas.
   no entanto, está fora do escopo deste trabalho.
 - **Viés de classificação do FinBERT-PT-BR.** O modelo utilizado
   sobrerrepresenta sentimento negativo (53% contra 21% positivo) em
-  período de alta do índice, plausivelmente por interpretar vocabulário
-  técnico neutro como negativo. Embora a análise de correlação preditiva
-  (Seção 5.5) utilize a polaridade contínua e não seja afetada por esse
-  viés na conclusão central, tal viés limita a interpretabilidade direta
-  das frações `sent_pos_frac` e `sent_neg_frac` como medidas de sentimento
-  de mercado; não foi possível mitigá-lo, por exemplo mediante
-  reponderação de classes ou comparação com outro modelo de sentimento,
-  em razão de restrição de tempo.
-- **Análise principal restrita à manchete; corpo completo truncado em 512
-  tokens na verificação de robustez.** Por desenho da coleta original —
-  requisição em streaming, interrompida a aproximadamente 200KB para
-  capturar somente o bloco JSON-LD do cabeçalho HTML — o corpus usado nas
-  Seções 5.1 a 5.6 contém exclusivamente a manchete de cada matéria. A
-  Seção 5.7 testou diretamente se essa restrição de escopo explicava o
-  resultado nulo, recoletando o corpo completo de 56.819 matérias (98,6%
-  do corpus) e retreinando todas as variantes de LSTM com texto sob
-  protocolo idêntico; os deltas de MCC observados (todos entre −0,002 e
-  +0,015) permaneceram muito inferiores ao desvio-padrão entre sementes, o
-  que indica que a ausência de sinal preditivo não decorre da limitação de
-  escopo do texto. Uma limitação residual permanece: o corpo completo,
-  com mediana de 2.584 caracteres, foi truncado em 512 tokens — o limite
-  de comprimento de contexto do BERTimbau e do FinBERT-PT-BR —, de modo
-  que artigos mais longos (o percentil 90 chega a 7.540 caracteres) têm
-  apenas sua porção inicial representada nos embeddings. Estratégias de
-  particionamento em blocos (*chunking*) com agregação posterior poderiam,
-  em princípio, capturar o texto integral, mas não foram testadas em razão
-  de restrição de tempo.
+  período de alta do índice. Testou-se diretamente se esse viés é
+  específico do FinBERT-PT-BR, comparando-o a um segundo modelo de
+  linhagem independente e sem ajuste financeiro
+  (`nlptown/bert-base-multilingual-uncased-sentiment`, multilíngue,
+  escala de 1 a 5 estrelas) aplicado ao mesmo corpus de manchetes. O
+  resultado é contrário à hipótese original de que o viés decorreria da
+  interpretação equivocada de vocabulário técnico financeiro pelo
+  FinBERT-PT-BR: o modelo genérico classifica uma fração **ainda maior**
+  das manchetes como negativas (67,7%, contra 53% do FinBERT-PT-BR),
+  sugerindo que a assimetria reflete antes o estilo editorial das
+  manchetes financeiras em português — que tende a enfatizar riscos,
+  quedas e alertas mesmo em períodos de alta — do que uma característica
+  específica do FinBERT-PT-BR. A correlação entre as polaridades dos dois
+  modelos é moderada (r = +0,359), indicando concordância parcial sobre
+  quais dias são relativamente mais positivos ou negativos, apesar da
+  calibração absoluta distinta. Como verificação adicional, a correlação
+  preditiva da polaridade do modelo alternativo com o retorno de D+1
+  também é estatisticamente nula (r = +0,011, contra r = +0,075 com o
+  retorno contemporâneo) — o mesmo padrão reativo já documentado para o
+  FinBERT-PT-BR (Seção 5.5), obtido agora por uma via de sentimento
+  totalmente independente. A análise de correlação preditiva reportada
+  como resultado principal utiliza, em todo caso, a polaridade contínua
+  do FinBERT-PT-BR, e não a classe discreta, permanecendo válida
+  independentemente deste viés.
+- **Análise principal restrita à manchete.** Por desenho da coleta
+  original — requisição em streaming, interrompida a aproximadamente
+  200KB para capturar somente o bloco JSON-LD do cabeçalho HTML — o
+  corpus usado nas Seções 5.1 a 5.6 contém exclusivamente a manchete de
+  cada matéria. A Seção 5.7 testou diretamente se essa restrição de
+  escopo explicava o resultado nulo, recoletando o corpo completo de
+  56.819 matérias (98,6% do corpus) e retreinando todas as variantes de
+  LSTM com texto sob protocolo idêntico; os deltas de MCC observados
+  (todos entre −0,002 e +0,015) permaneceram muito inferiores ao
+  desvio-padrão entre sementes. Testou-se ainda se o truncamento em 512
+  tokens do próprio corpo completo (limite de contexto do BERTimbau e do
+  FinBERT-PT-BR, que deixava artigos mais longos representados apenas por
+  sua porção inicial) escondia sinal recuperável: o texto de cada matéria
+  foi dividido em blocos de até 512 tokens (*chunking*), cada bloco
+  processado separadamente e os embeddings agregados por média, cobrindo
+  o artigo inteiro (56.819 artigos, 123.570 blocos). O MCC com *chunking*
+  permaneceu dentro da mesma faixa de ruído observada com o corpo
+  truncado (por exemplo, LSTM+BERTimbau k=8: −0,015 com *chunking* contra
+  −0,003 truncado e −0,018 com manchete), sem melhora atribuível à
+  cobertura textual mais completa. A ausência de sinal preditivo não
+  decorre, portanto, nem do escopo (manchete versus corpo) nem do
+  comprimento de contexto disponível ao modelo dentro do corpo completo.
 - **Cobertura editorial única.** O corpus está restrito às seções
   *mercados* e *economia* de um único veículo (InfoMoney); vieses
   editoriais específicos desse veículo não foram controlados nem
@@ -970,19 +1072,38 @@ consistente por nenhuma das arquiteturas aqui avaliadas.
   de que o texto coletado anos depois não coincida exatamente com o texto
   publicado em tempo real, por exemplo em razão de reescrita de manchete
   para fins de otimização em mecanismos de busca.
-- **Redes sociais não implementadas.** O sinal de redes sociais (X/Twitter)
-  não foi coletado nesta versão do trabalho.
-- **Ausência de baseline não recorrente.** Não foi testado um perceptron
-  multicamadas (MLP) simples sobre a mesma janela achatada (21×18), o que
-  impediria isolar se a recorrência da LSTM, em si, agrega desempenho em
-  relação ao XGBoost neste conjunto de dados; os resultados aqui
-  apresentados não permitem distinguir entre "arquitetura recorrente não
-  contribui" e "nenhuma arquitetura testada contribui".
-- **Componentes de PCA não interpretados.** O PCA é ajustado por fold, o
-  que é necessário para evitar vazamento de informação, mas impede leitura
-  estável de quais dimensões do embedding cada componente captura entre
-  folds; o sinal textual permanece, portanto, uma caixa-preta mesmo nos
-  casos em que poderia ter contribuído para o desempenho preditivo.
+- **Recorrência versus capacidade.** Testou-se um perceptron multicamadas
+  (MLP) simples — uma camada oculta de 32 unidades, mesmo otimizador,
+  número de épocas, dropout e regularização da LSTM — sobre a mesma janela
+  de 21 dias, apenas achatada (21×18 = 378 entradas) em vez de sequencial,
+  sob protocolo idêntico (walk-forward, embargo, `StandardScaler` por
+  fold, calibração isotônica, 5 sementes). O MLP obteve MCC de
+  −0,004 ± 0,046, estatisticamente indistinguível do MCC da LSTM
+  (−0,009 ± 0,057) e, como este, também indistinguível de zero — ambos
+  permanecem distantes do XGBoost (+0,040 ± 0,049). A recorrência da LSTM
+  não produz, portanto, vantagem detectável sobre um MLP raso neste
+  conjunto de dados; a limitação de arquitetura não explica o resultado
+  nulo.
+- **Interpretação dos componentes de PCA.** Ajustou-se, para fins
+  exclusivamente diagnósticos, um PCA (k=8) sobre a série completa de
+  embeddings do BERTimbau (não o PCA por fold usado nos modelos
+  reportados, que constituiria vazamento se empregado para esse fim). A
+  leitura qualitativa (manchetes nos extremos de cada componente) não
+  revela eixos semânticos nitidamente interpretáveis — padrão esperado
+  para embeddings de propósito geral, cujas dimensões não correspondem a
+  conceitos isolados. A leitura quantitativa, por correlação de cada
+  componente agregado por dia com metadados conhecidos, é mais reveladora:
+  os componentes de maior variância explicada correlacionam-se
+  principalmente com o **volume editorial** do dia (`n_noticias`,
+  r = +0,43 no componente 1; r = −0,60 com `emb_dispersao` no mesmo
+  componente) e, secundariamente, com a polaridade de sentimento
+  (r entre −0,12 e +0,15 em quatro dos oito componentes), mas
+  nenhum componente, entre os oito testados, correlaciona-se de forma
+  perceptível com o retorno contemporâneo ou com o retorno de D+1
+  (|r| ≤ 0,04 em todos os casos). Isto é, o sinal textual capturado pelos
+  primeiros componentes principais descreve o quanto e o quão
+  polarizado foi o noticiário do dia, não a direção do mercado — leitura
+  consistente com a explicação mecanística da Seção 5.5.
 - **Migração de ambiente computacional.** Os resultados aqui reportados
   foram obtidos localmente em GPU RTX 3070, após terem sido originalmente
   produzidos em GPU T4 do Google Colab. Os valores reproduziram-se dentro
@@ -1055,6 +1176,17 @@ contribuição científica válida.
   *Proceedings of the 2019 Conference on Empirical Methods in Natural
   Language Processing and the 9th International Joint Conference on
   Natural Language Processing (EMNLP-IJCNLP)*, p. 55–65, 2019.
+- LOUGHRAN, T.; MCDONALD, B. When Is a Liability Not a Liability? Textual
+  Analysis, Dictionaries, and 10-Ks. *The Journal of Finance*, v. 66, n. 1,
+  p. 35–65, 2011. DOI: 10.1111/j.1540-6261.2010.01625.x.
+- GU, S.; KELLY, B.; XIU, D. Empirical Asset Pricing via Machine Learning.
+  *The Review of Financial Studies*, v. 33, n. 5, p. 2223–2273, 2020.
+- SIRIGNANO, J.; CONT, R. Universal features of price formation in
+  financial markets: perspectives from Deep Learning. *Quantitative
+  Finance*, v. 19, n. 9, p. 1449–1459, 2019.
+- TORRES, R.; BONOMO, M.; FERNANDES, C. A Aleatoriedade do Passeio na
+  Bovespa: Testando a Eficiência do Mercado Acionário Brasileiro. *Revista
+  Brasileira de Economia*, v. 56, n. 2, 2002.
 
 ---
 
