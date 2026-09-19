@@ -5,9 +5,11 @@ produz data/processed/features_copom.parquet, com uma linha por pregao do
 periodo de estudo (2019-01 a 2024-12).
 
 Classificacao hawkish/dovish (zero-shot, MoritzLaurer/mDeBERTa-v3-base-mnli-xnli):
-os comunicados tem 1.219-1.876 tokens (mediana 1.482) -- TODOS excedem o
-limite de 512 tokens do modelo, e apenas 2 de 49 abrem com a frase da
-decisao ("O Copom decidiu..."), que costuma vir no fim. Por isso o texto e
+os 49 comunicados coletados (reuniao 219, semente anterior ao periodo de
+estudo, mais 220-267, as 48 do proprio periodo) tem 1.219-1.876 tokens
+(mediana 1.482) -- TODOS excedem o limite de 512 tokens do modelo, e
+apenas 2 de 49 abrem com a frase da decisao ("O Copom decidiu..."), que
+costuma vir no fim. Por isso o texto e
 classificado em DUAS janelas: o inicio (truncamento natural do pipeline) e o
 trecho FINAL (ultimos ~1.500 chars, onde a decisao e enunciada). A janela
 usada nas features e a de maior correlacao com a direcao REAL da decisao de

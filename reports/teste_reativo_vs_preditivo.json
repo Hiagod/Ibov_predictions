@@ -1,0 +1,48 @@
+{
+  "n": 1492,
+  "r_autocorr_lag1": -0.15869729972290453,
+  "B": 20000,
+  "seed": 0,
+  "resultados": [
+    {
+      "variavel": "sent_polaridade",
+      "r_contemporanea": 0.20139463117807427,
+      "r_preditiva": -0.0389728865290807,
+      "delta": 0.24036751770715498,
+      "ci_lo": 0.1256353688102197,
+      "ci_hi": 0.3566139659224309,
+      "p_bootstrap": 0.0001,
+      "p_holm": 0.00030000000000000003
+    },
+    {
+      "variavel": "sent_dispersao",
+      "r_contemporanea": 0.1065888498384462,
+      "r_preditiva": -0.03923254814656522,
+      "delta": 0.14582139798501143,
+      "ci_lo": 0.03062489974927873,
+      "ci_hi": 0.2655869179239605,
+      "p_bootstrap": 0.0089,
+      "p_holm": 0.0089
+    },
+    {
+      "variavel": "sent_pos_frac",
+      "r_contemporanea": 0.16505187415478267,
+      "r_preditiva": -0.02753292171372699,
+      "delta": 0.19258479586850966,
+      "ci_lo": 0.1068261875786384,
+      "ci_hi": 0.2810997124504292,
+      "p_bootstrap": 0.0,
+      "p_holm": 0.0
+    },
+    {
+      "variavel": "sent_neg_frac",
+      "r_contemporanea": -0.17274498190241028,
+      "r_preditiva": 0.033307356942842085,
+      "delta": -0.20605233884525237,
+      "ci_lo": -0.33568531051509126,
+      "ci_hi": -0.07769631215787431,
+      "p_bootstrap": 0.0021,
+      "p_holm": 0.0042
+    }
+  ]
+}

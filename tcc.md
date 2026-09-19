@@ -103,7 +103,7 @@ As contribuições deste trabalho são as seguintes:
    de dados abertos do Banco Central e classificados por zero-shot, com
    alinhamento cuidadoso dos períodos de teste entre modelos com e sem
    embargo temporal.
-5. Uma avaliação de custo de oportunidade financeiro (Sharpe, drawdown
+5. Uma avaliação de viabilidade econômica (Sharpe, drawdown
    máximo, custo de transação) que demonstra que nenhum modelo produz
    vantagem econômica estatisticamente robusta sob custos de transação
    realistas, incluindo a análise criteriosa do único índice de Sharpe
@@ -286,7 +286,25 @@ p ≈ 0). A decisão de incluir o volume, mesmo sem garantia prévia de que
 contribuiria para o desempenho preditivo, foi deliberada, com o objetivo de
 constituir o baseline de preço mais robusto possível, de modo que qualquer
 ganho atribuído ao texto precisasse superar o melhor modelo de preço
-construível, e não um baseline artificialmente fraco.
+construível, e não um baseline artificialmente fraco. Essa garantia, de
+fato, não se confirmou para o XGBoost especificamente: comparando a versão
+com volume (18 features) contra a versão sem `vol_rel`/`dvol` (16
+features), a acurácia direcional melhora discretamente (DA +0,5189 vs.
++0,5153), mas F1 (+0,3852 vs. +0,4099) e MCC (+0,0280 vs. +0,0401) pioram.
+Ainda assim, o conjunto de 18 variáveis foi mantido como definitivo para
+todos os modelos de preço (XGBoost, ARIMA/ARIMAX e LSTM), por dois motivos.
+Primeiro, a validade do volume como variável foi estabelecida por um
+critério independente do desempenho de qualquer modelo específico —
+plausibilidade financeira (correlação com retorno absoluto, Karpoff 1987)
+e persistência estatística (Ljung-Box) —, o que evita selecionar a
+composição do baseline a posteriori, a partir do resultado que mais o
+favorece; essa prática enviesaria exatamente a comparação que esse
+baseline deveria arbitrar de forma justa (mesma disciplina anti-*forking
+paths* discutida na Seção 5.2 para a família de 13 testes de
+Diebold-Mariano). Segundo, o mesmo conjunto de features precisa ser
+compartilhado entre os três modelos de preço para que a comparação entre
+eles (Seção 5.1) isole o efeito do algoritmo, e não de qual subconjunto de
+variáveis cada um recebeu.
 
 ### 4.2 Variáveis de texto
 
@@ -528,7 +546,7 @@ estimativa conservadora de corretagem e *slippage* para operações em
 | Random Walk | 0,0116 | 0,0159 | 0,485 | −0,033 | — | 0,250 | 1,000 |
 | ARIMA | 0,0120 | 0,0166 | 0,522 | +0,039 | — | — | 1,000 |
 | ARIMAX (texto linear) | 0,0124 | 0,0181 | 0,511 | +0,006 | — | — | 1,000 |
-| XGBoost (preço) | 0,0117 | 0,0161 | 0,515 | +0,040 | ±0,049 | 0,266 | 0,577 |
+| XGBoost (preço) | 0,0117 | 0,0161 | 0,519 | +0,028 | ±0,038 | 0,265 | 0,727 |
 | LSTM (preço) | 0,0127 | 0,0172 | 0,494 | −0,009 | ±0,057 | 0,273 | 1,000 |
 | LSTM + BERTimbau k=8 | 0,0132 | 0,0181 | 0,494 | −0,018 | ±0,054 | 0,273 | 1,000 |
 | LSTM + BERTimbau k=30 | 0,0133 | 0,0178 | 0,508 | −0,009 | ±0,060 | 0,265 | 1,000 |
@@ -542,7 +560,7 @@ p já corrigido por Holm sobre a família de 11 testes de habilidade
 direcional.)*
 
 Nenhum modelo atinge significância direcional a 5% após a correção; o
-p-valor corrigido mais baixo corresponde ao XGBoost (0,577), estando os
+p-valor corrigido mais baixo corresponde ao XGBoost (0,727), estando os
 demais acima de 0,9. A magnitude do MCC de todos os modelos situa-se
 tipicamente dentro de um desvio-padrão entre sementes em relação a zero,
 quando esse desvio está disponível, como no caso do XGBoost e das
@@ -550,7 +568,7 @@ variantes de LSTM — evidência direta de que as diferenças observadas são
 compatíveis com ruído de amostragem e de inicialização, não constituindo
 sinal real. Em termos de poder estatístico, com n=1.030 observações
 agregadas, o intervalo de 95% para a DA de um classificador sem habilidade
-direcional é de 50% ± 3,1 pontos percentuais; a maior DA observada (52,5%,
+direcional é de 50% ± 3,1 pontos percentuais; a maior DA observada (52,3%,
 XGBoost) situa-se dentro dessa faixa. Os dados possuem poder para detectar
 habilidade direcional a partir de aproximadamente 53,1%, patamar que
 nenhum modelo atinge.
@@ -559,21 +577,18 @@ nenhum modelo atinge.
 
 Das 13 comparações pareadas testadas (seis do tipo LSTM-preço versus
 variantes de texto ou Copom; sete do tipo XGBoost versus variantes de
-LSTM), quatro permanecem significativas a 5% após a correção de Holm —
-as mesmas quatro já identificadas antes da inclusão do Copom, sendo que a
-comparação entre XGBoost e LSTM+Copom situa-se próxima do limiar, sem
-contudo ultrapassá-lo (p=0,055 após Holm):
+LSTM), cinco permanecem significativas a 5% após a correção de Holm,
+incluindo a comparação entre XGBoost e LSTM+Copom:
 
-| Comparação | DM (estat.) | p (Holm) | Direção |
-|---|---|---|---|
-| LSTM-preço vs. LSTM+FinBERT-sentimento | −3,12 | 0,015 | texto piora a previsão |
-| XGBoost vs. LSTM+BERTimbau k=30 | −3,52 | 0,005 | XGBoost mais preciso |
-| XGBoost vs. LSTM+FinBERT-sentimento | −3,90 | 0,001 | XGBoost mais preciso |
-| XGBoost vs. LSTM+FinBERT-emb. k=30 | −3,18 | 0,017 | XGBoost mais preciso |
+| Comparação | DM (estat.) | d̄ | p (Holm) | Direção |
+|---|---|---|---|---|
+| LSTM-preço vs. LSTM+FinBERT-sentimento | −3,12 | −0,000045 | 0,019 | texto piora a previsão |
+| XGBoost vs. LSTM+BERTimbau k=30 | −3,53 | −0,000042 | 0,005 | XGBoost mais preciso |
+| XGBoost vs. LSTM+FinBERT-sentimento | −3,91 | −0,000063 | 0,001 | XGBoost mais preciso |
+| XGBoost vs. LSTM+FinBERT-emb. k=30 | −3,22 | −0,000032 | 0,015 | XGBoost mais preciso |
+| XGBoost vs. LSTM+Copom | −2,79 | −0,000048 | 0,048 | XGBoost mais preciso |
 
-*(Fonte: `reports/testes_dm_pareados.parquet`. A comparação entre XGBoost
-e LSTM+Copom não figura na tabela por não ser significativa, mas situa-se
-próxima do limiar: DM=−2,75, p=0,055 após Holm.)*
+*(Fonte: `reports/testes_dm_pareados.parquet`.)*
 
 Em nenhuma das 13 comparações a adição de texto ou de sinal do Copom
 reduz o erro de forma significativa. Nos casos em que há significância,
@@ -581,7 +596,7 @@ esta aponta na direção oposta: (i) a adição de sentimento explícito à
 LSTM aumenta o erro quadrático de forma estatisticamente significativa em
 relação à LSTM apenas com preço; e (ii) um modelo tabular relativamente
 simples (XGBoost, apenas com preço) mostra-se significativamente mais
-preciso do que três das sete variantes de LSTM com texto ou Copom. Esse
+preciso do que quatro das sete variantes de LSTM com texto ou Copom. Esse
 segundo achado corrobora, com respaldo estatístico formal, um padrão
 qualitativo já observável na progressão de complexidade: o aumento da
 sofisticação do modelo (passeio aleatório → ARIMA → XGBoost → LSTM) não
@@ -598,7 +613,7 @@ mais amplo de múltiplas comparações não declaradas (*garden of forking
 paths*), caso outras comparações tivessem sido exploradas antes da
 definição dessas 13. Em segundo lugar, e de maior relevância,
 significância estatística não implica relevância econômica: as
-diferenças de erro quadrático médio subjacentes aos quatro resultados
+diferenças de erro quadrático médio subjacentes aos cinco resultados
 significativos (o parâmetro `dbar` da tabela de Diebold-Mariano) são da
 ordem de 10⁻⁵, detectáveis em razão de n ≈ 1.030 conferir poder
 estatístico suficiente para diferenças de pequena magnitude, e não porque
@@ -793,6 +808,30 @@ substancialmente da direção temporal considerada:
 - Sentimento do dia $t$ em relação ao retorno contemporâneo do dia $t$: r = +0,201
 - Sentimento do dia $t$ em relação ao retorno de D+1, o alvo de todos os modelos: r = −0,039
 
+Essas duas correlações compartilham a variável de sentimento e usam
+retornos adjacentes da mesma série ($t$ e $t+1$, com autocorrelação de
+lag-1 de $-0{,}159$) — não são independentes, de modo que um teste de
+diferença entre correlações independentes (ex.: Fisher z simples) não se
+aplica. Testou-se formalmente se a diferença $\Delta = r_{\text{contemp}}
+- r_{\text{predit}}$ é distinguível de zero via bootstrap (reamostragem de
+dias com reposição, $B=20\,000$, IC percentil): para `sent_polaridade`,
+$\Delta=+0{,}240$, IC 95% $[+0{,}126,\ +0{,}357]$, $p=0{,}0001$
+(bicaudal, $p_{\text{Holm}}=0{,}0003$). O mesmo teste, repetido para as
+quatro variáveis de sentimento agregado, permanece significativo a 5%
+mesmo após correção de Holm para essa família de 4 comparações —
+`sent_dispersao` ($\Delta=+0{,}146$, $p=0{,}009$, $p_{\text{Holm}}=0{,}009$),
+`sent_pos_frac` ($\Delta=+0{,}193$, $p<0{,}0001$, $p_{\text{Holm}}<0{,}0001$)
+e `sent_neg_frac` ($\Delta=-0{,}206$, $p=0{,}002$, $p_{\text{Holm}}=0{,}004$).
+A assimetria entre sentimento contemporâneo e preditivo, portanto, não é
+uma leitura visual de dois números próximos — é uma diferença
+estatisticamente robusta, e é justamente essa robustez que sustenta a
+interpretação mecanística proposta a seguir como o achado central do
+trabalho, e não apenas mais uma comparação entre modelos.
+
+*(Fonte: `scripts/teste_reativo_vs_preditivo.py`, saída em
+`reports/teste_reativo_vs_preditivo.{parquet,json}`; `ret_lag0` como
+retorno contemporâneo, `y` como alvo D+1.)*
+
 Todas as quatro variáveis de sentimento agregado (`sent_polaridade`,
 `sent_dispersao`, `sent_pos_frac`, `sent_neg_frac`) apresentam correlação
 preditiva entre −0,04 e +0,03 com o alvo, valores indistinguíveis de zero,
@@ -811,12 +850,18 @@ dia $t$ possa explorá-la para o dia $t+1$.
 Cabe registrar uma limitação do FinBERT-PT-BR utilizado: o modelo exibe
 viés para classificações negativas (53% das manchetes classificadas como
 negativas, contra 21% como positivas, em período de alta acumulada do
-índice), plausivelmente em razão de associar vocabulário técnico neutro
-(por exemplo, "juros mantidos inalterados") a tom negativo. Esse viés,
-contudo, não explica o resultado nulo: a correlação preditiva foi
-calculada sobre a polaridade contínua, P(positivo) menos P(negativo), e
-não sobre a classe discreta, permanecendo estatisticamente nula ainda que
-essa ressalva seja considerada.
+índice). A hipótese inicial de que esse viés decorreria de o modelo
+associar vocabulário técnico neutro (por exemplo, "juros mantidos
+inalterados") a tom negativo foi testada diretamente na Seção 7, mediante
+comparação com um modelo de sentimento genérico e independente: o
+resultado não confirma a hipótese — o modelo genérico classifica fração
+ainda maior das manchetes como negativas, sugerindo que a assimetria
+reflete antes o estilo editorial das manchetes financeiras em português do
+que uma característica específica do FinBERT-PT-BR. De todo modo, esse
+viés, qualquer que seja sua origem, não explica o resultado nulo: a
+correlação preditiva foi calculada sobre a polaridade contínua, P(positivo)
+menos P(negativo), e não sobre a classe discreta, permanecendo
+estatisticamente nula ainda que essa ressalva seja considerada.
 
 ### 5.6 Métricas financeiras
 
@@ -826,7 +871,7 @@ essa ressalva seja considerada.
 | Random Walk | 0,000 | 0,000 | 0,0% | 0 |
 | ARIMA | −0,035 | −0,445 | −45,2% | 469 |
 | ARIMAX | +0,149 | −0,258 | −34,7% | 467 |
-| XGBoost | +0,002 | −0,303 | −49,2% | 350 |
+| XGBoost | −0,083 | −0,406 | −50,6% | 371 |
 | LSTM (preço) | −0,277 | −0,570 | −55,3% | 335 |
 | LSTM + BERTimbau k=8 | −1,017 | −1,251 | −76,2% | 267 |
 | LSTM + BERTimbau k=30 | +0,175 | −0,019 | −41,1% | 221 |
@@ -845,7 +890,7 @@ buy-and-hold é calculado sobre o período dos baselines. O drawdown máximo
 das famílias de LSTM atravessa os intervalos de embargo na concatenação
 dos folds.)*
 
-Sem custo de transação, 5 dos 11 modelos exibem índice de Sharpe bruto
+Sem custo de transação, 4 dos 11 modelos exibem índice de Sharpe bruto
 positivo. Sob custo realista de 5 pontos-base por operação — valor
 condizente com a faixa observada de corretagem e *slippage* para operações
 em índice na B3 —, dez dos onze modelos apresentam Sharpe negativo ou
@@ -909,7 +954,7 @@ DA=0,4864 em ambas as versões, por não depender do texto). No teste de
 Diebold-Mariano pareado, o padrão qualitativo se mantém: nenhuma
 comparação em que o texto (manchete ou corpo completo) supera
 significativamente o preço isolado ou o XGBoost; ao contrário, das
-comparações significativas após Holm-Bonferroni — quatro de treze com
+comparações significativas após Holm-Bonferroni — cinco de treze com
 manchetes, duas de treze com corpo completo —, todas favorecem o modelo
 mais simples (XGBoost) sobre a variante de LSTM com texto, nunca o
 inverso.
@@ -1000,8 +1045,8 @@ que se torna conhecida.
 O achado secundário — superioridade estatisticamente significativa do
 XGBoost em relação a diversas variantes de LSTM no teste de
 Diebold-Mariano — requer interpretação criteriosa: não significa que o
-XGBoost preveja o mercado, uma vez que seu MCC de +0,040 ± 0,049 também
-não é distinguível de zero, e seu p-valor de Pesaran-Timmermann, 0,577
+XGBoost preveja o mercado, uma vez que seu MCC de +0,028 ± 0,038 também
+não é distinguível de zero, e seu p-valor de Pesaran-Timmermann, 0,727
 após correção, está distante da significância. Significa, antes, que,
 entre modelos igualmente desprovidos de habilidade preditiva real, os
 modelos mais simples produzem erros de magnitude menor e mais estável —
@@ -1119,10 +1164,40 @@ continuidade dessa tendência, e não com sua reversão.
   fold, calibração isotônica, 5 sementes). O MLP obteve MCC de
   −0,004 ± 0,046, estatisticamente indistinguível do MCC da LSTM
   (−0,009 ± 0,057) e, como este, também indistinguível de zero — ambos
-  permanecem distantes do XGBoost (+0,040 ± 0,049). A recorrência da LSTM
+  permanecem distantes do XGBoost (+0,028 ± 0,038). A recorrência da LSTM
   não produz, portanto, vantagem detectável sobre um MLP raso neste
   conjunto de dados; a limitação de arquitetura não explica o resultado
   nulo.
+- **Eficiência em dado pequeno: texto acoplado a um modelo não
+  recorrente.** Questionamento de banca: dado o tamanho reduzido da
+  amostra (≈1.492 pregões), uma rede recorrente como a LSTM —
+  arquitetura notoriamente ávida por dados — poderia ser um veículo
+  estruturalmente fraco para o sinal textual, de modo que o resultado
+  nulo refletisse a escolha do modelo, e não a ausência de sinal no
+  próprio texto. Testou-se essa hipótese diretamente: o mesmo sinal
+  textual usado no nível 5/via 1/via 2 (BERTimbau k=8/k=30, FinBERT
+  embeddings k=8/k=30, FinBERT sentimento; PCA ajustado exclusivamente
+  no treino de cada fold, protocolo idêntico) foi acoplado ao XGBoost em
+  vez da LSTM, mantendo os hiperparâmetros e o protocolo do nível 3 (10
+  sementes, calibração isotônica via hold-out interno, embargo=0). Em
+  todas as cinco variantes, o MCC do XGBoost com texto foi igual ou
+  inferior ao do XGBoost apenas-preço (+0,028 ± 0,038): BERTimbau k=8,
+  +0,010 ± 0,045; BERTimbau k=30, −0,017 ± 0,038; FinBERT emb. k=8,
+  +0,008 ± 0,031; FinBERT emb. k=30, +0,002 ± 0,034; FinBERT sentimento,
+  +0,006 ± 0,055 — o mesmo padrão nulo observado com a LSTM. Ainda
+  assim, o XGBoost com texto supera a LSTM com o mesmo texto em quatro
+  das cinco comparações diretas (exceção: BERTimbau k=30, em que a LSTM
+  tem MCC ligeiramente maior, −0,009 contra −0,017 do XGBoost) —
+  indício de que a arquitetura mais eficiente em dado pequeno de fato
+  extrai algo a mais do sinal textual do que a LSTM, mas não o
+  suficiente para superar sequer o próprio baseline de preço do
+  XGBoost. O resultado nulo, portanto, não é artefato de ter acoplado o
+  texto a uma arquitetura inadequada ao volume de dados disponível.
+
+  *(Fonte:
+  `reports/xgboost_{bertimbau_k8,bertimbau_k30,finbert_k8,finbert_k30,finbert_sent}_full.parquet`,
+  notebook `07_ablacoes.ipynb`, célula "Ablação — XGBoost + embeddings de
+  texto".)*
 - **Interpretação dos componentes de PCA.** Ajustou-se, para fins
   exclusivamente diagnósticos, um PCA (k=8) sobre a série completa de
   embeddings do BERTimbau (não o PCA por fold usado nos modelos
@@ -1155,6 +1230,17 @@ continuidade dessa tendência, e não com sua reversão.
   consideração de liquidez ou custo de financiamento de posições vendidas;
   não pretende constituir estratégia de investimento realista, mas apenas
   um teste de utilidade econômica mínima das previsões.
+- **Escolha dos modelos de embedding.** BERTimbau e FinBERT-PT-BR foram
+  escolhidos por serem, à época do desenho deste trabalho, referências
+  estabelecidas para texto em português geral e financeiro,
+  respectivamente. Não foram comparados contra alternativas mais recentes
+  de representação textual em português (modelos de sentence-embedding
+  mais novos, por exemplo); um resultado nulo obtido com esses dois
+  modelos específicos não descarta que uma representação mais moderna
+  capture um sinal diferente — a robustez demonstrada neste trabalho
+  (anisotropia, BoW/TF-IDF, corpo completo) é robustez *dentro* da família
+  de modelos testada, não uma prova de que nenhum embedding jamais
+  funcionaria.
 
 ---
 
@@ -1234,10 +1320,15 @@ contribuição científica válida.
 
 ## Apêndice A — Reprodutibilidade
 
-Todo o código, os dados brutos, as variáveis derivadas e os resultados
-reportados neste trabalho estão disponíveis no repositório do projeto
-(`D:\tcc_ibov`), com instruções de execução em `README.md` e ambiente
-fixado em `requirements.txt`. A suíte de testes automatizados
-`utils/test_tcc_utils.py` (14 casos, cobrindo corte temporal, horário de
-verão, embargo e geração do alvo) documenta e verifica formalmente as
-garantias anti-vazamento descritas na Seção 3.3.
+Todo o código-fonte deste trabalho — notebooks, scripts de coleta e o
+módulo `utils/tcc_utils.py` (fonte única das funções de corte temporal,
+geração do alvo e particionamento walk-forward) — está publicado no
+repositório do projeto no GitHub, com instruções de execução em
+`README.md` e ambiente fixado em `requirements.txt`. Os dados brutos,
+as variáveis derivadas e os resultados reportados neste trabalho podem
+ser integralmente reconstituídos a partir desse código, seguindo a ordem
+de execução documentada; por seu volume, não são distribuídos no mesmo
+repositório, mas podem ser disponibilizados sob solicitação. A suíte de
+testes automatizados `utils/test_tcc_utils.py` (14 casos, cobrindo corte
+temporal, horário de verão, embargo e geração do alvo) documenta e
+verifica formalmente as garantias anti-vazamento descritas na Seção 3.3.

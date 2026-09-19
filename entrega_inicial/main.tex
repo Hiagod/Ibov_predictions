@@ -84,14 +84,14 @@ Quatro baselines foram implementados e avaliados sob o mesmo protocolo walk-forw
 Random Walk & 0,0116 & 0,0159 & 0,485 & 1,000 \\
 ARIMA       & 0,0120 & 0,0166 & 0,522 & 1,000 \\
 ARIMAX      & 0,0124 & 0,0181 & 0,511 & 1,000 \\
-XGBoost     & 0,0117 & 0,0161 & 0,515 & 0,577 \\
+XGBoost     & 0,0117 & 0,0161 & 0,519 & 0,727 \\
 \bottomrule
 \end{tabular}
 \label{tab:baselines}
 \end{center}
 \end{table}
 
-Nenhum dos quatro baselines atinge signific\^ancia direcional a 5\% pelo teste de Pesaran-Timmermann \cite{pesaran1992} ap\'os corre\c{c}\~ao de Holm; o XGBoost, o mais competitivo dos quatro, chega mais perto ($p=0{,}577$), mas permanece longe do limiar. O ARIMA supera marginalmente o passeio aleat\'orio em acur\'acia direcional (52,2\% vs.\ 48,5\%), consistente com a estrutura linear fraca identificada na Fig.~\ref{fig:acf}, mas essa vantagem n\~ao se traduz, ainda, em signific\^ancia estat\'istica formal. O volume de negocia\c{c}\~ao foi validado como sinal financeiramente plaus\'ivel antes de ser inclu\'ido como vari\'avel: correla\c{c}\~ao com retorno absoluto de +0,18, consistente com a literatura \cite{karpoff1987}, e persist\^encia estatisticamente significativa (Ljung-Box, $p\approx0$).
+Nenhum dos quatro baselines atinge signific\^ancia direcional a 5\% pelo teste de Pesaran-Timmermann \cite{pesaran1992} ap\'os corre\c{c}\~ao de Holm; o XGBoost, o mais competitivo dos quatro, chega mais perto ($p=0{,}727$), mas permanece longe do limiar. O ARIMA supera marginalmente o passeio aleat\'orio em acur\'acia direcional (52,2\% vs.\ 48,5\%), consistente com a estrutura linear fraca identificada na Fig.~\ref{fig:acf}, mas essa vantagem n\~ao se traduz, ainda, em signific\^ancia estat\'istica formal. O volume de negocia\c{c}\~ao foi validado como sinal financeiramente plaus\'ivel antes de ser inclu\'ido como vari\'avel: correla\c{c}\~ao com retorno absoluto de +0,18, consistente com a literatura \cite{karpoff1987}, e persist\^encia estatisticamente significativa (Ljung-Box, $p\approx0$).
 
 \section{Discuss\~ao}
 

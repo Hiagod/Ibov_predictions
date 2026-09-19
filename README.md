@@ -8,8 +8,8 @@ treinado apenas com preço.
 ## Estrutura do repositório
 
 ```
-colabs/     notebooks (00-06), adaptados para execução local
-scripts/    scripts de coleta (rodam uma vez, fora dos notebooks)
+colabs/     notebooks (00-07), adaptados para execução local
+scripts/    scripts de coleta e análises pontuais (rodam uma vez, fora dos notebooks)
 data/raw/   dados brutos coletados (preços, corpus de notícias)
 data/processed/  features derivadas, embeddings, sequências para o LSTM
 models/     checkpoints (quando salvos)
@@ -34,7 +34,7 @@ ao migrar de ambiente.
 
 ## Ordem de execução
 
-**Coleta (uma vez só; dados já estão em `data/raw/` e `data/processed/` neste repositório — só reexecute se for recoletar do zero):**
+**Coleta (uma vez só).** Este repositório contém apenas o código; `data/raw/` e `data/processed/` não são versionados aqui por volume — reexecute os passos abaixo para reconstituí-los do zero, ou solicite os arquivos diretamente ao autor:
 
 1. `colabs/02_coleta_noticias.ipynb` — descobre sitemaps, monta a fila de URLs (`fila_artigos.parquet`).
 2. `scripts/coleta_artigos.py` — baixa e extrai headline/datePublished de cada URL da fila (shards de 1000, retomável, 5 threads).
@@ -54,7 +54,8 @@ ao migrar de ambiente.
 5. `scripts/features_copom.py` — classificação zero-shot hawkish/dovish dos comunicados do Copom (`MoritzLaurer/mDeBERTa-v3-base-mnli-xnli`, com seleção empírica de janela início/fim do texto por correlação com a decisão real de Selic) e construção de `features_copom.parquet` (forward-fill entre reuniões, mesmo corte de 17h das notícias).
 6. `colabs/05_lstm.ipynb` — LSTM só-preço (nível 4), LSTM+BERTimbau (nível 5/5b), LSTM+sentimento FinBERT (Via 2), LSTM+embeddings FinBERT (Via 1/1b), LSTM+Copom (Via 3).
 7. `colabs/06_avaliacao_final.ipynb` — testes estatísticos (Diebold-Mariano pareado, Pesaran-Timmermann pooled, correção de Holm), tabela comparativa consolidada dos modelos, e métricas financeiras (Sharpe, max drawdown, com e sem custo de transação).
-8. `colabs/07_ablacoes.ipynb` — robustez: texto do dia D vs. D-1, e sweep de janela de lookback {1,3,5,10} vs. o padrão 21.
+8. `colabs/07_ablacoes.ipynb` — robustez e ablações, em ordem: (i) texto do dia D vs. D-1; (ii) sweep de janela de lookback {1,3,5,10} vs. o padrão 21, para LSTM só-preço e LSTM+texto; (iii) MLP simples sobre a janela achatada, vs. a recorrência da LSTM; (iv) anisotropia dos embeddings (whitening) e teste de permutação; (v) qualidade textual — remoção de manchetes-template e isolamento de linguagem prospectiva/retrospectiva; (vi) interpretação qualitativa e quantitativa dos componentes de PCA do BERTimbau; (vii) agregação por recência (última manchete do dia vs. média); (viii)-(ix) representação Bag-of-Words/TF-IDF (k=8 e k=30) vs. embedding denso.
+9. `scripts/analise_sentimento_alternativo.py` — roda um segundo modelo de sentimento (`nlptown/bert-base-multilingual-uncased-sentiment`, genérico, sem ajuste financeiro) sobre o mesmo corpus de manchetes, para testar se o viés de classificação negativa do FinBERT-PT-BR é específico do modelo ou do estilo editorial do corpus.
 
 Cada notebook pode ser executado de ponta a ponta via:
 
