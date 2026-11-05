@@ -6,10 +6,10 @@ Passos (nesta ordem):
      assim o dedup por URL com keep='last' prefere o resultado da repesca
      quando ela teve sucesso onde a coleta original falhou).
   2. Mantem so status == 200 com datePublished nao-nulo.
-  3. Parseia datePublished como UTC verdadeiro (confirmado por
-     verifica_timezone.py -- o JSON-LD do InfoMoney usa UTC real, nao um
-     offset fixo de -3h) e converte para America/Sao_Paulo via zoneinfo,
-     que trata o horario de verao historico corretamente.
+  3. Parseia datePublished, que e UTC verdadeiro depois da migracao do site
+     (verifica_timezone.py) e hora local rotulada como UTC antes dela, e
+     converte para America/Sao_Paulo via zoneinfo, que trata o horario de
+     verao historico corretamente.
   4. Filtra ao periodo de coleta (2018-06 a 2025-02, com margem -- o corte
      fino por periodo de estudo acontece no notebook 03).
   5. Remove duplicatas de manchete no mesmo dia local (republicacoes).
@@ -18,12 +18,16 @@ Passos (nesta ordem):
 Uso:
     python consolida_corpus.py
 """
+import sys
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pandas as pd
 
 PROJECT = Path(r'D:\tcc_ibov')
+sys.path.insert(0, str(PROJECT / 'utils'))
+from tcc_utils import corrige_carimbo_infomoney
+
 RAW_DIR = PROJECT / 'data' / 'raw'
 SHARD_DIR = RAW_DIR / 'shards_artigos'
 REPESCA_DIR = RAW_DIR / 'shards_repesca'
@@ -61,11 +65,13 @@ def main():
     corpus = bruto[(bruto['status'] == 200) & bruto['datePublished'].notna()].copy()
     print(f"Com status 200 e datePublished: {len(corpus):,}")
 
-    # datePublished do JSON-LD e UTC verdadeiro (confirmado empiricamente --
-    # ver verifica_timezone.py). pd.to_datetime com utc=True normaliza
-    # qualquer offset presente na string ISO para UTC.
-    corpus['ts_utc'] = pd.to_datetime(corpus['datePublished'], utc=True,
-                                       errors='coerce')
+    # datePublished do JSON-LD e UTC verdadeiro so depois da migracao do site
+    # (24/09/2019); antes, e hora local rotulada como UTC. Ver
+    # corrige_carimbo_infomoney em tcc_utils.py.
+    validos = pd.to_datetime(corpus['datePublished'], utc=True, errors='coerce').notna()
+    corpus['ts_utc'] = pd.NaT
+    corpus.loc[validos, 'ts_utc'] = corrige_carimbo_infomoney(corpus.loc[validos, 'datePublished'])
+    corpus['ts_utc'] = pd.to_datetime(corpus['ts_utc'], utc=True)
     antes = len(corpus)
     corpus = corpus.dropna(subset=['ts_utc'])
     if antes != len(corpus):

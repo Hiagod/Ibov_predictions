@@ -1,0 +1,247 @@
+
+########## 05_lstm[1] #@title Setup + reprodutibilidade (determinismo PyTorch)
+Device: cuda
+PyTorch: 2.6.0+cu124
+GPU: NVIDIA GeForce RTX 3070
+
+Determinismo OK: True  (deve ser True)
+########## 05_lstm[1] concluida em 5s
+
+########## 05_lstm[2] #@title Embargo na walk_forward_splits -- ja incluso no tcc_utils cano
+
+5 folds com embargo=21:
+  fold 1: treino termina idx 251 (2020-01-07) | teste comeca idx 273 (2020-02-06) | gap=21
+  fold 2: treino termina idx 457 (2020-11-03) | teste comeca idx 479 (2020-12-03) | gap=21
+  fold 3: treino termina idx 663 (2021-09-02) | teste comeca idx 685 (2021-10-05) | gap=21
+  fold 4: treino termina idx 869 (2022-07-04) | teste comeca idx 891 (2022-08-03) | gap=21
+  fold 5: treino termina idx 1075 (2023-05-02) | teste comeca idx 1097 (2023-06-01) | gap=21
+
+Embargo OK: gap de exatamente 21 dias entre treino e teste em todos os folds.
+########## 05_lstm[2] concluida em 0s
+
+########## 05_lstm[3] #@title Preparação de sequências (janelas lookback=21) + scaling POR F
+Sequências: (1472, 21, 18)  (esperado ~1472 x 21 x 18)
+Alvos: (1472,) | índices originais: 20..1491
+
+Sequências por fold (após embargo):
+  fold 1: treino 232 seqs | teste 206 seqs
+  fold 2: treino 438 seqs | teste 206 seqs
+  fold 3: treino 644 seqs | teste 206 seqs
+  fold 4: treino 850 seqs | teste 206 seqs
+  fold 5: treino 1056 seqs | teste 206 seqs
+
+Salvo: lstm_sequences.npz
+########## 05_lstm[3] concluida em 1s
+
+########## 05_lstm[4] #@title Modelo LSTM (1 camada, hidden=16, dropout=0.4) → regressor esc
+Parâmetros: 2321
+Razão params/amostra (fold 1, 232 seqs): 10.0
+Saída: torch.Size([8])  (esperado torch.Size([8]))
+Determinismo do modelo: True  (deve ser True)
+########## 05_lstm[4] concluida em 0s
+
+########## 05_lstm[5] #@title Nível 4 — LSTM (só preço) · treino multi-semente com scaling P
+fold 1: 232 tr seqs | 28s
+fold 2: 438 tr seqs | 29s
+fold 3: 644 tr seqs | 44s
+fold 4: 850 tr seqs | 59s
+fold 5: 1056 tr seqs | 69s
+
+=== Média sobre 5 sementes, por fold ===
+         MAE    RMSE      DA      F1     MCC   Brier
+fold                                                
+1     0.0243  0.0366  0.4864  0.5878 -0.0467  0.2919
+2     0.0104  0.0132  0.4971  0.2395  0.0253  0.2922
+3     0.0102  0.0129  0.5087  0.6472 -0.0057  0.2706
+4     0.0112  0.0142  0.4874  0.2036  0.0076  0.2560
+5     0.0075  0.0093  0.4893  0.3954 -0.0237  0.2545
+
+=== Desvio sobre 5 sementes, por fold ===
+         MAE    RMSE      DA      F1     MCC   Brier
+fold                                                
+1     0.0026  0.0036  0.0410  0.0777  0.0375  0.0331
+2     0.0002  0.0003  0.0140  0.1541  0.0397  0.0225
+3     0.0001  0.0001  0.0282  0.0187  0.0401  0.0152
+4     0.0001  0.0001  0.0339  0.1655  0.0902  0.0029
+5     0.0000  0.0001  0.0213  0.2216  0.0577  0.0052
+
+=== Resumo global (média ± desvio entre sementes) ===
+  MAE: +0.0127 ± 0.0012
+  RMSE: +0.0172 ± 0.0016
+  DA: +0.4938 ± 0.0292
+  F1: +0.4147 ± 0.1460
+  MCC: -0.0086 ± 0.0567
+  Brier: +0.2730 ± 0.0193
+
+Salvos: preds_lstm_preco.npz, lstm_preco_full.parquet
+########## 05_lstm[5] concluida em 228s
+
+########## 05_lstm[6] #@title Nível 5 — LSTM (preço + texto) · PCA(768→8) e scaling POR FOLD
+Alinhamento OK: preço (1492, 19) | texto (1492, 770)
+fold 1: 232 tr seqs | PCA var explicada 43.6% | 16s
+fold 2: 438 tr seqs | PCA var explicada 42.2% | 28s
+fold 3: 644 tr seqs | PCA var explicada 43.8% | 41s
+fold 4: 850 tr seqs | PCA var explicada 46.6% | 53s
+fold 5: 1056 tr seqs | PCA var explicada 49.0% | 65s
+
+PCA k=8: variância explicada média 45.0%
+
+=== Média sobre 5 sementes, por fold ===
+         MAE    RMSE      DA      F1     MCC   Brier
+fold                                                
+1     0.0258  0.0383  0.4777  0.4913 -0.0441  0.3428
+2     0.0106  0.0135  0.4864  0.2594 -0.0285  0.2578
+3     0.0105  0.0132  0.4854  0.6640 -0.0078  0.3067
+4     0.0113  0.0144  0.5165  0.0976  0.0339  0.2807
+5     0.0075  0.0093  0.4845  0.5216 -0.0689  0.2632
+
+=== Desvio sobre 5 sementes, por fold ===
+         MAE    RMSE      DA      F1     MCC   Brier
+fold                                                
+1     0.0041  0.0053  0.0163  0.1862  0.0420  0.0628
+2     0.0003  0.0002  0.0380  0.2132  0.0979  0.0018
+3     0.0003  0.0004  0.0212  0.0047  0.0376  0.0719
+4     0.0003  0.0004  0.0122  0.1784  0.0528  0.0589
+5     0.0001  0.0001  0.0173  0.2300  0.0429  0.0094
+
+=== Resumo global (média ± desvio) ===
+  MAE: +0.0132 ± 0.0018
+  RMSE: +0.0177 ± 0.0024
+  DA: +0.4901 ± 0.0228
+  F1: +0.4068 ± 0.1816
+  MCC: -0.0231 ± 0.0590
+  Brier: +0.2902 ± 0.0503
+
+Salvos: preds_lstm_texto.npz, lstm_texto_full.parquet
+########## 05_lstm[6] concluida em 204s
+
+########## 05_lstm[7] #@title Nível 5b — desambiguação: PCA k=30 (retém mais variância)
+=== PCA k=30 ===
+  fold 1: var 69.8% | 17s
+  fold 2: var 67.3% | 27s
+  fold 3: var 67.7% | 41s
+  fold 4: var 69.3% | 54s
+  fold 5: var 70.4% | 68s
+
+Variância explicada: k=8 ~45% | k=30 ~69%
+
+=== Comparação (MCC/DA/RMSE/Brier) ===
+  MCC: só-preço=-0.0086 | texto-k8=-0.0231 | texto-k30=-0.0048 ±0.0569
+  DA: só-preço=+0.4938 | texto-k8=+0.4901 | texto-k30=+0.4998 ±0.0280
+  RMSE: só-preço=+0.0172 | texto-k8=+0.0177 | texto-k30=+0.0182 ±0.0047
+  Brier: só-preço=+0.2730 | texto-k8=+0.2902 | texto-k30=+0.2795 ±0.0363
+
+=== k=30 por fold ===
+         MAE    RMSE      DA      F1     MCC   Brier
+fold                                                
+1     0.0268  0.0396  0.5078  0.5231  0.0410  0.3245
+2     0.0107  0.0138  0.4932  0.2101 -0.0044  0.2859
+3     0.0102  0.0130  0.5087  0.6565 -0.0263  0.2550
+4     0.0115  0.0146  0.4903  0.2831 -0.0294  0.2803
+5     0.0078  0.0099  0.4990  0.3724 -0.0049  0.2517
+
+Salvos: preds_lstm_texto_k30.npz, lstm_texto_k30_full.parquet
+########## 05_lstm[7] concluida em 209s
+
+########## 05_lstm[8] #@title Via 2 — LSTM (preço + sentimento FinBERT) · 4 features densas,
+fold 1: 232 tr seqs | 16s
+fold 2: 438 tr seqs | 28s
+fold 3: 644 tr seqs | 42s
+fold 4: 850 tr seqs | 57s
+fold 5: 1056 tr seqs | 69s
+
+=== Via 2 (preço+sentimento) vs nível 4 (só-preço) ===
+  MCC: só-preço=-0.0086 | +sentimento=+0.0061 ±0.0603 | Δ=+0.0148
+  DA: só-preço=+0.4938 | +sentimento=+0.4953 ±0.0283 | Δ=+0.0016
+  RMSE: só-preço=+0.0172 | +sentimento=+0.0181 ±0.0058 | Δ=+0.0008
+  Brier: só-preço=+0.2730 | +sentimento=+0.2730 ±0.0248 | Δ=-0.0000
+
+=== Via 2 por fold ===
+         MAE    RMSE      DA      F1     MCC   Brier
+fold                                                
+1     0.0280  0.0406  0.4845  0.5141 -0.0354  0.3302
+2     0.0106  0.0134  0.5136  0.4282  0.0514  0.2639
+3     0.0102  0.0128  0.5078  0.6329  0.0042  0.2645
+4     0.0113  0.0142  0.4913  0.2196  0.0276  0.2546
+5     0.0075  0.0092  0.4796  0.5709 -0.0171  0.2518
+
+Salvos: preds_lstm_via2_sent.npz, lstm_via2_sent_full.parquet
+########## 05_lstm[8] concluida em 212s
+
+########## 05_lstm[9] #@title Via 1 -- LSTM (preço + embeddings FinBERT) · PCA(768→8) e scal
+Alinhamento OK: preço (1492, 19) | texto FinBERT (1492, 770)
+=== Via 1 -- FinBERT emb, PCA k=8 ===
+  fold 1: var 83.7% | 15s
+  fold 2: var 84.8% | 27s
+  fold 3: var 85.2% | 41s
+  fold 4: var 85.7% | 53s
+  fold 5: var 85.8% | 67s
+
+Variância explicada (FinBERT k=8): 85.0%
+
+=== Via 1 (FinBERT k=8) vs nível 4 (só-preço) ===
+  MCC: só-preço=-0.0086 | +emb FinBERT k8=-0.0112 ±0.0545 | Δ=-0.0025
+  DA: só-preço=+0.4938 | +emb FinBERT k8=+0.4922 ±0.0287 | Δ=-0.0016
+  RMSE: só-preço=+0.0172 | +emb FinBERT k8=+0.0185 ±0.0041 | Δ=+0.0012
+  Brier: só-preço=+0.2730 | +emb FinBERT k8=+0.2691 ±0.0153 | Δ=-0.0039
+
+=== Via 1 (k=8) por fold ===
+         MAE    RMSE      DA      F1     MCC   Brier
+fold                                                
+1     0.0275  0.0416  0.4990  0.4992 -0.0496  0.2900
+2     0.0110  0.0140  0.4951  0.2214  0.0591  0.2639
+3     0.0105  0.0131  0.4786  0.6268  0.0003  0.2734
+4     0.0112  0.0141  0.4951  0.1824 -0.0150  0.2624
+5     0.0075  0.0094  0.4932  0.4753 -0.0505  0.2557
+
+Salvos: preds_lstm_via1_finbert_k8.npz, lstm_via1_finbert_k8_full.parquet
+########## 05_lstm[9] concluida em 203s
+
+########## 05_lstm[10] #@title Via 1b -- desambiguação PCA k=30 (FinBERT) + comparação final 
+=== Via 1b -- FinBERT emb, PCA k=30 ===
+  fold 1: var 91.6% | 15s
+  fold 2: var 91.7% | 27s
+  fold 3: var 91.8% | 41s
+  fold 4: var 92.0% | 53s
+  fold 5: var 92.1% | 65s
+
+Variância explicada (FinBERT k=30): 91.8%
+
+=== Via 1b (FinBERT k=30) vs nível 4 (só-preço) ===
+  MCC: só-preço=-0.0086 | +emb FinBERT k30=+0.0075 ±0.0544 | Δ=+0.0162
+  DA: só-preço=+0.4938 | +emb FinBERT k30=+0.4942 ±0.0279 | Δ=+0.0004
+  RMSE: só-preço=+0.0172 | +emb FinBERT k30=+0.0175 ±0.0022 | Δ=+0.0003
+  Brier: só-preço=+0.2730 | +emb FinBERT k30=+0.2686 ±0.0221 | Δ=-0.0044
+
+=== Comparação final -- MCC ± desvio entre sementes ===
+  só-preço (nível 4)          : MCC -0.0086
+  BERTimbau k=8 (nível 5)     : MCC -0.0231 ± 0.0590
+  BERTimbau k=30 (nível 5b)   : MCC -0.0048 ± 0.0569
+  FinBERT emb k=8 (via 1)     : MCC -0.0112 ± 0.0545
+  FinBERT emb k=30 (via 1b)   : MCC +0.0075 ± 0.0544
+########## 05_lstm[10] concluida em 202s
+
+########## 05_lstm[11] #@title Via 3 -- LSTM (preço + Copom) · 3 features densas, SEM PCA
+fold 1: 232 tr seqs | 15s
+fold 2: 438 tr seqs | 27s
+fold 3: 644 tr seqs | 41s
+fold 4: 850 tr seqs | 53s
+fold 5: 1056 tr seqs | 65s
+
+=== Via 3 (preço+Copom) vs nível 4 (só-preço) ===
+  MCC: só-preço=-0.0086 | +Copom=+0.0057 ±0.0686 | Δ=+0.0143
+  DA: só-preço=+0.4938 | +Copom=+0.5072 ±0.0371 | Δ=+0.0134
+  RMSE: só-preço=+0.0172 | +Copom=+0.0186 ±0.0031 | Δ=+0.0014
+  Brier: só-preço=+0.2730 | +Copom=+0.2634 ±0.0198 | Δ=-0.0096
+
+=== Via 3 por fold ===
+         MAE    RMSE      DA      F1     MCC   Brier
+fold                                                
+1     0.0302  0.0430  0.5097  0.6306  0.0084  0.2841
+2     0.0107  0.0136  0.5068  0.1797  0.0395  0.2594
+3     0.0104  0.0132  0.4825  0.5810  0.0083  0.2634
+4     0.0110  0.0140  0.5350  0.3233  0.0057  0.2543
+5     0.0076  0.0093  0.5019  0.5375 -0.0336  0.2558
+
+Salvos: preds_lstm_via3_copom.npz, lstm_via3_copom_full.parquet
+########## 05_lstm[11] concluida em 201s

@@ -7,11 +7,11 @@ periodo de estudo (2019-01 a 2024-12).
 Classificacao hawkish/dovish (zero-shot, MoritzLaurer/mDeBERTa-v3-base-mnli-xnli):
 os 49 comunicados coletados (reuniao 219, semente anterior ao periodo de
 estudo, mais 220-267, as 48 do proprio periodo) tem 1.219-1.876 tokens
-(mediana 1.482) -- TODOS excedem o limite de 512 tokens do modelo, e
-apenas 2 de 49 abrem com a frase da decisao ("O Copom decidiu..."), que
-costuma vir no fim. Por isso o texto e
-classificado em DUAS janelas: o inicio (truncamento natural do pipeline) e o
-trecho FINAL (ultimos ~1.500 chars, onde a decisao e enunciada). A janela
+(mediana 1.482) -- TODOS excedem o limite de 512 tokens do modelo. Por isso o
+texto e classificado em DUAS janelas: o inicio (truncamento natural do
+pipeline) e o trecho FINAL (ultimos ~1.500 chars). O anuncio da decisao cai
+dentro da janela inicial em 34 dos 49 comunicados, o que explica boa parte da
+validade do escore (ver diagnostico_copom_validade.py). A janela
 usada nas features e a de maior correlacao com a direcao REAL da decisao de
 Selic (extraida do titulo oficial por regex, independente do modelo) --
 criterio de selecao supervisionado por um rotulo auxiliar, sem contato com o
@@ -103,7 +103,7 @@ def main():
 
     # ---------------- bucket para pregao ----------------
     # Comunicado liberado ~18h30 do dia da reuniao (apos o fechamento) -> cai
-    # no proximo pregao pela mesma regra de corte (17h) das noticias.
+    # no proximo pregao pela mesma regra de corte das noticias.
     ts_evento = pd.DatetimeIndex(
         [d.replace(hour=18, minute=30, tzinfo=TZ_BR) for d in df['data_reuniao']]
     ).tz_convert('UTC')

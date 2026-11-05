@@ -1,0 +1,405 @@
+
+########## 07_ablacoes[0] #@title Setup -- ablacoes (D vs D-1, janelas de lookback)
+Device: cuda
+Setup OK.
+########## 07_ablacoes[0] concluida em 0s
+
+########## 07_ablacoes[1] #@title Ablacao -- texto do dia D vs. D-1 (defasado), LSTM + BERTimbau
+Dias apos remover o 1o (sem D-1): 1491 (esperado 1491)
+=== LSTM + BERTimbau k=8, texto DEFASADO (D-1) ===
+  fold 1: 232 tr seqs | 16s
+  fold 2: 438 tr seqs | 27s
+  fold 3: 644 tr seqs | 41s
+  fold 4: 850 tr seqs | 53s
+  fold 5: 1056 tr seqs | 65s
+
+Correlacao texto(D-1) -> retorno(D+1):
+  n_noticias: -0.0217
+  emb_dispersao: -0.0342
+
+=== MCC: preco | texto-D (nivel 5) | texto-D-1 (esta ablacao) ===
+  so-preco:      -0.0086
+  texto D (k8):  -0.0231 +/- 0.0590
+  texto D-1(k8): -0.0117 +/- 0.0426
+
+Salvos: preds_lstm_bertimbau_k8_lagD1.npz, lstm_bertimbau_k8_lagD1_full.parquet
+########## 07_ablacoes[1] concluida em 205s
+
+########## 07_ablacoes[2] #@title Ablacao -- janelas de lookback {1,3,5,10} -- LSTM so-preco
+=== LSTM so-preco, lookback=1 ===
+  fold 1: 252 tr seqs | 15s
+  fold 2: 458 tr seqs | 27s
+  fold 3: 664 tr seqs | 38s
+  fold 4: 870 tr seqs | 51s
+  fold 5: 1076 tr seqs | 62s
+=== LSTM so-preco, lookback=3 ===
+  fold 1: 250 tr seqs | 16s
+  fold 2: 456 tr seqs | 29s
+  fold 3: 662 tr seqs | 41s
+  fold 4: 868 tr seqs | 53s
+  fold 5: 1074 tr seqs | 66s
+=== LSTM so-preco, lookback=5 ===
+  fold 1: 248 tr seqs | 16s
+  fold 2: 454 tr seqs | 29s
+  fold 3: 660 tr seqs | 41s
+  fold 4: 866 tr seqs | 53s
+  fold 5: 1072 tr seqs | 60s
+=== LSTM so-preco, lookback=10 ===
+  fold 1: 243 tr seqs | 16s
+  fold 2: 449 tr seqs | 28s
+  fold 3: 655 tr seqs | 38s
+  fold 4: 861 tr seqs | 53s
+  fold 5: 1067 tr seqs | 61s
+
+=== Sweep de lookback -- LSTM so-preco ===
+             MAE    RMSE      DA     MCC  MCC_sd
+lookback                                        
+1         0.0122  0.0166  0.4992 -0.0138  0.0682
+3         0.0123  0.0168  0.5019 -0.0058  0.0424
+5         0.0125  0.0170  0.4957 -0.0034  0.0427
+10        0.0125  0.0171  0.5056  0.0054  0.0450
+21        0.0127  0.0172  0.4938 -0.0086  0.0567
+
+Salvo: sweep_lookback_preco.parquet
+########## 07_ablacoes[2] concluida em 799s
+
+########## 07_ablacoes[3] #@title Ablacao -- janelas de lookback {1,3,5,10} -- LSTM + BERTimbau 
+=== LSTM + BERTimbau k=8, lookback=1 ===
+  fold 1: 252 tr seqs | 15s
+  fold 2: 458 tr seqs | 27s
+  fold 3: 664 tr seqs | 37s
+  fold 4: 870 tr seqs | 56s
+  fold 5: 1076 tr seqs | 75s
+=== LSTM + BERTimbau k=8, lookback=3 ===
+  fold 1: 250 tr seqs | 16s
+  fold 2: 456 tr seqs | 29s
+  fold 3: 662 tr seqs | 38s
+  fold 4: 868 tr seqs | 53s
+  fold 5: 1074 tr seqs | 66s
+=== LSTM + BERTimbau k=8, lookback=5 ===
+  fold 1: 248 tr seqs | 16s
+  fold 2: 454 tr seqs | 27s
+  fold 3: 660 tr seqs | 39s
+  fold 4: 866 tr seqs | 48s
+  fold 5: 1072 tr seqs | 60s
+=== LSTM + BERTimbau k=8, lookback=10 ===
+  fold 1: 243 tr seqs | 15s
+  fold 2: 449 tr seqs | 26s
+  fold 3: 655 tr seqs | 36s
+  fold 4: 861 tr seqs | 48s
+  fold 5: 1067 tr seqs | 58s
+
+=== Sweep de lookback -- LSTM + BERTimbau k=8 ===
+             MAE    RMSE      DA     MCC  MCC_sd
+lookback                                        
+1         0.0125  0.0169  0.4920 -0.0052  0.0611
+3         0.0127  0.0172  0.4868 -0.0160  0.0328
+5         0.0127  0.0173  0.4934 -0.0193  0.0590
+10        0.0128  0.0174  0.4963 -0.0040  0.0496
+21        0.0132  0.0177  0.4901 -0.0231  0.0590
+
+Salvo: sweep_lookback_texto.parquet
+########## 07_ablacoes[3] concluida em 788s
+
+########## 07_ablacoes[4] #@title Resumo consolidado das ablacoes (D vs D-1, sweep de lookback)
+=== D vs. D-1 (BERTimbau k=8, lookback=21) -- MCC ===
+  so-preco:  -0.0086
+  texto D:   -0.0231 +/- 0.0590
+  texto D-1: -0.0117 +/- 0.0426
+
+=== Sweep de lookback -- MCC por janela ===
+          MCC_preco  MCC_preco_sd  MCC_texto  MCC_texto_sd
+lookback                                                  
+1           -0.0138        0.0682    -0.0052        0.0611
+3           -0.0058        0.0424    -0.0160        0.0328
+5           -0.0034        0.0427    -0.0193        0.0590
+10           0.0054        0.0450    -0.0040        0.0496
+21          -0.0086        0.0567    -0.0231        0.0590
+
+Salvo: sweep_lookback_consolidado.parquet
+
+Conclusao preliminar (conferir apos rodar): se o MCC permanecer dentro do desvio entre sementes em TODAS as janelas, o resultado nulo e robusto a escolha do lookback -- nao e um artefato da janela de 21 dias.
+########## 07_ablacoes[4] concluida em 0s
+
+########## 07_ablacoes[6] #@title Ablacao -- anisotropia dos embeddings (whitening) + teste de p
+Similaridade de cosseno media entre pares aleatorios de manchetes: 0.659 (0=isotropico; confirma anisotropia se >> 0)
+
+=== BERTimbau ===
+  cru        k=8 (var 52.2%, k=8): max|r| preditivo=0.0282 | max|r| contemporaneo=0.0314
+  whitened   k=8 (var 7.4%, k=8): max|r| preditivo=0.0423 | max|r| contemporaneo=0.0656
+  cru        k=30 (var 72.1%, k=30): max|r| preditivo=0.0616 | max|r| contemporaneo=0.0625
+  whitened   k=30 (var 16.7%, k=30): max|r| preditivo=0.0498 | max|r| contemporaneo=0.0648
+  cru        k=100 (var 88.1%, k=100): max|r| preditivo=0.0691 | max|r| contemporaneo=0.0641
+  whitened   k=100 (var 37.4%, k=100): max|r| preditivo=0.0740 | max|r| contemporaneo=0.0680
+  cru        k=300 (var 97.8%, k=300): max|r| preditivo=0.0865 | max|r| contemporaneo=0.0759
+  whitened   k=300 (var 73.7%, k=300): max|r| preditivo=0.0879 | max|r| contemporaneo=0.0762
+
+=== FinBERT ===
+  cru        k=8 (var 86.2%, k=8): max|r| preditivo=0.0707 | max|r| contemporaneo=0.1934
+  whitened   k=8 (var 7.2%, k=8): max|r| preditivo=0.0219 | max|r| contemporaneo=0.0827
+  cru        k=30 (var 92.3%, k=30): max|r| preditivo=0.0707 | max|r| contemporaneo=0.1934
+  whitened   k=30 (var 16.4%, k=30): max|r| preditivo=0.0684 | max|r| contemporaneo=0.1229
+  cru        k=100 (var 96.8%, k=100): max|r| preditivo=0.0717 | max|r| contemporaneo=0.1934
+  whitened   k=100 (var 37.0%, k=100): max|r| preditivo=0.0766 | max|r| contemporaneo=0.1254
+  cru        k=300 (var 99.4%, k=300): max|r| preditivo=0.0915 | max|r| contemporaneo=0.1934
+  whitened   k=300 (var 73.3%, k=300): max|r| preditivo=0.0816 | max|r| contemporaneo=0.1245
+
+Sanidade cruzada: a correlacao CONTEMPORANEA do FinBERT whitened (k>=30) deve aproximar-se de +0.201 -- a correlacao ja reportada via a cabeca de sentimento dedicada do FinBERT (Secao 5.4) -- confirmando que o whitening recupera sinal real, nao ruido.
+########## 07_ablacoes[6] concluida em 10s
+
+########## 07_ablacoes[7] #@title Teste de permutacao -- a correlacao preditiva whitened e real 
+max|r| observado (BERTimbau whitened, k=300): 0.0879
+nulo empirico (500 permutacoes) -- media: 0.0817 | p95: 0.1009
+p-valor empirico: 0.226  (NAO significativo -- consistente com ruido)
+
+Salvo: ablacao_anisotropia_whitening.parquet
+########## 07_ablacoes[7] concluida em 11s
+
+########## 07_ablacoes[8] #@title Ablacao -- qualidade do texto: manchetes-template e linguagem 
+Manchetes-template identificadas: 871 (1.5% do corpus)
+
+Manchetes prospectivas: 5506 (9.6%)
+Manchetes retrospectivas: 251 (0.4%)
+
+=== Filtragem de manchetes-template ===
+COM templates (baseline): n_dias=1492 | k=30 | max|r| preditivo=0.0498 | p-valor (permutacao, 300x)=0.800
+SEM templates (filtrado): n_dias=1492 | k=30 | max|r| preditivo=0.0424 | p-valor (permutacao, 300x)=0.970
+
+=== Prospectiva vs. retrospectiva ===
+SO prospectivas: n_dias=1385 | k=30 | max|r| preditivo=0.0613 | p-valor (permutacao, 300x)=0.533
+SO retrospectivas: n_dias=218 | k=30 | max|r| preditivo=0.1529 | p-valor (permutacao, 300x)=0.517
+########## 07_ablacoes[8] concluida em 7s
+
+########## 07_ablacoes[9] #@title Interpretacao dos componentes de PCA (BERTimbau, k=8) -- diagn
+Variancia explicada por componente (k=8): ['11.8%', '5.9%', '5.2%', '4.0%', '2.9%', '2.6%', '2.4%', '2.1%']
+Variancia acumulada: 36.9%
+
+--- Componente 0 ---
+  Score MAIS BAIXO (5 manchetes):
+    [-3.77] Ibovespa descola do exterior e recua pressionado por Vale (VALE3) e bancos
+    [-3.69] Fed: Mester vê &#8216;complacência&#8217; em relação ao avanço das expectativas 
+    [-3.67] Fluxo cambial total no ano até 19 de agosto é positivo em US$ 20,891 bi, diz BC
+    [-3.62] Hackers têm presa fácil com vários alertas ignorados pelo governo dos EUA
+    [-3.62] Powell diz que Fed começará a reduzir balanço de ativos no próximo encontro
+  Score MAIS ALTO (5 manchetes):
+    [+2.80] O que a fraude contábil da Americanas representou para Magalu e Casas Bahia?
+    [+2.80] Dirigente do Fed diz que não tem havido espiral de alta de preços neste momento 
+    [+2.79] Mercados da China iniciam recuperação após temores de colapso
+    [+2.74] Ibovespa futuro sobe em última sessão de semana marcada por inflação nos EUA e b
+    [+2.73] Ministério diz ter exclusividade na compra de CoronaVac e prazo até maio para de
+
+--- Componente 1 ---
+  Score MAIS BAIXO (5 manchetes):
+    [-2.54] PMI industrial da China cai de 49,4 em novembro para 49,0 em dezembro
+    [-2.48] Gol (GOLL4) vê momento de “incertezas” quanto ao dólar, enquanto mercado interna
+    [-2.34] Agência britânica cita mais 41 relatos de coágulos após vacinação com AstraZenec
+    [-2.33] Vale altera valor de dividendo a ser pago em junho para R$ 2,189 por ação, Marfr
+    [-2.30] Petrobras (PETR4), BB (BBAS3) e Bradesco (BBDC4) puxam altas da Bolsa; Vale (VAL
+  Score MAIS ALTO (5 manchetes):
+    [+3.21] Vibra (VBBR3): Queda do petróleo derruba valor de estoques e margens no primeiro
+    [+3.19] Ibovespa segue em queda e descolada do exterior; mês deve ser o pior para a Bols
+    [+3.11] Posição cambial líquida do BC é de US$ 236,2 bilhões até 26 de abril
+    [+3.09] Países da UE assinam acordo para envio de até € 2 bilhões em munições para a Ucr
+    [+3.07] BB Seguridade (BBSE3) lucra R$ 1,179 bi no 1º trimestre, alta de 20,7% na base a
+
+--- Componente 2 ---
+  Score MAIS BAIXO (5 manchetes):
+    [-2.71] Bancos alertam que não estão prontos para teste climático do BCE
+    [-2.69] &#8220;Mesmo com a pandemia, a procura pelos nossos empreendimentos aumentou 50%
+    [-2.68] Por que as bolsas caem com o aumento dos rendimentos dos Treasuries?
+    [-2.67] Mudanças climáticas e IA serão pautas do Brasil à frente do Brics
+    [-2.65] Os 5 assuntos que vão movimentar o mercado nesta terça-feira
+  Score MAIS ALTO (5 manchetes):
+    [+2.93] Pacote de corte de gastos está pronto e só faltam ajustes na Defesa, diz Haddad
+    [+2.89] Petrorio (PRIO3) lucra 32% a mais no 4º trimestre, para R$ 894,2 milhões; Ebitda
+    [+2.82] BoE: &#8220;não é improvável que o juro básico suba a 2% ou mais&#8221;, diz Sau
+    [+2.81] Vendas no varejo caem 0,3% em agosto, puxadas por artigos de uso pessoal e domés
+    [+2.79] Ibovespa Futuro cai com exterior, repercussão do Copom e aprovação do arcabouço 
+
+--- Componente 3 ---
+  Score MAIS BAIXO (5 manchetes):
+    [-5.67] Produção de petróleo sob regime de partilha cresce 4% em agosto, diz PPSA
+    [-5.40] PRIO (PRIO3): produção diária em agosto atinge 71,7 mil barris por dia
+    [-5.35] Sinais de que Selic não subirá e de que juro dos EUA cairá estimulam alta do Ibo
+    [-5.15] Reforma administrativa deve ter impacto pequeno nas contas públicas, dizem econo
+    [-5.13] Táxi aéreo elétrico realiza primeiro voo em Munique
+  Score MAIS ALTO (5 manchetes):
+    [+1.79] Variante delta ainda não circula em São Paulo, diz prefeitura
+    [+1.67] Pacote de estímulo nos EUA está em risco por objetivos divergentes
+    [+1.56] B3 lança índice de ações formado por melhores empresas para trabalhar, segundo a
+    [+1.55] Amazon tem lucro muito acima do esperado e ações sobem no after-market de NY
+    [+1.53] Musk perde US$ 12,5 bi de patrimônio após notícia de adiamento de &#8220;robotáx
+
+--- Componente 4 ---
+  Score MAIS BAIXO (5 manchetes):
+    [-2.60] Cidade de São Paulo permite reabertura de bares, restaurantes e salões de beleza
+    [-2.56] Com soluções disruptivas, fintech se diferencia de bancos e corretoras de câmbio
+    [-2.55] Perdas consecutivas não são motivo para deixar de operar, diz especialista
+    [-2.55] Itaú lucra R$ 6,38 bilhões, Cielo decepciona e mais 2 balanços; Eletrobras e out
+    [-2.55] Ibovespa confirma a força dos 79 mil pontos e Itaú abre caminho para R$ 43,50
+  Score MAIS ALTO (5 manchetes):
+    [+2.20] Bolsas mundiais em leve alta, inflação nos EUA, balança comercial da China e mai
+    [+2.19] Ibovespa Futuro sobe seguindo exterior no fim do prazo defendido por democrata p
+    [+2.14] Ibovespa cai 4,5% na semana e dólar fecha no maior patamar desde outubro de 2018
+    [+2.12] Gasto com juros do setor público soma R$ 83,731 bi em agosto, aponta BC
+    [+2.11] Petrobras (PETR4) confirma oferta vinculante do consórcio formado por Petrorecôn
+
+--- Componente 5 ---
+  Score MAIS BAIXO (5 manchetes):
+    [-2.82] &#8216;Não tem nenhuma chance de MCMV ser interrompido&#8217;, diz presidente da
+    [-2.62] Preço de venda de refinaria pela Petrobras fica abaixo do esperado e já reflete 
+    [-2.62] Eletrobras tem lucro líquido de R$ 307 milhões no 1º trimestre, queda de 77% em 
+    [-2.62] Biden ameaça Brasil com sanções por Amazônia e propõe US$ 20 bi para floresta
+    [-2.62] Mercado financeiro eleva projeção para a inflação em 2021 pela 12ª vez seguida e
+  Score MAIS ALTO (5 manchetes):
+    [+2.71] Minerva (BEEF3) é notificada sobre suspensão de exportação para China e espera r
+    [+2.45] Conselho do PPI recomenda exclusão de Petrobras e Correios de processo de desest
+    [+2.37] O que explica a queda de 10% do Bitcoin e para onde o preço pode ir agora
+    [+2.36] Even (EVEN3) reverte prejuízo e tem lucro de R$ 41,7 milhões no 4º trimestre
+    [+2.35] Subsidiárias da JBS captam US$ 1,5 bi em bonds, Marfrig conclui aquisições, JHSF
+
+--- Componente 6 ---
+  Score MAIS BAIXO (5 manchetes):
+    [-2.35] Petrobras (PETR4) reclama falta de pagamento de parcela bilionária de venda do P
+    [-2.33] Por que o Bitcoin caiu 45% em um mês e o que precisa acontecer para os preços vo
+    [-2.26] IPC-S sobe 0,45% na 2ª quadrissemana de maio, diz FGV
+    [-2.21] Petrobras recebe do governo indicação de mais dois nomes para o Conselho de Admi
+    [-2.20] B2W, Cesp, CCR e mais 25 empresas divulgam resultados na próxima semana
+  Score MAIS ALTO (5 manchetes):
+    [+2.53] Magalu eleva oferta pela Netshoes, Cielo corta dividendo, 3 recomendações e mais
+    [+2.49] Juros &#8216;&#8221;não necessariamente&#8221; atingiram pico na zona do euro, d
+    [+2.43] PGR fecha delação com fundador e outros três ex-executivos da Hypera com multa r
+    [+2.39] OCDE reduz previsão de crescimento global em 2020 por coronavírus
+    [+2.39] Fábrica de vacinas da AstraZeneca é esvaziada devido a pacote suspeito
+
+--- Componente 7 ---
+  Score MAIS BAIXO (5 manchetes):
+    [-2.10] Bitcoin acima de US$ 56 mil, Bitmain fora da China e mais assuntos que vão movim
+    [-2.00] EUA vetam resolução brasileira no Conselho de Segurança da ONU sobre Israel e Ga
+    [-1.93] &#8220;Só impedimos a explosão&#8221;: por que não podemos parar a agenda de ref
+    [-1.90] Zelensky visita sul da Ucrânia, atingido por enchentes, para avaliar escala de d
+    [-1.89] Como ganhar mais que os fundos multimercados? Analistas sem Censura explicam
+  Score MAIS ALTO (5 manchetes):
+    [+2.38] Mercado já prevê crescimento do PIB abaixo de 1% em 2022
+    [+2.38] Liga de FIIs destaca fundos para investir em outubro
+    [+2.35] Ibovespa ganha importante batalha no intraday, mas tem uma guerra contra os 77.3
+    [+2.30] Minério de ferro cai com aumento de estoques e margens fracas de siderúrgicas
+    [+2.29] Petróleo pode chegar a US$ 380 o barril em cenário extremo se Rússia cortar prod
+
+=== Correlacao de cada componente (agregado por dia) com metadados ===
+        n_noticias  emb_dispersao  sent_polaridade  ret_contemporaneo  ret_alvo_Dmais1  dia_semana
+comp_0      -0.097          0.307           -0.030             -0.041            0.005      -0.027
+comp_1       0.436         -0.584            0.153              0.014           -0.010       0.045
+comp_2       0.118         -0.016            0.053              0.004            0.011       0.009
+comp_3       0.271         -0.085            0.156              0.007            0.021       0.023
+comp_4      -0.161          0.027           -0.103             -0.030           -0.020      -0.010
+comp_5       0.379          0.096           -0.008             -0.039           -0.002       0.020
+comp_6      -0.338          0.367           -0.111             -0.004           -0.005      -0.012
+comp_7      -0.155         -0.086           -0.050             -0.030            0.003      -0.010
+
+Salvo: interpretacao_pca_componentes.parquet
+
+Nota: PCA ajustado sobre a serie completa, apenas para diagnostico -- os modelos reportados usam PCA ajustado por fold (Secao 4.2), como sempre neste trabalho.
+########## 07_ablacoes[9] concluida em 1s
+
+########## 07_ablacoes[10] #@title Ablacao -- ultima manchete do dia (recencia) vs. media do dia 
+=== LSTM + BERTimbau k=8, ULTIMA manchete do dia (recencia) ===
+  fold 1: 232 tr seqs | 15s
+  fold 2: 438 tr seqs | 25s
+  fold 3: 644 tr seqs | 38s
+  fold 4: 850 tr seqs | 48s
+  fold 5: 1056 tr seqs | 57s
+
+Correlacao ultima-manchete(PCA k=8) -> retorno(D+1): max|r|=0.0500
+
+=== MCC: preco | texto-MEDIA do dia (nivel 5) | texto-ULTIMA manchete (esta ablacao) ===
+  so-preco:          -0.0086
+  texto media (k8):  -0.0231 +/- 0.0590
+  texto ultima (k8): -0.0110 +/- 0.0606
+
+Salvos: preds_lstm_bertimbau_k8_ultima.npz, lstm_bertimbau_k8_ultima_full.parquet
+########## 07_ablacoes[10] concluida em 187s
+
+########## 07_ablacoes[11] #@title Ablacao -- Bag-of-Words (TF-IDF+SVD) vs. embedding denso (BERT
+Dias sem manchete no periodo de estudo: 0 de 1492
+fold 1: 232 tr seqs | vocab=2905 | SVD var 7.3% | 15s
+fold 2: 438 tr seqs | vocab=4743 | SVD var 6.0% | 25s
+fold 3: 644 tr seqs | vocab=5000 | SVD var 6.0% | 38s
+fold 4: 850 tr seqs | vocab=5000 | SVD var 6.7% | 48s
+fold 5: 1056 tr seqs | vocab=5000 | SVD var 7.2% | 64s
+
+Variancia explicada media (SVD sobre TF-IDF, k=8): 6.6%
+
+=== MCC: preco | texto denso BERTimbau k8 (nivel 5) | texto BoW/TF-IDF k8 (esta ablacao) ===
+  so-preco:              -0.0086
+  texto denso (k8):      -0.0231 +/- 0.0590
+  texto BoW/TF-IDF (k8): -0.0322 +/- 0.0472
+
+Salvos: preds_lstm_bow_k8.npz, lstm_bow_k8_full.parquet
+########## 07_ablacoes[11] concluida em 193s
+
+########## 07_ablacoes[12] #@title Desambiguacao -- BoW/TF-IDF com k=30 (retem mais variancia)
+fold 1: 232 tr seqs | vocab=2905 | SVD var 22.1% | 14s
+fold 2: 438 tr seqs | vocab=4743 | SVD var 15.8% | 26s
+fold 3: 644 tr seqs | vocab=5000 | SVD var 14.0% | 37s
+fold 4: 850 tr seqs | vocab=5000 | SVD var 14.2% | 48s
+fold 5: 1056 tr seqs | vocab=5000 | SVD var 14.5% | 61s
+
+Variancia explicada media (SVD sobre TF-IDF, k=30): 16.1% (k=8 havia retido 6.6%)
+
+=== Comparacao final -- MCC +/- dp entre sementes ===
+  so-preco                        : MCC -0.0086
+  BERTimbau denso k=8 (nivel 5)   : MCC -0.0231 +/- 0.0590
+  BERTimbau denso k=30 (nivel 5b) : MCC -0.0048 +/- 0.0569
+  BoW/TF-IDF k=8 (esta secao)     : MCC -0.0322 +/- 0.0472
+  BoW/TF-IDF k=30 (esta secao)    : MCC +0.0017 +/- 0.0568
+
+Salvos: preds_lstm_bow_k30.npz, lstm_bow_k30_full.parquet
+########## 07_ablacoes[12] concluida em 189s
+
+########## 07_ablacoes[13] #@title Ablação -- XGBoost + embeddings de texto (sinal acoplado a mod
+=== XGBoost + BERTimbau, PCA k=8 ===
+  fold 1: 3s | PCA var 43.6%
+  fold 2: 2s | PCA var 42.2%
+  fold 3: 2s | PCA var 43.8%
+  fold 4: 2s | PCA var 46.6%
+  fold 5: 3s | PCA var 49.0%
+
+=== XGBoost + BERTimbau, PCA k=30 ===
+  fold 1: 3s | PCA var 69.8%
+  fold 2: 3s | PCA var 67.3%
+  fold 3: 3s | PCA var 67.7%
+  fold 4: 4s | PCA var 69.3%
+  fold 5: 4s | PCA var 70.4%
+
+=== XGBoost + FinBERT embeddings, PCA k=8 ===
+  fold 1: 2s | PCA var 83.7%
+  fold 2: 2s | PCA var 84.8%
+  fold 3: 2s | PCA var 85.2%
+  fold 4: 2s | PCA var 85.7%
+  fold 5: 3s | PCA var 85.8%
+
+=== XGBoost + FinBERT embeddings, PCA k=30 ===
+  fold 1: 3s | PCA var 91.6%
+  fold 2: 3s | PCA var 91.7%
+  fold 3: 4s | PCA var 91.8%
+  fold 4: 4s | PCA var 92.0%
+  fold 5: 4s | PCA var 92.1%
+
+=== XGBoost + FinBERT sentimento (4 features densas, sem PCA) ===
+  fold 1: 2s
+  fold 2: 2s
+  fold 3: 2s
+  fold 4: 2s
+  fold 5: 2s
+
+=== MCC: mesmo sinal textual, XGBoost vs. LSTM ===
+  XGBoost só-preço (nível 3, corrigido): +0.0280 +/- 0.0384
+  BERTimbau k=8       : XGBoost +0.0150 +/- 0.0410  |  LSTM -0.0231
+  BERTimbau k=30      : XGBoost +0.0255 +/- 0.0363  |  LSTM -0.0048
+  FinBERT emb k=8     : XGBoost +0.0131 +/- 0.0445  |  LSTM -0.0112
+  FinBERT emb k=30    : XGBoost +0.0162 +/- 0.0367  |  LSTM +0.0075
+  FinBERT sentimento  : XGBoost +0.0058 +/- 0.0379  |  LSTM +0.0061
+
+Salvos: preds_xgboost_{bertimbau_k8,bertimbau_k30,finbert_k8,finbert_k30,finbert_sent}.npz e xgboost_*_full.parquet
+########## 07_ablacoes[13] concluida em 69s

@@ -12,13 +12,16 @@
 \usepackage{booktabs}
 \usepackage{placeins}
 \usepackage{float}
+% Trechos alterados para responder aos comentarios da revisao aparecem em vermelho.
+% Versao final sem destaque: troque a linha abaixo por \newcommand{\novo}[1]{#1}
+\newcommand{\novo}[1]{\textcolor{red}{#1}}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
 \title{Embeddings de not\'icias financeiras e comunicados do Copom em portugu\^es na previs\~ao do retorno di\'ario do Ibovespa: uma avalia\c{c}\~ao com valida\c{c}\~ao walk-forward}
 
-\author{\IEEEauthorblockN{Hiago Lacerda}
+\author{\IEEEauthorblockN{Hiago Willyam Ara\'ujo Lacerda}
 \IEEEauthorblockA{\textit{Deep Learning} \\
 \textit{Universidade Federal de Pernambuco - UFPE}\\
 Recife, Brasil \\
@@ -28,7 +31,7 @@ hwal@cin.ufpe.br}
 \maketitle
 
 \begin{abstract}
-Este trabalho avalia se embeddings textuais de not\'icias financeiras e o sinal de pol\'itica monet\'aria do Copom, ambos em portugu\^es, melhoram a previs\~ao do retorno di\'ario (D+1) do Ibovespa frente a baselines cl\'assicos (passeio aleat\'orio, ARIMA/ARIMAX) e a um modelo tabular treinado s\'o com pre\c{c}o (XGBoost). Manchetes do InfoMoney (2018--2024, 57.611 registros) foram convertidas em embeddings por BERTimbau e FinBERT-PT-BR e combinadas a uma LSTM parcimoniosa treinada sobre vari\'aveis de pre\c{c}o, sob protocolo walk-forward com embargo de 21 dias e ajuste de todo componente dependente de dados exclusivamente no treino de cada fold. Nenhum modelo supera o acaso na previs\~ao direcional de forma estatisticamente significativa (Pesaran-Timmermann, $p>0{,}05$ ap\'os Holm em todos os casos). O sinal textual \'e reativo, n\~ao preditivo: a polaridade de sentimento correlaciona-se com o retorno do mesmo dia ($r\approx0{,}20$), mas n\~ao com o de D+1 ($r$ entre $0{,}00$ e $-0{,}04$). Testes de Diebold-Mariano mostram que o XGBoost \'e significativamente mais preciso do que diversas variantes de LSTM com texto, nunca o inverso. Sob custo de 5 bps/opera\c{c}\~ao, dez das onze estrat\'egias mec\^anicas t\^em Sharpe negativo ou nulo; a exce\c{c}\~ao \'e indistingu\'ivel de zero e inst\'avel entre folds. Uma verifica\c{c}\~ao de robustez, retreinando os modelos sobre o corpo completo das mat\'erias (56.819 textos, n\~ao apenas a manchete), reproduz o mesmo padr\~ao nulo. Conclui-se que, sob valida\c{c}\~ao rigorosa e sem vazamento temporal, embeddings de not\'icias financeiras em portugu\^es n\~ao melhoram a previs\~ao do retorno di\'ario do Ibovespa -- resultado nulo obtido com rigor metodol\'ogico, n\~ao uma limita\c{c}\~ao de implementa\c{c}\~ao.
+\novo{Este trabalho avalia se embeddings de manchetes financeiras em portugu\^es (BERTimbau e FinBERT-PT-BR; 57.611 manchetes do InfoMoney, 2018--2024) e o vi\'es dos comunicados do Copom melhoram a previs\~ao do retorno di\'ario (D+1) do Ibovespa frente a passeio aleat\'orio, ARIMA/ARIMAX, XGBoost e LSTM s\'o com pre\c{c}o, em valida\c{c}\~ao walk-forward com embargo de 21 dias e todo ajuste restrito ao treino de cada fold. Nenhum modelo supera o passeio aleat\'orio em erro (R$^2$ fora da amostra de $-0{,}01$ a $-0{,}37$) nem o acaso em dire\c{c}\~ao (Pesaran-Timmermann, menor $p$ ap\'os Holm de 0,73), o ganho do texto n\~ao se distingue de zero em 26 combina\c{c}\~oes de desenho e, sob custo de 5 bps, dez das onze estrat\'egias t\^em Sharpe negativo ou nulo. Os intervalos de 95\% excluem acur\'acia direcional acima de $\approx$55\% em qualquer modelo (5 p.p. sobre o acaso; Sharpe bruto de $\approx$1,1) e ganho do texto sobre o pre\c{c}o acima de $\approx$0,13 de MCC, mas n\~ao efeitos menores: com $n=1030$, o teste s\'o atinge 80\% de poder a partir de 54,4\% de acerto (Sharpe de $\approx$0,9). O sentimento acompanha o retorno do pr\'oprio dia ($r\approx0{,}18$), sobretudo em manchetes que relatam pre\c{c}os ($+0{,}25$, contra $+0{,}07$ nas de eventos), e a parte n\~ao explicada pelo pre\c{c}o n\~ao prev\^e D+1 ($r=-0{,}007$, IC $[-0{,}07;\,+0{,}05]$). Com aberturas reais, o texto publicado antes da abertura relaciona-se com o gap noturno ($r\approx0{,}13$), mas n\~ao prev\^e o retorno abertura$\to$fechamento ($r=0{,}00$, IC $[-0{,}05;\,+0{,}05]$); o classificador do Copom l\^e a dire\c{c}\~ao da decis\~ao ($r=+0{,}615$; $+0{,}25$ sem a frase do an\'uncio), sem rela\c{c}\~ao detect\'avel com o retorno nem na janela de rea\c{c}\~ao (48 eventos).}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -49,18 +52,17 @@ y_t = \ln\!\left(\frac{\text{close}_{t+1}}{\text{close}_t}\right),
 avaliado por magnitude do erro (MAE, RMSE), acerto direcional (DA, F1, MCC) e calibra\c{c}\~ao (Brier). A valida\c{c}\~ao segue sempre esquema walk-forward temporal, com toda transforma\c{c}\~ao dependente dos dados -- normaliza\c{c}\~ao, PCA, calibra\c{c}\~ao, sele\c{c}\~ao de ordem ARIMA -- ajustada exclusivamente no treino de cada fold.
 
 Contribui\c{c}\~oes deste trabalho:
-\begin{itemize}
-\item Corpus de 57.611 manchetes do InfoMoney (2018--2024) com atribui\c{c}\~ao temporal por corte \`as 17h, incluindo hor\'ario de ver\~ao hist\'orico.
-\item Compara\c{c}\~ao sim\'etrica entre BERTimbau e FinBERT-PT-BR, embeddings e sentimento expl\'icito.
-\item Evid\^encia de que o sinal textual \'e reativo, n\~ao preditivo (Se\c{c}\~ao~\ref{sec:achado}).
-\item Protocolo estat\'istico abrangente (Diebold-Mariano, Pesaran-Timmermann, corre\c{c}\~ao de Holm, avalia\c{c}\~ao multi-semente) sobre 11 modelos, incluindo Copom via API do BCB.
-\item Avalia\c{c}\~ao de viabilidade econ\^omica (Sharpe, drawdown) sob custo de transa\c{c}\~ao realista.
-\end{itemize}
+\begin{enumerate}[\IEEEsetlabelwidth{(iii)}\renewcommand{\labelenumi}{\novo{(\roman{enumi})}}]
+\item \novo{\textbf{Protocolo anti-vazamento test\'avel:} regra de atribui\c{c}\~ao temporal no fechamento efetivo da B3, com hor\'ario de ver\~ao hist\'orico, verificada por 25 testes automatizados, inclusive sobre os pr\'oprios dados; todo ajuste dentro do treino de cada fold; an\'alise de poder do desenho (Fig.~\ref{fig:poder}).}
+\item \novo{\textbf{Evid\^encia de que o texto descreve o retorno do dia} (Se\c{c}\~ao~\ref{sec:achado}), e de que o encoder de dom\'inio faz isso melhor: correla\c{c}\~ao contempor\^anea m\'axima de 0,19 no FinBERT-PT-BR, contra 0,08 no BERTimbau, em compara\c{c}\~ao sim\'etrica de embeddings e sentimento expl\'icito.}
+\item \novo{\textbf{Caracteriza\c{c}\~ao do que o desenho consegue e n\~ao consegue detectar:} intervalos por \emph{block bootstrap}, margem de equival\^encia, cadeia de robustez em tabela \'unica (Se\c{c}\~ao~\ref{sec:robustez}), viabilidade econ\^omica sob custo de transa\c{c}\~ao e o teste da janela de rea\c{c}\~ao com aberturas reais (Se\c{c}\~ao~\ref{sec:janela}).}
+\item \novo{\textbf{Corpus e vari\'aveis reconstitu\'iveis:} c\'odigo de coleta e de gera\c{c}\~ao das vari\'aveis publicado para as 57.611 manchetes e os 49 comunicados; os dados podem ser disponibilizados sob solicita\c{c}\~ao.}
+\end{enumerate}
 
 \section{Trabalhos Relacionados}
 \label{sec:relacionados}
 
-A literatura de previs\~ao de retornos com aprendizado profundo e dados textuais orienta tr\^es escolhas metodol\'ogicas deste trabalho. Combina\c{c}\~oes de LSTM com embeddings financeiros \cite{gu2024finbertlstm} reportam ganhos modestos e inconsistentes entre mercados, frequentemente sem controle rigoroso de vazamento temporal na normaliza\c{c}\~ao ou sele\c{c}\~ao de vari\'aveis -- lacuna que este trabalho procura sanar exigindo que todo ajuste estat\'istico (scaler, PCA, calibra\c{c}\~ao) ocorra exclusivamente dentro do treino de cada fold. Estudos comparativos sobre sentimento textual em previs\~ao financeira \cite{dahal2023comparative} documentam que o poder preditivo do sentimento agregado tende a ser pequeno e sens\'ivel \`a forma de agrega\c{c}\~ao temporal, refor\c{c}ando a necessidade de uma regra de corte temporal expl\'icita e validada -- adotada aqui pela fun\c{c}\~ao \texttt{assign\_trading\_day}, com corte \`as 17h America/Sao\_Paulo (Se\c{c}\~ao~\ref{sec:antivazamento}). A literatura de FinBERT \cite{araci2019finbert} estabelece que modelos de linguagem ajustados a corpora financeiros produzem sentimento mais alinhado ao dom\'inio do que modelos gen\'ericos, mas isso n\~ao garante, por si s\'o, que esse sentimento seja \emph{preditivo} -- apenas que constitui descri\c{c}\~ao mais \emph{precisa} do texto. Este trabalho distingue explicitamente essas duas propriedades (Se\c{c}\~ao~\ref{sec:achado}): o FinBERT-PT-BR aqui utilizado produz sentimento fortemente correlacionado ao retorno \emph{contempor\^aneo}, mas n\~ao ao retorno \emph{futuro}, consistente com a hip\'otese de efici\^encia informacional de mercado -- dificuldade de extrair sentimento genuinamente informativo cuja raiz remonta a \cite{loughran2011}, que documentam que l\'exicos gen\'ericos classificam mal o vocabul\'ario t\'ecnico financeiro.
+A literatura de previs\~ao de retornos com aprendizado profundo e dados textuais orienta tr\^es escolhas metodol\'ogicas deste trabalho. Combina\c{c}\~oes de LSTM com embeddings financeiros \cite{gu2024finbertlstm} reportam ganhos modestos e inconsistentes entre mercados, frequentemente sem controle rigoroso de vazamento temporal na normaliza\c{c}\~ao ou sele\c{c}\~ao de vari\'aveis -- lacuna que este trabalho procura sanar exigindo que todo ajuste estat\'istico (scaler, PCA, calibra\c{c}\~ao) ocorra exclusivamente dentro do treino de cada fold. Estudos comparativos sobre sentimento textual em previs\~ao financeira \cite{dahal2023comparative} documentam que o poder preditivo do sentimento agregado tende a ser pequeno e sens\'ivel \`a forma de agrega\c{c}\~ao temporal, refor\c{c}ando a necessidade de uma regra de corte temporal expl\'icita e validada -- adotada aqui pela fun\c{c}\~ao \texttt{assign\_trading\_day}, \novo{com corte no fechamento efetivo da B3} (Se\c{c}\~ao~\ref{sec:antivazamento}). A literatura de FinBERT \cite{araci2019finbert} estabelece que modelos de linguagem ajustados a corpora financeiros produzem sentimento mais alinhado ao dom\'inio do que modelos gen\'ericos, mas isso n\~ao garante, por si s\'o, que esse sentimento seja \emph{preditivo} -- apenas que constitui descri\c{c}\~ao mais \emph{precisa} do texto. Este trabalho distingue explicitamente essas duas propriedades (Se\c{c}\~ao~\ref{sec:achado}): o FinBERT-PT-BR aqui utilizado produz sentimento \novo{correlacionado ao retorno \emph{contempor\^aneo}, mas n\~ao ao retorno \emph{futuro}, porque acompanha o pre\c{c}o do dia, sobretudo nas manchetes que relatam o pr\'oprio mercado.} A dificuldade de extrair sentimento genuinamente informativo remonta a \cite{loughran2011}, que documentam que l\'exicos gen\'ericos classificam mal o vocabul\'ario t\'ecnico financeiro.
 
 \textbf{Onde a previs\~ao funciona.} A literatura de ML em finan\c{c}as documenta sucesso preditivo robusto, por\'em fora do regime aqui testado: em corte transversal, com milhares de ativos, sobre retornos mensais \cite{gukellyxiu2020}; e em alta frequ\^encia, via livro de ofertas, em horizonte de segundos \cite{sirignanocont2019}. Ambos diferem estruturalmente do problema tratado -- \'indice \'unico, horizonte di\'ario, texto de not\'icias p\'ublicas --, precisamente a combina\c{c}\~ao menos favor\'avel \`a previsibilidade sob efici\^encia de mercado.
 
@@ -70,17 +72,23 @@ A literatura de previs\~ao de retornos com aprendizado profundo e dados textuais
 A s\'erie di\'aria do Ibovespa (\^{}BVSP), julho/2018--dezembro/2024, foi obtida junto ao Stooq e validada contra refer\^encias p\'ublicas conhecidas -- fundo da crise da COVID-19 em 23/03/2020 ($\approx$63.570 pontos) e fechamento do \'ultimo preg\~ao de 2024 ($\approx$120.283 pontos) --, com desvio de 0,00\% em ambos os casos. O per\'iodo de julho a dezembro de 2018 funciona como \emph{buffer} para vari\'aveis de janela longa. O per\'iodo de estudo (janeiro/2019--dezembro/2024) totaliza 1.492 preg\~oes com alvo definido.
 
 \subsection{Not\'icias}
-Manchetes do InfoMoney (se\c{c}\~oes \emph{mercados} e \emph{economia}) foram coletadas via sitemaps e extra\c{c}\~ao dos campos \texttt{datePublished}/\texttt{headline} do JSON-LD de cada p\'agina. Ap\'os deduplica\c{c}\~ao, o corpus totaliza 57.611 manchetes, cobrindo 100\% dos preg\~oes do per\'iodo de estudo (Fig.~\ref{fig:manchetes}). Os timestamps, verificados como UTC verdadeiro, s\~ao convertidos \`a hora local via \texttt{zoneinfo}/America-S\~ao\_Paulo, tratando corretamente o hor\'ario de ver\~ao hist\'orico (vigente at\'e fevereiro/2019).
+Manchetes do InfoMoney (se\c{c}\~oes \emph{mercados} e \emph{economia}) foram coletadas via sitemaps e extra\c{c}\~ao dos campos \texttt{datePublished}/\texttt{headline} do JSON-LD de cada p\'agina. Ap\'os deduplica\c{c}\~ao, o corpus totaliza 57.611 manchetes, cobrindo 100\% dos preg\~oes do per\'iodo de estudo (Fig.~\ref{fig:manchetes}). \novo{At\'e a migra\c{c}\~ao do site do InfoMoney (24/09/2019), o \texttt{datePublished} traz a hora local rotulada como UTC (9,3\% do corpus); depois, UTC verdadeiro. Rel\'ogios independentes confirmam o erro e a corre\c{c}\~ao: os relatos de fechamento do Ibovespa passam de 14h19 para 17h19 (mediana), e a decis\~ao do Fed de 31/07/2019, de 12h01 para 15h01.} Os carimbos corrigidos s\~ao convertidos \`a hora local via \texttt{zoneinfo}/America-S\~ao\_Paulo, tratando corretamente o hor\'ario de ver\~ao hist\'orico (vigente at\'e fevereiro/2019).
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=0.48\textwidth]{manchetes_por_pregao.png}}
-\caption{Manchetes coletadas por preg\~ao, 2019--2024.}
+\caption{\novo{Manchetes coletadas por preg\~ao, 2019--2024 (m\'edia m\'ovel de 21 preg\~oes em destaque). A cobertura \'e total (m\'inimo de 2 manchetes por preg\~ao), mas o volume di\'ario triplica no per\'iodo: a m\'edia anual passa de $\approx$17 em 2019 para $\approx$53 em 2024.}}
 \label{fig:manchetes}
 \end{figure}
 
 \subsection{Alvo e corte temporal (anti-vazamento)}
 \label{sec:antivazamento}
-O alvo \'e gerado em um \'unico ponto do c\'odigo (Eq.~\eqref{eq:target}). Cada not\'icia \'e atribu\'ida ao preg\~ao cujo fechamento ela pode informar via \texttt{assign\_trading\_day}, com corte inclusivo \`as 17h (fechamento da B3): publicada at\'e 17h00 do dia $D$, atribu\'ida a $D$; depois, ao preg\~ao seguinte. Essa fun\c{c}\~ao \'e coberta por 14 testes automatizados (10 sobre o corte temporal), incluindo hor\'ario de ver\~ao hist\'orico e instantes UTC reais -- desenhados para detectar o erro cl\'assico de tratar o fuso como deslocamento fixo em vez de consultar a regra vigente na data.
+O alvo \'e gerado em um \'unico ponto do c\'odigo (Eq.~\eqref{eq:target}). Cada not\'icia \'e atribu\'ida ao preg\~ao cujo fechamento ela pode informar via \texttt{assign\_trading\_day}, \novo{com corte inclusivo no fechamento efetivo da B3, que acompanha o rel\'ogio de Nova York: 18h entre o fim e o in\'icio do hor\'ario de ver\~ao americano (34\% dos preg\~oes da amostra) e 17h no restante. Publicada at\'e o fechamento de $D$, atribu\'ida a $D$; depois, ao preg\~ao seguinte (Fig.~\ref{fig:janela}). A regra \'e coberta por 25 testes automatizados, 3 deles sobre os pr\'oprios dados, que falham com o carimbo original. Os resultados deste artigo usam o carimbo corrigido. O original n\~ao afetava os dias de teste, mas afetava o treino (73\% do fold 1, 17\% do fold 5); retreinadas, as cinco variantes de texto mudam o MCC em $-0{,}01$ a $+0{,}03$ (IC contendo zero) e o R$^2$ em $0{,}00$ a $+0{,}04$, sem alterar as conclus\~oes.}
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{fig_janela_24h.png}}
+\caption{\novo{Atribui\c{c}\~ao temporal das manchetes e janelas de retorno. Uma manchete publicada entre os fechamentos dos dias $D$ e $D+1$ entra na linha $D+1$; os percentuais indicam a fra\c{c}\~ao do corpus em cada intervalo do rel\'ogio (dias \'uteis; os 4,1\% restantes saem em fins de semana). O retorno $D\to D+1$ \'e, ao mesmo tempo, o alvo da linha $D$ e o retorno contempor\^aneo da linha $D+1$, e se decomp\~oe em gap noturno e abertura$\to$fechamento: a rea\c{c}\~ao imediata a qualquer manchete das faixas pr\'e-abertura recai no gap, e o alvo da linha $D+1$ \'e o retorno seguinte. Os comunicados do Copom (18h30) pertencem sempre a essa faixa. A ata (8h30, seis dias \'uteis ap\'os a reuni\~ao) n\~ao \'e usada.}}
+\label{fig:janela}
+\end{figure*}
 
 \subsection{Comunicados do Copom}
 Os 49 comunicados de decis\~ao de pol\'itica monet\'aria (reuni\~oes 219--267, dezembro/2018--dezembro/2024) foram obtidos via API p\'ublica de dados abertos do Banco Central. Liberados ap\'os o fechamento do preg\~ao ($\approx$18h30), s\~ao atribu\'idos ao preg\~ao seguinte pela mesma regra de corte. A reuni\~ao 219, anterior ao per\'iodo de estudo, funciona como semente de estado inicial.
@@ -89,13 +97,13 @@ Os 49 comunicados de decis\~ao de pol\'itica monet\'aria (reuni\~oes 219--267, d
 
 \subsection{Vari\'aveis de pre\c{c}o}
 \label{sec:features-preco}
-O arquivo \texttt{features\_preco.parquet} cont\'em 18 vari\'aveis, calculadas com dados dispon\'iveis at\'e o dia $t$ para prever $t+1$: retornos defasados (lags 0--10), volatilidade realizada (5/10/21), momento (5/10/21), dist\^ancia \`a m\'edia m\'ovel (10/21), calend\'ario e duas vari\'aveis de volume relativo/varia\c{c}\~ao logar\'itmica -- nunca o n\'ivel absoluto, que carregaria tend\^encia estrutural esp\'uria. A maior correla\c{c}\~ao absoluta com o alvo \'e 0,159, consistente com aus\^encia de vazamento. O volume foi validado como sinal financeiramente plaus\'ivel: correla\c{c}\~ao com retorno absoluto de +0,18 \cite{karpoff1987} e persist\^encia estatisticamente significativa (Ljung-Box, $p\approx0$). Isoladamente, para o XGBoost, as duas vari\'aveis de volume pioram F1 (0,385 vs.\ 0,410) e MCC (0,028 vs.\ 0,040) apesar de melhorarem levemente a DA; mantivemos o conjunto de 18 vari\'aveis como definitivo para os tr\^es modelos de pre\c{c}o porque sua validade foi estabelecida por crit\'erio independente do desempenho de qualquer modelo espec\'ifico -- evitando selecionar features a posteriori -- e porque um conjunto compartilhado isola o efeito do algoritmo na compara\c{c}\~ao entre eles.
+O arquivo \texttt{features\_preco.parquet} cont\'em 18 vari\'aveis, calculadas com dados dispon\'iveis at\'e o dia $t$ para prever $t+1$: retornos defasados (lags 0--10), volatilidade realizada (5/10/21), momento (5/10/21), dist\^ancia \`a m\'edia m\'ovel (10/21), calend\'ario e duas vari\'aveis de volume relativo/varia\c{c}\~ao logar\'itmica -- nunca o n\'ivel absoluto, que carregaria tend\^encia estrutural esp\'uria. A maior correla\c{c}\~ao absoluta com o alvo \'e 0,159, consistente com aus\^encia de vazamento. O volume foi validado como sinal financeiramente plaus\'ivel: correla\c{c}\~ao com retorno absoluto de +0,18 \cite{karpoff1987} e persist\^encia estatisticamente significativa (Ljung-Box, $p\approx0$); mantido por esse crit\'erio, independente do desempenho de qualquer modelo, para evitar selecionar vari\'aveis a posteriori.
 
 \subsection{Vari\'aveis de texto}
-\textbf{BERTimbau} (\texttt{neuralmind/\allowbreak bert-base-portuguese-cased}) e \textbf{FinBERT-PT-BR} (\texttt{lucas-leme/\allowbreak FinBERT-PT-BR}) geram embeddings congelados (768 dimens\~oes) por mean-pooling mascarado por manchete, agregados por preg\~ao (m\'edia dos vetores do dia, acrescida de \texttt{n\_noticias} e dispers\~ao ao centroide). O FinBERT-PT-BR tamb\'em expõe sentimento expl\'icito (positivo/negativo/neutro) via forward oficial do classificador, agregado em quatro vari\'aveis densas por preg\~ao (\texttt{sent\_polaridade}, dispers\~ao, fra\c{c}\~oes positiva/negativa). Para redu\c{c}\~ao de dimensionalidade (768$\to k$), aplicou-se PCA ajustado \textbf{exclusivamente no treino de cada fold}, com $k\in\{8,30\}$: o BERTimbau ret\'em $\approx$45\%/69\% da vari\^ancia; o FinBERT-PT-BR, mais especializado, $\approx$86\%/92\% -- diferen\c{c}a estrutural que n\~ao se traduz em vantagem preditiva para nenhuma das duas fontes.
+\textbf{BERTimbau} (\texttt{neuralmind/\allowbreak bert-base-portuguese-cased}) e \textbf{FinBERT-PT-BR} (\texttt{lucas-leme/\allowbreak FinBERT-PT-BR}) geram embeddings congelados (768 dimens\~oes) por mean-pooling mascarado por manchete, agregados por preg\~ao (m\'edia dos vetores do dia, acrescida de \texttt{n\_noticias} e dispers\~ao ao centroide). O FinBERT-PT-BR tamb\'em expõe sentimento expl\'icito (positivo/negativo/neutro) via forward oficial do classificador, agregado em quatro vari\'aveis densas por preg\~ao (\texttt{sent\_polaridade}, dispers\~ao, fra\c{c}\~oes positiva/negativa). Para redu\c{c}\~ao de dimensionalidade (768$\to k$), aplicou-se PCA ajustado \textbf{exclusivamente no treino de cada fold}, com $k\in\{8,30\}$: o BERTimbau ret\'em $\approx$45\%/69\% da vari\^ancia; o FinBERT-PT-BR, mais especializado, \novo{$\approx$85\%/92\%} -- diferen\c{c}a estrutural que n\~ao se traduz em vantagem preditiva para nenhuma das duas fontes.
 
 \subsection{Vari\'aveis do Copom}
-Cada comunicado foi classificado por zero-shot (\texttt{MoritzLaurer/mDeBERTa-v3-base-mnli-xnli}) em vi\'es de aperto monet\'ario (\emph{hawkish}) versus afrouxamento (\emph{dovish}). Os comunicados (mediana 1.482 tokens) excedem o limite de 512 tokens do modelo, que trunca silenciosamente; testaram-se as janelas de in\'icio e de fim (\'ultimos 1.500 caracteres), selecionando-se a de maior correla\c{c}\~ao com a decis\~ao real de Selic: o in\'icio venceu ($r=+0{,}615$ contra $+0{,}424$), confirmando que o classificador capta vi\'es real, n\~ao ru\'ido. O score, a dire\c{c}\~ao da \'ultima decis\~ao e os dias desde a \'ultima reuni\~ao s\~ao propagados por \emph{forward-fill} di\'ario -- conven\c{c}\~ao padr\~ao em finan\c{c}as macro, segundo a qual o mercado precifica o \'ultimo vi\'es conhecido at\'e a pr\'oxima decis\~ao. O n\'ivel absoluto da Selic \'e exclu\'ido, pela mesma raz\~ao do volume (Se\c{c}\~ao~\ref{sec:features-preco}).
+Cada comunicado foi classificado por zero-shot (\texttt{MoritzLaurer/mDeBERTa-v3-base-mnli-xnli}) em vi\'es de aperto monet\'ario (\emph{hawkish}) versus afrouxamento (\emph{dovish}). Os comunicados (mediana 1.482 tokens) excedem o limite de 512 tokens do modelo, que trunca silenciosamente; testaram-se as janelas de in\'icio e de fim (\'ultimos 1.500 caracteres), selecionando-se a de maior correla\c{c}\~ao com a decis\~ao real de Selic: o in\'icio venceu ($r=+0{,}615$ contra $+0{,}424$), \novo{indicando que o classificador l\^e a dire\c{c}\~ao da decis\~ao. Essa validade vem em boa parte do pr\'oprio an\'uncio: em 34 dos 49 comunicados, a frase da decis\~ao est\'a na janela classificada ($r=+0{,}72$, contra $+0{,}16$ nos 15 demais); retiradas essas frases e reclassificados os textos, $r=+0{,}25$ (IC de 95\% $[-0{,}05;\,+0{,}50]$).} O score, a dire\c{c}\~ao da \'ultima decis\~ao e os dias desde a \'ultima reuni\~ao s\~ao propagados por \emph{forward-fill} di\'ario -- conven\c{c}\~ao padr\~ao em finan\c{c}as macro, segundo a qual o mercado precifica o \'ultimo vi\'es conhecido at\'e a pr\'oxima decis\~ao. O n\'ivel absoluto da Selic \'e exclu\'ido, pela mesma raz\~ao do volume (Se\c{c}\~ao~\ref{sec:features-preco}).
 
 \subsection{Modelos}
 \begin{itemize}
@@ -120,42 +128,48 @@ Adotou-se estrat\'egia mec\^anica long/short: posi\c{c}\~ao no dia $t$ = sinal d
 \section{Resultados}
 
 \subsection{Diagn\'ostico de estrutura do retorno}
-A Fig.~\ref{fig:acf} apresenta a autocorrela\c{c}\~ao do retorno e do retorno ao quadrado. O retorno exibe estrutura linear fraca; o retorno ao quadrado exibe \emph{clustering} de volatilidade bem mais pronunciado -- a previsibilidade dispon\'ivel na s\'erie concentra-se, majoritariamente, na vari\^ancia, n\~ao na dire\c{c}\~ao.
+A Fig.~\ref{fig:acf} apresenta a autocorrela\c{c}\~ao do retorno e do retorno ao quadrado. O retorno exibe estrutura linear fraca; o retorno ao quadrado exibe \emph{clustering} de volatilidade bem mais pronunciado -- a previsibilidade dispon\'ivel na s\'erie concentra-se, majoritariamente, na vari\^ancia, n\~ao na dire\c{c}\~ao. \novo{Este trabalho testa a m\'edia; o teste da vari\^ancia fica como trabalho futuro (Se\c{c}\~ao~\ref{sec:conclusao}).}
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=0.48\textwidth]{acf_pacf_retorno.png}}
-\caption{ACF/PACF do retorno di\'ario do Ibovespa.}
+\caption{\novo{Autocorrela\c{c}\~ao (ACF) e autocorrela\c{c}\~ao parcial (PACF) do retorno di\'ario (acima) e de seu quadrado (abaixo), com bandas de 95\% sob ru\'ido branco. O retorno tem autocorrela\c{c}\~ao fraca (m\'aximo de $\approx$0,16 em m\'odulo, nos lags 1 e 7); o retorno ao quadrado permanece fora da banda em 21 dos 30 lags, com decaimento lento a partir de $\approx$0,6. A depend\^encia serial est\'a na volatilidade condicional, n\~ao na m\'edia.}}
 \label{fig:acf}
 \end{figure}
 
 \subsection{Tabela comparativa consolidada}
-A Tabela~\ref{tab:comparativa} e a Fig.~\ref{fig:mcc} resumem os 11 modelos avaliados. Nenhum atinge signific\^ancia direcional a 5\% ap\'os corre\c{c}\~ao de Holm; o menor $p$ corrigido \'e do XGBoost (0,727). O MCC de todos os modelos situa-se dentro de um desvio-padr\~ao entre sementes em torno de zero -- vis\'ivel na Fig.~\ref{fig:mcc}, cujas barras de erro cruzam a linha zero em praticamente todos os modelos estoc\'asticos. Com $n=1030$ observa\c{c}\~oes agregadas, o intervalo de 95\% para a DA de um classificador sem habilidade direcional \'e $50\%\pm3{,}1$ p.p.; a maior DA observada (52,3\%, XGBoost) situa-se dentro dessa faixa. Os dados t\^em poder para detectar habilidade direcional a partir de $\approx$53,1\%, patamar que nenhum modelo atinge.
+A Tabela~\ref{tab:comparativa} e a Fig.~\ref{fig:mcc} resumem os 11 modelos avaliados. \novo{Em erro de previs\~ao, nenhum supera o passeio aleat\'orio: o R$^2$ fora da amostra \'e negativo nos dez demais, com intervalo inteiramente abaixo de zero em nove (exce\c{c}\~ao: XGBoost, $-0{,}01$), de $-0{,}08$ a $-0{,}20$ nas variantes com texto ou Copom e $-0{,}07$ na LSTM s\'o com pre\c{c}o (Fig.~\ref{fig:mcc}a). Quanto ao acerto de sinal,} nenhum atinge signific\^ancia direcional a 5\% ap\'os corre\c{c}\~ao de Holm; o menor $p$ corrigido \'e do XGBoost (0,727). \novo{O MCC agrupado de nenhum dos onze modelos se distingue de zero (Fig.~\ref{fig:mcc}b; erro-padr\~ao de $\approx$0,03). Frente ao LSTM s\'o com pre\c{c}o, nenhuma variante com texto ou Copom tem $\Delta$MCC distingu\'ivel de zero (Fig.~\ref{fig:mcc}c), mas nenhum intervalo cabe na margem de equival\^encia de $\pm0{,}05$: o desenho exclui ganhos de MCC acima de $\approx$0,13, n\~ao efeitos menores.} Com $n=1030$ observa\c{c}\~oes agregadas, o intervalo de 95\% para a DA de um classificador sem habilidade direcional \'e $50\%\pm3{,}1$ p.p.; a maior DA observada (52,3\%, XGBoost) situa-se dentro dessa faixa. \novo{O limite superior dessa faixa (53,1\%) corresponde a apenas 50\% de poder; 80\% exige DA verdadeira de $\approx$54,4\% (Fig.~\ref{fig:poder}). Efeitos menores (Sharpe equivalente $\lesssim$0,9, sem custos) n\~ao s\~ao distingu\'iveis de zero com 80\% de poder, e as onze DAs observadas (47,9\% a 52,3\%) caem todas nessa regi\~ao.}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.48\textwidth]{fig_poder.png}}
+\caption{\novo{Poder do teste binomial bilateral (5\%) de acur\'acia direcional, com $n=1030$ dias agrupados, em fun\c{c}\~ao da DA verdadeira. O teste rejeita $H_0$ (DA = 50\%) em 50\% dos casos se a DA verdadeira for 53,1\% e em 80\% se for $\approx$54,4\%. A faixa cinza marca as DAs com poder inferior a 80\%, que o desenho n\~ao distingue de zero; as marcas no eixo s\~ao as DAs agrupadas dos 11 modelos, todas nessa faixa. O eixo superior converte a DA no Sharpe equivalente de uma estrat\'egia long/short sem custos, com $\mathrm{E}|r|/\sqrt{\mathrm{E}[r^2]}=0{,}66$ medido nos dias de teste (aproxima\c{c}\~ao que sup\~oe acerto de sinal independente da magnitude do retorno).}}
+\label{fig:poder}
+\end{figure}
 
 \begin{figure*}[htbp]
-\centerline{\includegraphics[width=0.85\textwidth]{fig_mcc_por_modelo.png}}
-\caption{MCC por modelo, com barra de erro representando o desvio-padr\~ao entre sementes (quando aplic\'avel). Cinza: baselines determin\'isticos. Azul: LSTM apenas com pre\c{c}o. Laranja: variantes de LSTM com texto ou Copom.}
+\centerline{\includegraphics[width=\textwidth]{fig_ic_mcc.png}}
+\caption{\novo{Resultados com incerteza amostral: intervalos de 95\% por \emph{block bootstrap} sobre dias (blocos de 10 dias, $B=10\,000$), com a previs\~ao m\'edia entre sementes e os cinco folds concatenados. (a) R$^2$ fora da amostra frente ao passeio aleat\'orio, $1-\mathrm{EQM}_{\mathrm{modelo}}/\mathrm{EQM}_{\mathrm{PA}}$ (negativo = pior que prever retorno zero); o limite inferior do ARIMAX ($-1{,}20$) fica fora do eixo, e seu R$^2$ ($-0{,}37$) reflete sobretudo quatro previs\~oes extremas (de +6\% a +20\%, set/2021 a jan/2022): sem elas, $-0{,}05$. (b) MCC de cada modelo em rela\c{c}\~ao ao acaso. (c) Varia\c{c}\~ao de MCC das variantes com texto ou Copom frente ao LSTM s\'o com pre\c{c}o, nos mesmos dias. A faixa cinza \'e a margem de equival\^encia de $\pm0{,}05$ ($\approx\pm2{,}5$ p.p. de DA). Todos os intervalos de (c) cont\^em zero, mas nenhum cabe na faixa: seus limites superiores v\~ao de $+0{,}06$ a $+0{,}13$.}}
 \label{fig:mcc}
 \end{figure*}
 
 \begin{table*}[htbp]
-\caption{Tabela comparativa consolidada (fonte: \texttt{tabela\_comparativa\_final.csv})}
+\caption{Tabela comparativa consolidada (fontes: \texttt{tabela\_comparativa\_final.csv} \novo{e \texttt{testes\_pt\_pooled.parquet}}). \novo{DA agrup.: acerto de sinal da previs\~ao m\'edia entre sementes, com os cinco folds concatenados ($n=1030$); as demais m\'etricas s\~ao m\'edias por semente e por fold.}}
 \begin{center}
 \footnotesize
 \begin{tabular}{lccccccc}
 \toprule
-\textbf{Modelo} & \textbf{MAE} & \textbf{RMSE} & \textbf{DA} & \textbf{MCC} & \textbf{MCC ($\pm$dp)} & \textbf{Brier} & \textbf{PT $p$ (Holm)} \\
+\textbf{Modelo} & \textbf{MAE} & \textbf{RMSE} & \novo{\textbf{DA agrup.}} & \textbf{MCC} & \textbf{MCC ($\pm$dp)} & \textbf{Brier} & \textbf{PT $p$ (Holm)} \\
 \midrule
-Random Walk            & 0,0116 & 0,0159 & 0,485 & $-$0,033 & --      & 0,250 & 1,000 \\
-ARIMA                   & 0,0120 & 0,0166 & 0,522 & $+$0,039 & --      & --    & 1,000 \\
-ARIMAX (texto linear)   & 0,0124 & 0,0181 & 0,511 & $+$0,006 & --      & --    & 1,000 \\
-XGBoost (pre\c{c}o)     & 0,0117 & 0,0161 & 0,519 & $+$0,028 & 0,038   & 0,265 & 0,727 \\
-LSTM (pre\c{c}o)        & 0,0127 & 0,0172 & 0,494 & $-$0,009 & 0,057   & 0,273 & 1,000 \\
-LSTM + BERTimbau $k$=8  & 0,0132 & 0,0181 & 0,494 & $-$0,018 & 0,054   & 0,273 & 1,000 \\
-LSTM + BERTimbau $k$=30 & 0,0133 & 0,0178 & 0,508 & $-$0,009 & 0,060   & 0,265 & 1,000 \\
-LSTM + FinBERT sent.    & 0,0136 & 0,0182 & 0,498 & $+$0,004 & 0,055   & 0,273 & 1,000 \\
-LSTM + FinBERT emb. $k$=8  & 0,0136 & 0,0183 & 0,491 & $-$0,017 & 0,051 & 0,276 & 1,000 \\
-LSTM + FinBERT emb. $k$=30 & 0,0131 & 0,0178 & 0,502 & $-$0,012 & 0,055 & 0,271 & 1,000 \\
-LSTM + Copom            & 0,0140 & 0,0186 & 0,507 & $+$0,006 & 0,069   & 0,263 & 1,000 \\
+Random Walk            & 0,0116 & 0,0159 & \novo{0,485} & $-$0,033 & --      & 0,250 & 1,000 \\
+ARIMA                   & 0,0120 & 0,0166 & \novo{0,522} & $+$0,039 & --      & --    & 1,000 \\
+ARIMAX (texto linear) & \novo{0,0126} & \novo{0,0189} & \novo{0,505} & \novo{$-$0,005} & -- & -- & 1,000 \\
+XGBoost (pre\c{c}o)     & 0,0117 & 0,0161 & \novo{0,523} & $+$0,028 & 0,038   & 0,265 & 0,727 \\
+LSTM (pre\c{c}o)        & 0,0127 & 0,0172 & \novo{0,486} & $-$0,009 & 0,057   & 0,273 & 1,000 \\
+LSTM + BERTimbau $k$=8 & 0,0132 & \novo{0,0177} & \novo{0,479} & \novo{$-$0,023} & \novo{0,059} & \novo{0,290} & 1,000 \\
+LSTM + BERTimbau $k$=30 & \novo{0,0134} & \novo{0,0182} & \novo{0,512} & \novo{$-$0,005} & \novo{0,057} & \novo{0,279} & 1,000 \\
+LSTM + FinBERT sent. & \novo{0,0135} & \novo{0,0181} & \novo{0,489} & \novo{$+$0,006} & \novo{0,060} & 0,273 & 1,000 \\
+LSTM + FinBERT emb. $k$=8 & 0,0136 & \novo{0,0185} & \novo{0,496} & \novo{$-$0,011} & \novo{0,054} & \novo{0,269} & 1,000 \\
+LSTM + FinBERT emb. $k$=30 & \novo{0,0130} & \novo{0,0175} & \novo{0,500} & \novo{$+$0,008} & \novo{0,054} & \novo{0,269} & 1,000 \\
+LSTM + Copom            & 0,0140 & 0,0186 & \novo{0,513} & $+$0,006 & 0,069   & 0,263 & 1,000 \\
 \bottomrule
 \end{tabular}
 \label{tab:comparativa}
@@ -163,7 +177,7 @@ LSTM + Copom            & 0,0140 & 0,0186 & 0,507 & $+$0,006 & 0,069   & 0,263 &
 \end{table*}
 
 \subsection{Testes pareados (Diebold-Mariano)}
-Das 13 compara\c{c}\~oes pareadas testadas, 5 permanecem significativas a 5\% ap\'os corre\c{c}\~ao de Holm (Tabela~\ref{tab:dm}), incluindo XGBoost vs.\ LSTM+Copom. Em nenhuma delas a adi\c{c}\~ao de texto ou Copom reduz o erro de forma significativa; quando h\'a signific\^ancia, aponta sempre na dire\c{c}\~ao oposta -- o modelo mais simples vence.
+\novo{Das 13 compara\c{c}\~oes pareadas testadas, 2 permanecem significativas a 5\% ap\'os corre\c{c}\~ao de Holm (Tabela~\ref{tab:dm}), ambas contra o LSTM+FinBERT sent.; outras quatro ficam em $p_{\mathrm{Holm}}$ de 0,06 a 0,08, todas a favor do XGBoost.} Em nenhuma delas a adi\c{c}\~ao de texto ou Copom reduz o erro de forma significativa; quando h\'a signific\^ancia, aponta sempre na dire\c{c}\~ao oposta -- o modelo mais simples vence.
 
 \begin{table}[H]
 \caption{Compara\c{c}\~oes DM significativas ap\'os corre\c{c}\~ao de Holm}
@@ -174,11 +188,8 @@ Das 13 compara\c{c}\~oes pareadas testadas, 5 permanecem significativas a 5\% ap
 \toprule
 \textbf{Compara\c{c}\~ao} & \textbf{DM} & \textbf{$\bar{d}$} & \textbf{$p$ (Holm)} & \textbf{Dire\c{c}\~ao} \\
 \midrule
-pre\c{c}o vs.\ FinBERT-sent.     & $-3{,}12$ & $-0{,}00004$ & 0,019 & texto piora \\
-XGB vs.\ BERTimbau $k$=30    & $-3{,}53$ & $-0{,}00004$ & 0,005 & XGB melhor \\
-XGB vs.\ FinBERT-sent.       & $-3{,}91$ & $-0{,}00006$ & 0,001 & XGB melhor \\
-XGB vs.\ FinBERT emb.\ $k$=30 & $-3{,}22$ & $-0{,}00003$ & 0,015 & XGB melhor \\
-XGB vs.\ Copom               & $-2{,}79$ & $-0{,}00005$ & 0,048 & XGB melhor \\
+\novo{pre\c{c}o vs.\ FinBERT-sent.} & \novo{$-2{,}96$} & \novo{$-0{,}00004$} & \novo{0,037} & texto piora \\
+\novo{XGB vs.\ FinBERT-sent.} & \novo{$-3{,}68$} & \novo{$-0{,}00006$} & \novo{0,003} & XGB melhor \\
 \bottomrule
 \end{tabular}%
 }
@@ -186,93 +197,66 @@ XGB vs.\ Copom               & $-2{,}79$ & $-0{,}00005$ & 0,048 & XGB melhor \\
 \end{center}
 \end{table}
 
-Esse achado corrobora, com respaldo estat\'istico formal, um padr\~ao qualitativo j\'a observ\'avel na progress\~ao de complexidade: aumentar a sofistica\c{c}\~ao do modelo (RW$\to$ARIMA$\to$XGBoost$\to$LSTM) n\~ao melhora a previs\~ao; em v\'arias compara\c{c}\~oes diretas, o modelo mais simples \'e mensuravelmente superior. Duas ressalvas: a fam\'ilia de 13 testes foi definida pela estrutura do desenho experimental, n\~ao registrada previamente -- a corre\c{c}\~ao de Holm protege contra infla\c{c}\~ao de falso-positivo \emph{dentro} dessa fam\'ilia, mas n\~ao contra compara\c{c}\~oes n\~ao declaradas mais amplas; e, mais relevante, signific\^ancia estat\'istica n\~ao implica relev\^ancia econ\^omica -- as diferen\c{c}as de erro subjacentes aos 5 resultados significativos s\~ao da ordem de $10^{-5}$, detect\'aveis por $n\approx1030$ conferir poder estat\'istico, n\~ao por magnitude economicamente relevante (Se\c{c}\~ao~\ref{sec:financeiro-discussao}).
+Esse achado corrobora, com respaldo estat\'istico formal, um padr\~ao qualitativo j\'a observ\'avel na progress\~ao de complexidade: aumentar a sofistica\c{c}\~ao do modelo (RW$\to$ARIMA$\to$XGBoost$\to$LSTM) n\~ao melhora a previs\~ao; \novo{nas compara\c{c}\~oes significativas}, o modelo mais simples \'e mensuravelmente superior. A fam\'ilia de 13 testes foi definida pela estrutura do desenho, n\~ao registrada previamente, e signific\^ancia n\~ao implica relev\^ancia econ\^omica: as diferen\c{c}as de erro s\~ao da ordem de $10^{-5}$ (Se\c{c}\~ao~\ref{sec:financeiro-discussao}).
 
-\subsection{Robustez: defasagem temporal, lookback e agrega\c{c}\~ao por rec\^encia}
+\subsection{\novo{Robustez das escolhas de desenho}}
 \label{sec:robustez}
-Substituir o texto do dia $D$ pelo do dia anterior ($D-1$) no LSTM+BERTimbau $k$=8 n\~ao altera o quadro geral -- MCC de $-0{,}016\pm0{,}054$, valor intermedi\'ario entre o modelo s\'o-pre\c{c}o ($-0{,}009$) e o texto de $D$ ($-0{,}018\pm0{,}054$). A Tabela~\ref{tab:lookback} varia o lookback em $\{1,3,5,10,21\}$: em nenhuma janela o MCC ultrapassa o intervalo de um desvio-padr\~ao entre sementes em torno de zero -- o resultado nulo n\~ao \'e artefato da escolha de 21 dias. Testou-se ainda substituir a m\'edia diária de manchetes pela \'unica manchete mais recente antes do corte (agrega\c{c}\~ao por rec\^encia, motivada pelo achado de que o sinal textual \'e contempor\^aneo -- Se\c{c}\~ao~\ref{sec:achado}): MCC de $-0{,}023\pm0{,}052$, dentro do mesmo ru\'ido da m\'edia do dia, sem eleva\c{c}\~ao da correla\c{c}\~ao preditiva ($|r|$ m\'aximo $=0{,}057$) -- concentrar-se na informa\c{c}\~ao mais recente do dia tamb\'em n\~ao destrava sinal.
+\novo{Cada escolha de desenho foi variada isoladamente e comparada ao modelo sem texto na mesma configura\c{c}\~ao (Tabela~\ref{tab:robustez}): o texto do dia anterior ($D-1$); a manchete mais recente antes do corte, no lugar da m\'edia do dia; lookbacks de 1 a 10 dias, com embargo igual ao lookback; uma representa\c{c}\~ao esparsa (TF-IDF reduzido por SVD, ajustados s\'o no treino de cada fold), motivada pela evid\^encia de que \emph{bag-of-words} supera embeddings densos em similaridade sem\^antica financeira \cite{tangyang2025}; o corpo completo das mat\'erias (56.819 textos, 98,6\% do corpus, mediana de 2.584 caracteres, embeddings a 512 tokens) e sua cobertura integral por \emph{chunking} (123.570 blocos de at\'e 512 tokens); e o mesmo texto acoplado ao XGBoost, mais eficiente em amostras pequenas. Nenhum dos 26 intervalos exclui zero, com a mesma resolu\c{c}\~ao da compara\c{c}\~ao principal: os limites superiores v\~ao de $+0{,}01$ a $+0{,}13$ (mediana $+0{,}06$). Com o corpo completo, o teste de Pesaran-Timmermann agrupado segue n\~ao significativo para os 11 modelos ap\'os Holm, e nos testes DM o XGBoost \`as vezes supera variantes de LSTM com texto, nunca o inverso. Trocar a LSTM por um MLP raso, sem texto, tampouco altera o MCC ($\Delta$MCC $+0{,}02$, IC $[-0{,}05;\,+0{,}09]$).} O n\'ivel de \texttt{n\_noticias}, que cresce com o tempo e fica, no teste, de 1,3 a 2,3 desvios-padr\~ao acima da m\'edia do treino, permanece nas LSTMs com embeddings; retir\'a-lo n\~ao altera o resultado ($\Delta$MCC de $-0{,}04$ a $+0{,}01$, IC contendo zero).
 
-\begin{table}[H]
-\caption{MCC por janela de lookback (embargo = lookback em cada linha)}
+\begin{table*}[htbp]
+\caption{\novo{Cadeia de robustez: $\Delta$MCC agrupado de cada variante com texto frente ao modelo sem texto na mesma configura\c{c}\~ao (LSTM s\'o com pre\c{c}o, mesmo lookback e mesmos dias; XGBoost s\'o com pre\c{c}o na \'ultima linha), com IC de 95\% por block bootstrap sobre dias. Nenhum dos 26 intervalos exclui zero. ``--'': combina\c{c}\~ao n\~ao testada.}}
 \begin{center}
 \footnotesize
-\begin{tabular}{ccc}
+\novo{\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
 \toprule
-\textbf{Lookback} & \textbf{MCC s\'o-pre\c{c}o} & \textbf{MCC + BERTimbau $k$=8} \\
+\textbf{Verifica\c{c}\~ao} & \textbf{BERTimbau $k$=8} & \textbf{BERTimbau $k$=30} & \textbf{FinBERT sent.} & \textbf{FinBERT emb.\ $k$=8} & \textbf{FinBERT emb.\ $k$=30} \\
 \midrule
-1  & $-0{,}014\pm0{,}068$ & $+0{,}001\pm0{,}060$ \\
-3  & $-0{,}006\pm0{,}042$ & $-0{,}021\pm0{,}053$ \\
-5  & $-0{,}003\pm0{,}043$ & $-0{,}012\pm0{,}052$ \\
-10 & $+0{,}005\pm0{,}045$ & $-0{,}006\pm0{,}055$ \\
-21 & $-0{,}009\pm0{,}057$ & $-0{,}018\pm0{,}054$ \\
+Principal (manchete, LSTM, lookback 21) & $-0{,}02\;[-0{,}08;\,+0{,}06]$ & $+0{,}05\;[-0{,}01;\,+0{,}13]$ & $+0{,}01\;[-0{,}04;\,+0{,}08]$ & $+0{,}02\;[-0{,}04;\,+0{,}08]$ & $+0{,}03\;[-0{,}04;\,+0{,}09]$ \\
+Texto do dia anterior ($D-1$) & $-0{,}01\;[-0{,}08;\,+0{,}06]$ & -- & -- & -- & -- \\
+\'Ultima manchete antes do corte & $0{,}00\;[-0{,}06;\,+0{,}07]$ & -- & -- & -- & -- \\
+Lookback de 1 dia & $-0{,}02\;[-0{,}08;\,+0{,}05]$ & -- & -- & -- & -- \\
+Lookback de 3 dias & $-0{,}03\;[-0{,}10;\,+0{,}04]$ & -- & -- & -- & -- \\
+Lookback de 5 dias & $-0{,}02\;[-0{,}09;\,+0{,}04]$ & -- & -- & -- & -- \\
+Lookback de 10 dias & $-0{,}03\;[-0{,}10;\,+0{,}05]$ & -- & -- & -- & -- \\
+TF-IDF+SVD no lugar do embedding & $0{,}00\;[-0{,}07;\,+0{,}07]$ & $+0{,}02\;[-0{,}05;\,+0{,}10]$ & -- & -- & -- \\
+Corpo completo (512 tokens) & $+0{,}01\;[-0{,}05;\,+0{,}07]$ & $+0{,}03\;[-0{,}05;\,+0{,}11]$ & $0{,}00\;[-0{,}06;\,+0{,}06]$ & $0{,}00\;[-0{,}06;\,+0{,}06]$ & $+0{,}02\;[-0{,}04;\,+0{,}10]$ \\
+Corpo completo (\emph{chunking}) & $-0{,}01\;[-0{,}08;\,+0{,}06]$ & -- & $-0{,}01\;[-0{,}07;\,+0{,}06]$ & $+0{,}01\;[-0{,}05;\,+0{,}08]$ & -- \\
+XGBoost no lugar da LSTM & $-0{,}05\;[-0{,}10;\,+0{,}01]$ & $-0{,}04\;[-0{,}10;\,+0{,}03]$ & $-0{,}03\;[-0{,}06;\,+0{,}01]$ & $-0{,}01\;[-0{,}06;\,+0{,}04]$ & $-0{,}04\;[-0{,}10;\,+0{,}02]$ \\
 \bottomrule
-\end{tabular}
-\label{tab:lookback}
+\end{tabular}%
+}}
+\label{tab:robustez}
 \end{center}
-\end{table}
+\end{table*}
 
-\subsection{Robustez: anisotropia dos embeddings e qualidade textual}
-\label{sec:anisotropia}
-Embeddings de BERT s\~ao conhecidamente anisotr\'opicos \cite{ethayarajh2019}: textos sem rela\c{c}\~ao sem\^antica exibem similaridade de cosseno bem acima de zero, pois parte da vari\^ancia do espa\c{c}o vetorial concentra-se numa dire\c{c}\~ao gen\'erica n\~ao-informativa. A similaridade m\'edia entre pares aleat\'orios de manchetes \'e $0{,}659$ (esperar-se-ia $\approx0$ sob isotropia), confirmando anisotropia relevante. \emph{Whitening} explorat\'orio (decorrela\c{c}\~ao e equaliza\c{c}\~ao de vari\^ancia, ao molde de BERT-flow) eleva e estabiliza a correla\c{c}\~ao \emph{contempor\^anea} do BERTimbau (de $0{,}03$--$0{,}09$ para $0{,}067$--$0{,}077$); para o FinBERT, j\'a especializado, a correla\c{c}\~ao contempor\^anea \'e alta mesmo nos embeddings crus ($0{,}215$) e n\~ao se beneficia da corre\c{c}\~ao. Em ambas as fontes, contudo, a correla\c{c}\~ao \textbf{preditiva} permanece na faixa de ru\'ido para todo $k\in\{8,30,100,300\}$ testado (Tabela~\ref{tab:anisotropia}); teste de permuta\c{c}\~ao (500 repeti\c{c}\~oes) confirma que o maior valor observado ($r=0{,}090$) \'e indistingu\'ivel de ru\'ido ($p=0{,}178$).
-
-\begin{table}[H]
-\caption{Correla\c{c}\~ao m\'axima ($|r|$) entre componentes e o alvo, cru vs.\ whitened ($k=300$)}
-\begin{center}
-\footnotesize
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Fonte} & \multicolumn{2}{c}{\textbf{Preditivo}} & \multicolumn{2}{c}{\textbf{Contempor\^aneo}} \\
- & cru & whitened & cru & whitened \\
-\midrule
-BERTimbau & 0,085 & 0,090 & 0,088 & 0,068 \\
-FinBERT   & 0,082 & 0,079 & 0,215 & 0,189 \\
-\bottomrule
-\end{tabular}
-\label{tab:anisotropia}
-\end{center}
-\end{table}
-
-Remo\c{c}\~ao de manchetes-template recorrentes (1,5\% do corpus) e isolamento de linguagem prospectiva (9,6\%) versus retrospectiva (0,4\%) tamb\'em n\~ao produziram correla\c{c}\~ao preditiva distingu\'ivel de ru\'ido ($p\in\{0{,}29$--$0{,}87\}$ em todos os casos).
-
-Testou-se ainda hip\'otese mais radical: seria a pr\'opria representa\c{c}\~ao densa, e n\~ao a anisotropia, o fator limitante? A literatura recente de embeddings financeiros documenta que um \emph{bag-of-words} (BoW) simples supera embeddings densos em similaridade sem\^antica financeira \cite{tangyang2025}. Substituiu-se o embedding do BERTimbau por TF-IDF do texto do dia reduzido via SVD truncada (an\'alogo esparso ao PCA), vocabul\'ario e SVD ajustados s\'o no treino de cada fold (Tabela~\ref{tab:bow}): o MCC esparso \'e indistingu\'ivel do denso e de zero em ambos os $k$ testados. O achado da literatura n\~ao se replica aqui.
-
-\begin{table}[H]
-\caption{MCC preditivo: representa\c{c}\~ao densa vs.\ esparsa}
-\begin{center}
-\footnotesize
-\begin{tabular}{lcc}
-\toprule
-\textbf{Representa\c{c}\~ao} & \textbf{MCC ($k$=8)} & \textbf{MCC ($k$=30)} \\
-\midrule
-BERTimbau (denso)    & $-0{,}018\pm0{,}054$ & $-0{,}009\pm0{,}060$ \\
-BoW/TF-IDF (esparso) & $-0{,}021\pm0{,}063$ & $-0{,}016\pm0{,}052$ \\
-\bottomrule
-\end{tabular}
-\label{tab:bow}
-\end{center}
-\end{table}
-
-O resultado nulo mostra-se, portanto, robusto tanto \`a anisotropia dos embeddings quanto a interven\c{c}\~oes razo\'aveis de limpeza textual e \`a substitui\c{c}\~ao da representa\c{c}\~ao densa por uma esparsa.
-
-\subsection{Robustez: corpo completo das mat\'erias}
-\label{sec:corpo-completo}
-A an\'alise anterior usa exclusivamente a manchete de cada mat\'eria (Se\c{c}\~ao~\ref{sec:limitacoes}). Recoletou-se o corpo completo de 56.819 mat\'erias (98,6\% do corpus; mediana de 2.584 caracteres, contra dezenas na manchete) e retreinou-se todas as variantes de texto sob protocolo id\^entico, com embeddings extra\'idos a 512 tokens (limite do modelo, contra 64 usados para manchetes). Os $\Delta$MCC frente \`a manchete ficam entre $-0{,}002$ e $+0{,}015$ para as cinco variantes de texto -- muito abaixo do desvio-padr\~ao entre sementes ($0{,}04$--$0{,}07$). O teste de Pesaran-Timmermann pooled permanece n\~ao significativo para os 11 modelos ap\'os Holm, e o padr\~ao qualitativo dos testes DM se mant\'em: XGBoost ocasionalmente supera variantes de LSTM+texto, nunca o inverso. Conclui-se que ampliar o texto dispon\'ivel em cerca de trinta vezes n\~ao desloca MCC, acur\'acia direcional ou signific\^ancia estat\'istica de forma percept\'ivel -- refor\c{c}ando a explica\c{c}\~ao mecan\'istica da Se\c{c}\~ao~\ref{sec:achado} (sinal contempor\^aneo, n\~ao preditivo) como causa mais prov\'avel do resultado nulo do que a insufici\^encia de texto dispon\'ivel. Testou-se ainda se o pr\'oprio truncamento em 512 tokens do corpo completo escondia sinal: dividindo cada mat\'eria em blocos de at\'e 512 tokens (\emph{chunking}, 123.570 blocos ao todo) e agregando por m\'edia, o MCC permanece na mesma faixa de ru\'ido (ex.: BERTimbau $k$=8: $-0{,}015$ com \emph{chunking} vs.\ $-0{,}003$ truncado vs.\ $-0{,}018$ manchete) -- nem o escopo (manchete vs.\ corpo) nem o comprimento de contexto explicam o resultado nulo.
+\novo{Duas verifica\c{c}\~oes sem retreino tratam da qualidade da representa\c{c}\~ao. Embeddings de BERT s\~ao anisotr\'opicos \cite{ethayarajh2019}: a similaridade m\'edia entre pares aleat\'orios de manchetes \'e 0,659. \emph{Whitening} explorat\'orio eleva e estabiliza a correla\c{c}\~ao contempor\^anea do BERTimbau (de 0,03--0,08 para 0,065--0,076); para o FinBERT, j\'a especializado, ela \'e alta mesmo sem corre\c{c}\~ao (0,19). A correla\c{c}\~ao preditiva, por\'em, permanece na faixa de ru\'ido para todo $k\in\{8,30,100,300\}$: os maiores valores ($|r|\approx0{,}09$, $k=300$) ficam abaixo do percentil 95 do nulo (0,10; BERTimbau com whitening, permuta\c{c}\~ao com 500 repeti\c{c}\~oes, $p=0{,}23$). Remover manchetes-template (1,5\% do corpus) ou isolar linguagem prospectiva (9,6\%) e retrospectiva (0,4\%) tamb\'em n\~ao produz correla\c{c}\~ao preditiva distingu\'ivel de ru\'ido ($p$ entre 0,52 e 0,97).}
 
 \subsection{Sentimento reativo versus sentimento preditivo}
 \label{sec:achado}
-A correla\c{c}\~ao entre o sentimento do FinBERT-PT-BR e o retorno depende substancialmente da dire\c{c}\~ao temporal (Fig.~\ref{fig:sentimento}): contempor\^anea (dia $t$ vs.\ retorno de $t$), $r=+0{,}201$; preditiva (dia $t$ vs.\ retorno de D+1, o alvo), $r=-0{,}039$. Como as duas correla\c{c}\~oes compartilham a vari\'avel de sentimento e usam retornos adjacentes da mesma s\'erie (n\~ao independentes), testou-se a diferen\c{c}a via bootstrap dependente ($B=20\,000$): $p=0{,}0001$, significativa a 5\% mesmo ap\'os corre\c{c}\~ao de Holm para as 4 vari\'aveis de sentimento testadas.
+A correla\c{c}\~ao entre o sentimento do FinBERT-PT-BR e o retorno depende substancialmente da dire\c{c}\~ao temporal (Fig.~\ref{fig:sentimento}): contempor\^anea (dia $t$ vs.\ retorno de $t$), \novo{$r=+0{,}179$}; preditiva (dia $t$ vs.\ retorno de D+1, o alvo), \novo{$r=-0{,}036$}. Como as duas correla\c{c}\~oes compartilham a vari\'avel de sentimento e usam retornos adjacentes da mesma s\'erie (n\~ao independentes), testou-se a diferen\c{c}a via bootstrap dependente ($B=20\,000$): \novo{$p=0{,}0005$}, significativa a 5\% mesmo ap\'os corre\c{c}\~ao de Holm para as 4 vari\'aveis de sentimento testadas.
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=0.48\textwidth]{fig_sentimento_reativo.png}}
-\caption{Correla\c{c}\~ao das vari\'aveis de sentimento FinBERT com o retorno contempor\^aneo (D) versus o retorno preditivo (D+1, o alvo).}
+\caption{\novo{Correla\c{c}\~ao de Pearson entre cada vari\'avel de sentimento agregado (FinBERT-PT-BR) e o retorno do mesmo dia (azul, D) e o retorno de D+1, o alvo (laranja), com $n=1492$ preg\~oes. As correla\c{c}\~oes contempor\^aneas v\~ao de 0,09 a 0,18 em m\'odulo e as preditivas n\~ao passam de 0,04; a diferen\c{c}a \'e significativa nas quatro vari\'aveis (bootstrap dependente, $p_{\mathrm{Holm}}<0{,}05$).}}
 \label{fig:sentimento}
 \end{figure}
 
-As quatro vari\'aveis de sentimento agregado t\^em correla\c{c}\~ao preditiva entre $-0{,}04$ e $+0{,}03$ -- indistingu\'ivel de zero --, enquanto a correla\c{c}\~ao contempor\^anea de \texttt{sent\_polaridade} \'e cerca de cinco vezes maior. Essa assimetria constitui a explica\c{c}\~ao mecan\'istica proposta neste trabalho para a aus\^encia de ganho preditivo do texto em todas as arquiteturas testadas: as not\'icias financeiras descrevem com fidelidade o que j\'a ocorreu no mercado no mesmo dia, mas n\~ao antecipam o que ocorrer\'a no dia seguinte -- consistente com a hip\'otese de efici\^encia informacional de mercado. O FinBERT-PT-BR utilizado exibe vi\'es para sentimento negativo (53\% das manchetes, contra 21\% positivas, em per\'iodo de alta acumulada do \'indice); a hip\'otese inicial de que isso decorreria de confus\~ao de vocabul\'ario t\'ecnico foi testada e n\~ao confirmada na Se\c{c}\~ao~\ref{sec:limitacoes} (um modelo gen\'erico independente \'e \emph{ainda mais} negativo, sugerindo estilo editorial, n\~ao o modelo espec\'ifico). Em todo caso, como a correla\c{c}\~ao preditiva foi calculada sobre a polaridade cont\'inua, e n\~ao sobre a classe discreta, esse vi\'es n\~ao explica o resultado nulo.
+\novo{As quatro vari\'aveis de sentimento agregado t\^em correla\c{c}\~ao preditiva entre $-0{,}04$ e $+0{,}03$, e a maior parte dela \'e revers\~ao de pre\c{c}o transmitida pelo sentimento: o retorno do dia correlaciona-se com o de D+1 em $r=-0{,}16$, e o produto dessa revers\~ao pela correla\c{c}\~ao contempor\^anea ($-0{,}028$) responde por cerca de 80\% da correla\c{c}\~ao preditiva bruta de \texttt{sent\_polaridade} ($-0{,}036$). Retirada do sentimento a parte explicada pelo retorno do mesmo dia (correla\c{c}\~ao semiparcial), a correla\c{c}\~ao com D+1 \'e $-0{,}007$, IC de 95\% $[-0{,}07;\,+0{,}05]$ por \emph{block bootstrap} sobre dias; controlando pelas 18 vari\'aveis de pre\c{c}o, $|r|\le0{,}03$ nas quatro vari\'aveis.}
+
+\novo{Para separar o que a imprensa relata do que ela informa, cada manchete foi classificada por regra expl\'icita como \emph{relato de mercado} (verbo de movimento de pre\c{c}o, como ``sobe'', ``fecha'' ou ``despenca'', junto a um ativo, \'indice ou c\'odigo de negocia\c{c}\~ao) ou \emph{evento} (as demais). Os relatos s\~ao 21\% do corpus; a auditoria manual de 40 manchetes sorteadas por classe confirmou 38 relatos e 39 eventos. A correla\c{c}\~ao contempor\^anea concentra-se nos relatos ($+0{,}25$, IC $[+0{,}22;\,+0{,}29]$) e \'e pequena nos eventos ($+0{,}07$, IC $[+0{,}01;\,+0{,}13]$). O hor\'ario de publica\c{c}\~ao aponta na mesma dire\c{c}\~ao. Manchetes publicadas ap\'os o fechamento correlacionam-se com o preg\~ao que acabou de ocorrer ($+0{,}40$) e n\~ao com o seguinte ($-0{,}04$). As publicadas antes das 10h correlacionam-se com o preg\~ao do mesmo dia ($+0{,}19$), mas por meio de relatos de mercados externos e do Ibovespa futuro ($+0{,}25$), n\~ao de eventos ($+0{,}07$): descrevem movimento de pre\c{c}o j\'a em forma\c{c}\~ao antes da abertura, que integra o retorno fechamento a fechamento do dia. Em nenhum recorte o sentimento prev\^e D+1: o menor $p$ corrigido por Holm entre 15 testes preditivos (classes, faixas de hor\'ario, com e sem ortogonaliza\c{c}\~ao) \'e 0,28.}
+
+\novo{A correla\c{c}\~ao contempor\^anea mede, portanto, sobretudo a imprensa descrevendo o pre\c{c}o do dia, e n\~ao informa\c{c}\~ao nova que o mercado incorpore antes do fechamento. Esse padr\~ao \'e compat\'ivel com efici\^encia informacional, mas n\~ao a demonstra: a rea\c{c}\~ao \`a informa\c{c}\~ao publicada fora do preg\~ao recai no gap noturno, que o alvo fechamento a fechamento n\~ao isola (Fig.~\ref{fig:janela}), testado a seguir.}
+
+\subsection{\novo{Janela de rea\c{c}\~ao: texto antes da abertura}}
+\label{sec:janela}
+\novo{O gap noturno responde por 47\% da vari\^ancia do retorno di\'ario, e o desenho preditivo adequado \`a informa\c{c}\~ao publicada fora do preg\~ao prev\^e o retorno abertura$\to$fechamento com o texto dispon\'ivel antes da abertura. Como o \'indice n\~ao tem abertura utiliz\'avel no Stooq nem no Yahoo, usou-se o BOVA11 (Yahoo; correla\c{c}\~ao de 0,988 com o \'indice; exclu\'idos os preg\~oes sem negocia\c{c}\~ao). O sentimento pr\'e-abertura correlaciona-se com o gap ($+0{,}13$, IC $[+0{,}08;\,+0{,}18]$), sobretudo o da manh\~a ($+0{,}24$; noite anterior, $-0{,}04$), mas n\~ao com abertura$\to$fechamento ($0{,}00$, IC $[-0{,}05;\,+0{,}05]$; 10 testes, $p_{\mathrm{Holm}}=1{,}00$): relaciona-se com o pre\c{c}o que j\'a se moveu. A mesma LSTM, com pre\c{c}o at\'e $t-1$, gap de $t$ e texto pr\'e-abertura, n\~ao supera o modelo sem texto: $\Delta$MCC de $-0{,}05$ a $0{,}00$, IC contendo zero ($p_{\mathrm{Holm}}\ge0{,}84$; $n=1011$). As variantes n\~ao se distinguem do acaso (MCC de $-0{,}04$ a $+0{,}01$) nem superam ficar sempre vendido (Sharpe bruto de $-0{,}17$ a $+0{,}49$, contra $+0{,}68$), e a 10 bps ao dia todas t\^em Sharpe negativo.}
+
+\novo{No Copom, a rea\c{c}\~ao fica fora do alvo por constru\c{c}\~ao (Fig.~\ref{fig:janela}). Em 48 eventos, nenhum escore textual, em n\'ivel ou em varia\c{c}\~ao entre comunicados, tem rela\c{c}\~ao detect\'avel com o gap, o preg\~ao seguinte ou o alvo. A surpresa frente ao Focus aponta na dire\c{c}\~ao esperada na rea\c{c}\~ao ($r=-0{,}28$, $p=0{,}05$ por permuta\c{c}\~ao) e quase some no alvo ($-0{,}04$), mas nenhuma das 40 correla\c{c}\~oes resiste a Holm: \'e ind\'icio, e s\'o $|r|\gtrsim0{,}3$ seria detect\'avel.}
 
 \subsection{M\'etricas financeiras}
 \label{sec:financeiro-discussao}
-A Tabela~\ref{tab:financeiro} mostra que, sem custo de transa\c{c}\~ao, 4 dos 11 modelos exibem Sharpe bruto positivo. Sob custo realista de 5 pontos-base por opera\c{c}\~ao, \textbf{dez dos onze modelos apresentam Sharpe negativo ou nulo}, inclusive o LSTM+BERTimbau $k$=30 (de $+0{,}175$ para $-0{,}019$). A \'unica exce\c{c}\~ao \'e o LSTM+Copom (Sharpe l\'iquido $+0{,}42$), que exige leitura criteriosa: retorno m\'edio di\'ario estatisticamente indistingu\'ivel de zero ($t=0{,}86$, $p\approx0{,}39$); desempenho inst\'avel entre folds ($+0{,}84$, $+1{,}78$, $-1{,}69$, $+0{,}57$, $+0{,}18$; perda de 23,6\% no terceiro); e trata-se do m\'aximo entre 11 estrat\'egias derivadas de modelos sem habilidade direcional detect\'avel (PT $p=0{,}27$ sem corre\c{c}\~ao; MCC $+0{,}006\pm0{,}069$) -- o m\'aximo de v\'arios modelos nulos tende a parecer positivo por efeito de sele\c{c}\~ao, n\~ao capacidade preditiva gen\'uina.
+A Tabela~\ref{tab:financeiro} mostra que, sem custo de transa\c{c}\~ao, \novo{5} dos 11 modelos exibem Sharpe bruto positivo. Sob custo realista de 5 pontos-base por opera\c{c}\~ao, \textbf{dez dos onze modelos apresentam Sharpe negativo ou nulo}, \novo{inclusive o LSTM+FinBERT emb.\ $k$=8 (de $+0{,}215$ para $-0{,}045$).} A \'unica exce\c{c}\~ao \'e o LSTM+Copom (Sharpe l\'iquido $+0{,}42$), que exige leitura criteriosa: retorno m\'edio di\'ario estatisticamente indistingu\'ivel de zero ($t=0{,}86$, $p\approx0{,}39$); desempenho inst\'avel entre folds ($+0{,}84$, $+1{,}78$, $-1{,}69$, $+0{,}57$, $+0{,}18$; perda de 23,6\% no terceiro); e trata-se do m\'aximo entre 11 estrat\'egias derivadas de modelos sem habilidade direcional detect\'avel (PT $p=0{,}27$ sem corre\c{c}\~ao; MCC $+0{,}006\pm0{,}069$) -- o m\'aximo de v\'arios modelos nulos tende a parecer positivo por efeito de sele\c{c}\~ao, n\~ao capacidade preditiva gen\'uina.
 
 \begin{table*}[htbp]
 \caption{M\'etricas financeiras (fonte: \texttt{metricas\_financeiras.csv}). Linha RW: previs\~ao de regress\~ao \'e zero, estrat\'egia nunca opera (piso trivial).}
@@ -285,14 +269,14 @@ A Tabela~\ref{tab:financeiro} mostra que, sem custo de transa\c{c}\~ao, 4 dos 11
 Buy-and-hold (refer\^encia) & 0,091 & --      & $-46{,}8\%$ & -- \\
 Random Walk                & 0,000 & 0,000   & $0{,}0\%$   & 0 \\
 ARIMA                      & $-0{,}035$ & $-0{,}445$ & $-45{,}2\%$ & 469 \\
-ARIMAX                     & $+0{,}149$ & $-0{,}258$ & $-34{,}7\%$ & 467 \\
+ARIMAX & \novo{$+0{,}215$} & \novo{$-0{,}212$} & \novo{$-42{,}4\%$} & \novo{489} \\
 XGBoost                    & $-0{,}083$ & $-0{,}406$ & $-50{,}6\%$ & 371 \\
 LSTM (pre\c{c}o)           & $-0{,}277$ & $-0{,}570$ & $-55{,}3\%$ & 335 \\
-LSTM + BERTimbau $k$=8     & $-1{,}017$ & $-1{,}251$ & $-76{,}2\%$ & 267 \\
-LSTM + BERTimbau $k$=30    & $\mathbf{+0{,}175}$ & $-0{,}019$ & $-41{,}1\%$ & 221 \\
-LSTM + FinBERT sent.       & $-0{,}308$ & $-0{,}584$ & $-60{,}8\%$ & 316 \\
-LSTM + FinBERT emb.\ $k$=8  & $+0{,}063$ & $-0{,}196$ & $-38{,}9\%$ & 296 \\
-LSTM + FinBERT emb.\ $k$=30 & $-0{,}312$ & $-0{,}537$ & $-58{,}1\%$ & 258 \\
+LSTM + BERTimbau $k$=8 & \novo{$-0{,}413$} & \novo{$-0{,}640$} & \novo{$-59{,}5\%$} & \novo{259} \\
+LSTM + BERTimbau $k$=30 & \novo{$-0{,}087$} & \novo{$-0{,}302$} & \novo{$-39{,}0\%$} & \novo{245} \\
+LSTM + FinBERT sent. & \novo{$+0{,}039$} & \novo{$-0{,}246$} & \novo{$-42{,}6\%$} & \novo{326} \\
+LSTM + FinBERT emb.\ $k$=8 & \novo{$+0{,}215$} & \novo{$-0{,}045$} & \novo{$-37{,}2\%$} & \novo{298} \\
+LSTM + FinBERT emb.\ $k$=30 & \novo{$+0{,}174$} & \novo{$-0{,}059$} & \novo{$-45{,}2\%$} & \novo{266} \\
 LSTM + Copom                & $+0{,}688$ & $+0{,}424$ & $-37{,}7\%$ & 301 \\
 \bottomrule
 \end{tabular}
@@ -300,49 +284,37 @@ LSTM + Copom                & $+0{,}688$ & $+0{,}424$ & $-37{,}7\%$ & 301 \\
 \end{center}
 \end{table*}
 
-\begin{figure*}[htbp]
-\centerline{\includegraphics[width=0.85\textwidth]{fig_sharpe_custo.png}}
-\caption{Sharpe anualizado por modelo, sem custo de transa\c{c}\~ao (0 bps) e com custo realista (5 bps/trade). Dez dos onze modelos ficam negativos ou pr\'oximos de zero sob custo; a exce\c{c}\~ao (LSTM+Copom) \'e estatisticamente indistingu\'ivel de zero e inst\'avel entre folds.}
-\label{fig:sharpe}
-\end{figure*}
-
-O Random Walk, por nunca assumir posi\c{c}\~ao, constitui piso trivial de compara\c{c}\~ao. Esse conjunto de resultados, ilustrado na Fig.~\ref{fig:sharpe}, corrobora, sob m\'etrica de utilidade econ\^omica direta, a conclus\~ao dos testes estat\'isticos de acur\'acia: nenhum modelo produz vantagem operacionaliz\'avel.
-
 \section{Discuss\~ao}
 
-Os resultados convergem, sob tr\^es perspectivas independentes -- magnitude do erro, habilidade direcional formal e utilidade econ\^omica --, para uma conclus\~ao \'unica: nenhum modelo, com ou sem texto, prev\^e o retorno di\'ario do Ibovespa de forma estatisticamente distingu\'ivel do acaso.
+Os resultados convergem, sob tr\^es perspectivas -- magnitude do erro, habilidade direcional formal e utilidade econ\^omica --, para uma conclus\~ao \'unica: nenhum modelo, com ou sem texto, prev\^e o retorno di\'ario do Ibovespa de forma estatisticamente distingu\'ivel do acaso.
 
-O achado mais relevante n\~ao \'e a aus\^encia de sinal em si, mas a \emph{explica\c{c}\~ao mecan\'istica} (Se\c{c}\~ao~\ref{sec:achado}): o texto financeiro em portugu\^es carrega sinal gen\'uino sobre o mercado, por\'em esse sinal \'e \textbf{contempor\^aneo}, n\~ao \textbf{preditivo}. Esse aspecto distingue este trabalho de resultados nulos n\~ao explicados e de trabalhos que reportam ganhos sem controle adequado de vazamento temporal, problema recorrente na literatura de FinBERT-LSTM discutida na Se\c{c}\~ao~\ref{sec:relacionados}.
+\novo{O resultado mais informativo n\~ao \'e a aus\^encia de sinal em si, mas a caracteriza\c{c}\~ao de onde est\'a o sinal textual (Se\c{c}\~ao~\ref{sec:achado}): o sentimento acompanha o retorno do dia, sobretudo nas manchetes que relatam pre\c{c}os e nas publicadas ap\'os o fechamento, e, descontada essa parte, nada sobra para D+1 nem para o retorno abertura$\to$fechamento (Se\c{c}\~ao~\ref{sec:janela}).} Esse aspecto distingue este trabalho de resultados nulos n\~ao explicados e de trabalhos que reportam ganhos sem controle adequado de vazamento temporal, problema recorrente na literatura de FinBERT-LSTM discutida na Se\c{c}\~ao~\ref{sec:relacionados}.
 
-O sinal do Copom estende esse padr\~ao a uma fonte estruturalmente distinta: evento raro (49 reuni\~oes em 6 anos, contra 57.611 manchetes), de car\'ater oficial, com vi\'es diretamente verific\'avel contra a decis\~ao real de Selic ($r=+0{,}615$). O classificador \'e eficaz, mas o sinal assim capturado tampouco antecipa o retorno de D+1. Informa\c{c}\~ao p\'ublica relevante, qualquer que seja sua fonte, parece j\'a estar precificada no fechamento do dia em que se torna conhecida.
+\novo{O classificador do Copom \'e o \'unico sinal textual com validade verific\'avel contra um crit\'erio externo: o escore correlaciona-se com a decis\~ao real de Selic em $r=+0{,}615$ (IC de 95\% $[+0{,}44;\,+0{,}75]$; 49 comunicados), de modo que o nulo n\~ao decorre de um instrumento alheio \`a decis\~ao. Essa validade, por\'em, \'e sobretudo a leitura da decis\~ao anunciada: sem as frases do an\'uncio, $r=+0{,}25$ (IC $[-0{,}05;\,+0{,}50]$), o que n\~ao estabelece que o escore me\c{c}a tom al\'em dela, coerente com a aus\^encia de rela\c{c}\~ao na janela de rea\c{c}\~ao (Se\c{c}\~ao~\ref{sec:janela}).}
 
-A superioridade estatisticamente significativa do XGBoost em rela\c{c}\~ao a diversas variantes de LSTM n\~ao significa que o XGBoost preveja o mercado -- seu MCC de $+0{,}028\pm0{,}038$ tamb\'em n\~ao \'e distingu\'ivel de zero --, mas que, entre modelos igualmente desprovidos de habilidade preditiva real, os mais simples produzem erros de magnitude menor e mais est\'avel, argumento favor\'avel \`a pars\^imonia mesmo quando nenhum modelo alcan\c{c}a sucesso preditivo. Registra-se ainda que o MCC do passeio aleat\'orio direcional (persist\^encia) \'e \emph{negativo} ($-0{,}033$), sugerindo leve revers\~ao \`a m\'edia de curt\'issimo prazo -- estrutura fraca que nenhuma arquitetura testada converteu em habilidade preditiva significativa, refor\c{c}ando a leitura de efici\^encia informacional. Esse grau de efici\^encia \'e compat\'ivel com a evolu\c{c}\~ao hist\'orica documentada para a Bovespa: \cite{torres2002} rejeitaram passeio aleat\'orio na s\'erie di\'aria/semanal entre 1986--1998, mas com grau de rejei\c{c}\~ao decrescente ao longo da amostra, sobretudo ap\'os o Plano Real -- tend\^encia com a qual a estrutura linear fraca (n\~ao ausente) desta amostra, duas d\'ecadas mais recente, \'e consistente.
+\novo{A vantagem do XGBoost sobre as variantes de LSTM com texto, significativa ap\'os Holm apenas frente ao LSTM+FinBERT sent.,} n\~ao significa que o XGBoost preveja o mercado -- seu MCC de $+0{,}028\pm0{,}038$ tamb\'em n\~ao \'e distingu\'ivel de zero --, mas que, entre modelos igualmente desprovidos de habilidade preditiva real, os mais simples produzem erros de magnitude menor e mais est\'avel, argumento favor\'avel \`a parcim\^onia mesmo quando nenhum modelo alcan\c{c}a sucesso preditivo.
 
 \section{Limita\c{c}\~oes}
 \label{sec:limitacoes}
 
 \begin{itemize}
-\item \textbf{Frequ\^encia di\'aria.} Fechamentos di\'arios podem subestimar a velocidade real de incorpora\c{c}\~ao de not\'icias ao pre\c{c}o.
-\item \textbf{Vi\'es de classifica\c{c}\~ao do FinBERT-PT-BR.} Sobrerrepresenta\c{c}\~ao de sentimento negativo (53\% vs.\ 21\% positivo) em per\'iodo de alta. Comparado a um modelo independente, sem ajuste financeiro (\texttt{nlptown/\allowbreak bert-base-multilingual-uncased-sentiment}), sobre o mesmo corpus: o modelo gen\'erico classifica fra\c{c}\~ao \textbf{maior} como negativa (67,7\%) -- contr\'ario \`a hip\'otese de vi\'es espec\'ifico do FinBERT-PT-BR, sugerindo estilo editorial das manchetes, n\~ao confus\~ao de vocabul\'ario t\'ecnico. Correla\c{c}\~ao entre polaridades dos dois modelos: $r=+0{,}359$; correla\c{c}\~ao preditiva do modelo alternativo tamb\'em nula ($r=+0{,}011$ vs.\ $+0{,}075$ contempor\^anea) -- mesmo padr\~ao reativo, via independente.
-\item \textbf{Escopo textual.} O resultado nulo replica-se tanto com o corpo completo quanto com \emph{chunking} cobrindo o artigo inteiro sem truncamento (Se\c{c}\~ao~\ref{sec:corpo-completo}) -- nem o escopo (manchete vs.\ corpo) nem o comprimento de contexto dispon\'ivel ao modelo explicam a aus\^encia de sinal preditivo.
+\item \textbf{Vi\'es do FinBERT-PT-BR.} Sentimento negativo sobrerrepresentado (53\% vs.\ 21\% positivo) em per\'iodo de alta. Um modelo gen\'erico independente (\texttt{nlptown/\allowbreak bert-base-\allowbreak multilingual-\allowbreak uncased-\allowbreak sentiment}) classifica fra\c{c}\~ao \textbf{maior} como negativa (67,7\%), o que sugere estilo editorial, n\~ao confus\~ao de vocabul\'ario t\'ecnico; sua correla\c{c}\~ao preditiva tamb\'em \'e nula (\novo{$r=+0{,}008$, contra $+0{,}074$} contempor\^anea). Como a correla\c{c}\~ao preditiva usa a polaridade cont\'inua, esse vi\'es n\~ao explica o resultado nulo.
 \item \textbf{Cobertura editorial \'unica.} Corpus restrito a um \'unico ve\'iculo (InfoMoney); vi\'eses editoriais espec\'ificos n\~ao foram comparados a outras fontes.
 \item \textbf{Edi\c{c}\~ao de mat\'erias ap\'os a publica\c{c}\~ao original.} 4,3\% das mat\'erias foram editadas mais de 24h ap\'os a publica\c{c}\~ao, e 2,6\% mais de 7 dias depois -- risco real, ainda que reduzido, de diverg\^encia com o texto publicado em tempo real.
-\item \textbf{Recorr\^encia vs.\ capacidade.} MLP raso (1 camada, 32 unidades, mesmo regime de treino da LSTM) sobre a janela achatada obteve MCC $-0{,}004\pm0{,}046$, indistingu\'ivel do MCC da LSTM ($-0{,}009\pm0{,}057$) -- a recorr\^encia n\~ao agrega vantagem detect\'avel sobre um MLP raso.
-\item \textbf{Efici\^encia em dado pequeno.} O mesmo texto acoplado ao XGBoost (mais eficiente que a LSTM em dado pequeno) tampouco supera o XGBoost s\'o-pre\c{c}o ($+0{,}028\pm0{,}038$) em nenhuma das 5 vari\'aveis textuais testadas -- o resultado nulo n\~ao decorre da escolha de arquitetura.
-\item \textbf{Interpreta\c{c}\~ao de componentes de PCA.} PCA (k=8) ajustado sobre a s\'erie completa, s\'o para diagn\'ostico: os componentes de maior vari\^ancia correlacionam-se principalmente com volume editorial ($n\_noticias$, $r=+0{,}43$) e secundariamente com polaridade de sentimento, mas nenhum com o retorno contempor\^aneo ou de D+1 ($|r|\leq0{,}04$ em todos).
-\item \textbf{Migra\c{c}\~ao de ambiente computacional.} Resultados originalmente produzidos em GPU T4 (Colab), reproduzidos localmente em RTX 3070 dentro da varia\c{c}\~ao esperada entre sementes, sem altera\c{c}\~ao de conclus\~oes qualitativas.
-\item \textbf{Estrat\'egia financeira estilizada.} Avalia\c{c}\~ao de Sharpe/drawdown emprega estrat\'egia mec\^anica simples, sem dimensionamento de posi\c{c}\~ao, \emph{stop-loss} ou custo de financiamento.
 \item \textbf{Escolha dos modelos de embedding.} BERTimbau e FinBERT-PT-BR n\~ao foram comparados contra alternativas mais recentes de representa\c{c}\~ao textual em portugu\^es; um sinal nulo com esses dois modelos n\~ao descarta que um embedding mais moderno capture algo diferente.
 \end{itemize}
 
 \section{Conclus\~ao}
+\label{sec:conclusao}
 
-Sob protocolo de valida\c{c}\~ao walk-forward rigoroso -- embargo temporal apropriado, ajuste de todo componente dependente de dados exclusivamente no treino de cada fold, avalia\c{c}\~ao multi-semente e testes formais de signific\^ancia com corre\c{c}\~ao para m\'ultiplas compara\c{c}\~oes --, nenhum modelo testado, com ou sem embeddings de not\'icias financeiras em portugu\^es ou sinal de pol\'itica monet\'aria do Copom, prev\^e o retorno di\'ario do Ibovespa de forma estatisticamente distingu\'ivel do acaso. O sinal textual presente nas manchetes financeiras \'e gen\'uino, por\'em reativo: descreve o retorno do pr\'oprio dia com correla\c{c}\~ao de $+0{,}20$, e n\~ao o retorno do dia seguinte, cuja correla\c{c}\~ao com o sentimento \'e estatisticamente nula.
+Sob valida\c{c}\~ao walk-forward com embargo, ajuste restrito ao treino de cada fold e testes com corre\c{c}\~ao para m\'ultiplas compara\c{c}\~oes, nenhum modelo, com ou sem embeddings de not\'icias em portugu\^es ou sinal do Copom, prev\^e o retorno di\'ario do Ibovespa de forma distingu\'ivel do acaso. \novo{Os intervalos de 95\% excluem acur\'acia direcional acima de $\approx$55\% em qualquer modelo (Sharpe bruto de $\approx$1,1), mas n\~ao efeitos menores, que este desenho n\~ao distingue de zero com poder adequado. O sentimento das manchetes acompanha o retorno do pr\'oprio dia ($r=+0{,}18$), sobretudo nas que relatam pre\c{c}os, e a parte n\~ao explicada pelo pre\c{c}o n\~ao prev\^e o dia seguinte ($r=-0{,}007$).}
 
-Trata-se de resultado nulo obtido com rigor metodol\'ogico, e n\~ao de limita\c{c}\~ao de implementa\c{c}\~ao. Demonstrar de forma controlada e reprodut\'ivel que um canal de informa\c{c}\~ao amplamente considerado \'util n\~ao produz vantagem preditiva mensur\'avel, e explicar \emph{por que} esse resultado ocorre, constitui, em si, contribui\c{c}\~ao cient\'ifica v\'alida.
+\novo{O resultado caracteriza, portanto, o que o desenho consegue e n\~ao consegue detectar. O texto n\~ao acrescenta habilidade detect\'avel nem no alvo fechamento a fechamento nem no retorno abertura$\to$fechamento, com o texto dispon\'ivel antes da abertura: relaciona-se com o pre\c{c}o que j\'a se moveu. No Copom, a surpresa frente \`a expectativa \'e ind\'icio a verificar com amostra maior ou dados intradi\'arios.}
+
+\novo{O passo seguinte \'e o teste da vari\^ancia, onde est\'a a depend\^encia serial da s\'erie (Fig.~\ref{fig:acf}): baseline HAR \cite{corsi2009} com perda QLIKE, volatilidade por amplitude (Parkinson, Garman-Klass) e volume de not\'icias como candidato a preditor. Os estimadores devem usar o BOVA11, porque a amplitude do \'indice no Stooq incorpora o gap noturno (correla\c{c}\~ao de 0,99 com a do BOVA11 estendida ao fechamento anterior, contra 0,89 com a do preg\~ao). O ind\'icio a favor do volume de not\'icias \'e modesto: sem tend\^encia, sua correla\c{c}\~ao com a volatilidade do dia seguinte \'e $+0{,}08$ (IC $[+0{,}01;\,+0{,}15]$), e $+0{,}03$ (IC $[-0{,}03;\,+0{,}10]$) descontada a do dia.}
 
 \section*{Reprodutibilidade}
-Todo o c\'odigo-fonte -- notebooks, scripts de coleta e o m\'odulo \texttt{utils/tcc\_utils.py} -- est\'a publicado no reposit\'orio do projeto no GitHub, com instru\c{c}\~oes em \texttt{README.md} e ambiente fixado em \texttt{requirements.txt}. Dados brutos, vari\'aveis derivadas e resultados podem ser integralmente reconstitu\'idos a partir desse c\'odigo; por seu volume, n\~ao s\~ao distribu\'idos no mesmo reposit\'orio, mas podem ser disponibilizados sob solicita\c{c}\~ao. A su\'ite \texttt{test\_tcc\_utils.py} (14 casos, corte temporal, hor\'ario de ver\~ao, embargo e gera\c{c}\~ao do alvo) verifica formalmente as garantias anti-vazamento da Se\c{c}\~ao~\ref{sec:antivazamento}.
+Todo o c\'odigo-fonte -- notebooks, scripts de coleta e o m\'odulo \texttt{utils/tcc\_utils.py} -- est\'a publicado no reposit\'orio do projeto no GitHub, com instru\c{c}\~oes em \texttt{README.md} e ambiente fixado em \texttt{requirements.txt}. Dados brutos, vari\'aveis derivadas e resultados podem ser integralmente reconstitu\'idos a partir desse c\'odigo; por seu volume, n\~ao s\~ao distribu\'idos no mesmo reposit\'orio, mas podem ser disponibilizados sob solicita\c{c}\~ao. \novo{Os resultados foram gerados em RTX 3070; os modelos que n\~ao dependem do carimbo reproduzem os anteriores bit a bit.} A su\'ite \texttt{test\_tcc\_utils.py} \novo{(25 casos: corte temporal, fechamento efetivo, carimbo, hor\'ario de ver\~ao, embargo, gera\c{c}\~ao do alvo e verifica\c{c}\~oes sobre os dados)} verifica formalmente as garantias anti-vazamento da Se\c{c}\~ao~\ref{sec:antivazamento}.
 
 \begin{thebibliography}{00}
 \bibitem{araci2019finbert} D. Araci, ``FinBERT: Financial Sentiment Analysis with Pre-trained Language Models,'' \emph{arXiv preprint arXiv:1908.10063}, 2019.
@@ -356,8 +328,8 @@ Todo o c\'odigo-fonte -- notebooks, scripts de coleta e o m\'odulo \texttt{utils
 \bibitem{loughran2011} T. Loughran and B. McDonald, ``When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks,'' \emph{The Journal of Finance}, vol. 66, no. 1, pp. 35--65, 2011.
 \bibitem{gukellyxiu2020} S. Gu, B. Kelly, and D. Xiu, ``Empirical Asset Pricing via Machine Learning,'' \emph{The Review of Financial Studies}, vol. 33, no. 5, pp. 2223--2273, 2020.
 \bibitem{sirignanocont2019} J. Sirignano and R. Cont, ``Universal features of price formation in financial markets: perspectives from Deep Learning,'' \emph{Quantitative Finance}, vol. 19, no. 9, pp. 1449--1459, 2019.
-\bibitem{torres2002} R. Torres, M. Bonomo, and C. Fernandes, ``A Aleatoriedade do Passeio na Bovespa: Testando a Efici\^encia do Mercado Acion\'ario Brasileiro,'' \emph{Revista Brasileira de Economia}, vol. 56, no. 2, 2002.
 \bibitem{tangyang2025} Y. Tang and Y. Yang, ``FinMTEB: Finance Massive Text Embedding Benchmark,'' in \emph{Proc. 2025 Conf. on Empirical Methods in Natural Language Processing (EMNLP)}, 2025.
+\bibitem{corsi2009} \novo{F. Corsi, ``A Simple Approximate Long-Memory Model of Realized Volatility,'' \emph{Journal of Financial Econometrics}, vol. 7, no. 2, pp. 174--196, 2009.}
 \end{thebibliography}
 
 \end{document}

@@ -1,0 +1,68 @@
+{
+  "B1_ortogonalizacao": {
+    "n": 1492,
+    "B": 20000,
+    "seed": 0,
+    "resultados": [
+      {
+        "variavel": "sent_polaridade",
+        "r_preditiva_bruta": -0.03553161271908691,
+        "r_contemporanea": 0.17874778286505677,
+        "r_retorno_hoje_vs_amanha": -0.15869729972290453,
+        "cadeia_r_xz_x_r_zy": -0.028366790472140573,
+        "semiparcial_ret_lag0": -0.007282101005069964,
+        "ic95_lo": -0.0714571817421872,
+        "ic95_hi": 0.055917350350936174,
+        "p_bootstrap": 0.8174,
+        "semiparcial_todas_vars_preco": -0.024561063958029837
+      },
+      {
+        "variavel": "sent_dispersao",
+        "r_preditiva_bruta": -0.0380392547591486,
+        "r_contemporanea": 0.08764245899234552,
+        "r_retorno_hoje_vs_amanha": -0.15869729972290453,
+        "cadeia_r_xz_x_r_zy": -0.013908621583160625,
+        "semiparcial_ret_lag0": -0.02422384663171912,
+        "ic95_lo": -0.08123302138501753,
+        "ic95_hi": 0.03537306160008332,
+        "p_bootstrap": 0.4513,
+        "semiparcial_todas_vars_preco": -0.01720924069096932
+      },
+      {
+        "variavel": "sent_pos_frac",
+        "r_preditiva_bruta": -0.020258064402864682,
+        "r_contemporanea": 0.13707938223239163,
+        "r_retorno_hoje_vs_amanha": -0.15869729972290453,
+        "cadeia_r_xz_x_r_zy": -0.021754127807964447,
+        "semiparcial_ret_lag0": 0.0015103207342070054,
+        "ic95_lo": -0.051503326349471475,
+        "ic95_hi": 0.05365195468813484,
+        "p_bootstrap": 0.9564,
+        "semiparcial_todas_vars_preco": 0.0016199459246018482
+      },
+      {
+        "variavel": "sent_neg_frac",
+        "r_preditiva_bruta": 0.03169938342461039,
+        "r_contemporanea": -0.15195275903377992,
+        "r_retorno_hoje_vs_amanha": -0.15869729972290453,
+        "cadeia_r_xz_x_r_zy": 0.02411449254410606,
+        "semiparcial_ret_lag0": 0.007674003267995373,
+        "ic95_lo": -0.059811703270373086,
+        "ic95_hi": 0.07650405491320805,
+        "p_bootstrap": 0.81,
+        "semiparcial_todas_vars_preco": 0.03215137387508565
+      }
+    ]
+  },
+  "B0_viabilidade_open": {
+    "n": 1492,
+    "gap_std": 8.846346452345267e-05,
+    "gap_abs_mediano": 1.2221559908533204e-05,
+    "frac_gap_exatamente_zero": 0.1427613941018767,
+    "frac_abs_gap_lt_5bp": 0.9939678284182306,
+    "ret_cc_std": 0.015672125310714498,
+    "ret_oc_std": 0.015630394042397414,
+    "corr_ret_cc_ret_oc": 0.9999875811383683,
+    "corr_gap_ret_cc": 0.4739287596724977
+  }
+}

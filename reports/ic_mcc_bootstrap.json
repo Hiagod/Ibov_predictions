@@ -1,0 +1,737 @@
+{
+  "B": 10000,
+  "seed": 0,
+  "bloco": 10,
+  "margem": 0.05,
+  "r2_vs_rw": [
+    {
+      "modelo": "RandomWalk",
+      "n_dias": 1030,
+      "r2": 0.0,
+      "ep_bootstrap": 0.0,
+      "ic95_lo": 0.0,
+      "ic95_hi": 0.0,
+      "rmse": 0.0176494717849234,
+      "rmse_rw": 0.0176494717849234
+    },
+    {
+      "modelo": "ARIMA",
+      "n_dias": 1030,
+      "r2": -0.056877081664022944,
+      "ep_bootstrap": 0.041457860005092696,
+      "ic95_lo": -0.16633247214799196,
+      "ic95_hi": -0.014030004584945594,
+      "rmse": 0.018144456025071014,
+      "rmse_rw": 0.0176494717849234
+    },
+    {
+      "modelo": "ARIMAX",
+      "n_dias": 1030,
+      "r2": -0.3738370424730848,
+      "ep_bootstrap": 0.309729104935533,
+      "ic95_lo": -1.198317829882209,
+      "ic95_hi": -0.04309138199175356,
+      "rmse": 0.020687086162443323,
+      "rmse_rw": 0.0176494717849234
+    },
+    {
+      "modelo": "XGBoost",
+      "n_dias": 1030,
+      "r2": -0.011643709942342761,
+      "ep_bootstrap": 0.014355898964969367,
+      "ic95_lo": -0.0398472339439364,
+      "ic95_hi": 0.016729958083577474,
+      "rmse": 0.01775192707319531,
+      "rmse_rw": 0.0176494717849234
+    },
+    {
+      "modelo": "LSTM-preco",
+      "n_dias": 1030,
+      "r2": -0.07446973366467002,
+      "ep_bootstrap": 0.03381365766386638,
+      "ic95_lo": -0.15410290414827524,
+      "ic95_hi": -0.023065736575736222,
+      "rmse": 0.01823180908380788,
+      "rmse_rw": 0.01758865665399084
+    },
+    {
+      "modelo": "LSTM-BERTimbau-k8",
+      "n_dias": 1030,
+      "r2": -0.1034700592129687,
+      "ep_bootstrap": 0.039802165129625554,
+      "ic95_lo": -0.1977485936834265,
+      "ic95_hi": -0.04447874128244086,
+      "rmse": 0.018476212480489147,
+      "rmse_rw": 0.01758865665399084
+    },
+    {
+      "modelo": "LSTM-BERTimbau-k30",
+      "n_dias": 1030,
+      "r2": -0.12486905684573268,
+      "ep_bootstrap": 0.04421518784853275,
+      "ic95_lo": -0.23218073870754163,
+      "ic95_hi": -0.05802187656742049,
+      "rmse": 0.018654501857967104,
+      "rmse_rw": 0.01758865665399084
+    },
+    {
+      "modelo": "LSTM-FinBERT-sent",
+      "n_dias": 1030,
+      "r2": -0.20477648245315172,
+      "ep_bootstrap": 0.10427537527217612,
+      "ic95_lo": -0.47662584952402093,
+      "ic95_hi": -0.0707007703522975,
+      "rmse": 0.019305715943940985,
+      "rmse_rw": 0.01758865665399084
+    },
+    {
+      "modelo": "LSTM-FinBERT-emb-k8",
+      "n_dias": 1030,
+      "r2": -0.10399739143064246,
+      "ep_bootstrap": 0.05159256024998547,
+      "ic95_lo": -0.23110573762303274,
+      "ic95_hi": -0.033136219201194465,
+      "rmse": 0.018480626709165643,
+      "rmse_rw": 0.01758865665399084
+    },
+    {
+      "modelo": "LSTM-FinBERT-emb-k30",
+      "n_dias": 1030,
+      "r2": -0.08312694624843808,
+      "ep_bootstrap": 0.03607485750252161,
+      "ic95_lo": -0.1717296936925033,
+      "ic95_hi": -0.03418871913781948,
+      "rmse": 0.01830511035340757,
+      "rmse_rw": 0.01758865665399084
+    },
+    {
+      "modelo": "LSTM-Copom",
+      "n_dias": 1030,
+      "r2": -0.15978781734570813,
+      "ep_bootstrap": 0.08545913195496274,
+      "ic95_lo": -0.37048578586949865,
+      "ic95_hi": -0.04214454766992739,
+      "rmse": 0.018941830343182614,
+      "rmse_rw": 0.01758865665399084
+    }
+  ],
+  "absoluto": [
+    {
+      "modelo": "RandomWalk",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": -0.0302488148081046,
+      "ep_bootstrap": 0.03172475595367288,
+      "ic95_lo": -0.09343513202216995,
+      "ic95_hi": 0.029131598510017516,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.09343513202216995
+    },
+    {
+      "modelo": "ARIMA",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.03896392318624426,
+      "ep_bootstrap": 0.03190179719346097,
+      "ic95_lo": -0.022554132298819512,
+      "ic95_hi": 0.10192473728933375,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.10192473728933375
+    },
+    {
+      "modelo": "ARIMAX",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.001226139761806808,
+      "ep_bootstrap": 0.031215361938952423,
+      "ic95_lo": -0.05841998742693345,
+      "ic95_hi": 0.06468024701568587,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.06468024701568587
+    },
+    {
+      "modelo": "XGBoost",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.04688529231742482,
+      "ep_bootstrap": 0.029351124480221154,
+      "ic95_lo": -0.012031340187936869,
+      "ic95_hi": 0.10268640956604415,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.10268640956604415
+    },
+    {
+      "modelo": "LSTM-preco",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": -0.02865966231608499,
+      "ep_bootstrap": 0.030712735926715112,
+      "ic95_lo": -0.09268443981420428,
+      "ic95_hi": 0.028746417256896285,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.09268443981420428
+    },
+    {
+      "modelo": "LSTM-BERTimbau-k8",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": -0.04528366180145232,
+      "ep_bootstrap": 0.031088549111200146,
+      "ic95_lo": -0.10506040632249457,
+      "ic95_hi": 0.01667032426766325,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.10506040632249457
+    },
+    {
+      "modelo": "LSTM-BERTimbau-k30",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.025328819965272864,
+      "ep_bootstrap": 0.02944389379269163,
+      "ic95_lo": -0.031108795074810132,
+      "ic95_hi": 0.0839672246934116,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.0839672246934116
+    },
+    {
+      "modelo": "LSTM-FinBERT-sent",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": -0.016303999644956515,
+      "ep_bootstrap": 0.028692974774187564,
+      "ic95_lo": -0.07143745522432537,
+      "ic95_hi": 0.04084105884470356,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.07143745522432537
+    },
+    {
+      "modelo": "LSTM-FinBERT-emb-k8",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": -0.008034264858271243,
+      "ep_bootstrap": 0.029623660496230154,
+      "ic95_lo": -0.07009250182015897,
+      "ic95_hi": 0.04656279760564148,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.07009250182015897
+    },
+    {
+      "modelo": "LSTM-FinBERT-emb-k30",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": -0.0010039763231280607,
+      "ep_bootstrap": 0.03076710104209955,
+      "ic95_lo": -0.06494589222127578,
+      "ic95_hi": 0.05502651492696787,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.06494589222127578
+    },
+    {
+      "modelo": "LSTM-Copom",
+      "referencia": null,
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.019092123074768375,
+      "ep_bootstrap": 0.03003896051740289,
+      "ic95_lo": -0.03958434695548333,
+      "ic95_hi": 0.07899805764918225,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.07899805764918225
+    }
+  ],
+  "vs_lstm_preco": [
+    {
+      "modelo": "LSTM-BERTimbau-k8",
+      "referencia": "LSTM-preco",
+      "n_dias": 1030,
+      "mcc_ou_delta": -0.016623999485367327,
+      "ep_bootstrap": 0.034976876290670915,
+      "ic95_lo": -0.0816898274806317,
+      "ic95_hi": 0.05601760689228002,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.0816898274806317
+    },
+    {
+      "modelo": "LSTM-BERTimbau-k30",
+      "referencia": "LSTM-preco",
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.05398848228135786,
+      "ep_bootstrap": 0.03560479342278225,
+      "ic95_lo": -0.012220957883598078,
+      "ic95_hi": 0.12839999618988818,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.12839999618988818
+    },
+    {
+      "modelo": "LSTM-FinBERT-sent",
+      "referencia": "LSTM-preco",
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.012355662671128476,
+      "ep_bootstrap": 0.03058072135975528,
+      "ic95_lo": -0.04303071821530036,
+      "ic95_hi": 0.07694272649666946,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.07694272649666946
+    },
+    {
+      "modelo": "LSTM-FinBERT-emb-k8",
+      "referencia": "LSTM-preco",
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.02062539745781375,
+      "ep_bootstrap": 0.029892822368852,
+      "ic95_lo": -0.03804614993433707,
+      "ic95_hi": 0.0791110052111623,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.0791110052111623
+    },
+    {
+      "modelo": "LSTM-FinBERT-emb-k30",
+      "referencia": "LSTM-preco",
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.02765568599295693,
+      "ep_bootstrap": 0.03379786754109067,
+      "ic95_lo": -0.03923296590675922,
+      "ic95_hi": 0.0925759302517788,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.0925759302517788
+    },
+    {
+      "modelo": "LSTM-Copom",
+      "referencia": "LSTM-preco",
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.04775178539085337,
+      "ep_bootstrap": 0.03235113289931546,
+      "ic95_lo": -0.011029302971204706,
+      "ic95_hi": 0.1150586664846252,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.1150586664846252
+    }
+  ],
+  "vs_random_walk": [
+    {
+      "modelo": "ARIMA",
+      "referencia": "RandomWalk",
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.06921273799434886,
+      "ep_bootstrap": 0.05578399994072332,
+      "ic95_lo": -0.03655361568961373,
+      "ic95_hi": 0.18103010282043172,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.18103010282043172
+    },
+    {
+      "modelo": "ARIMAX",
+      "referencia": "RandomWalk",
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.03147495456991141,
+      "ep_bootstrap": 0.05398223845907914,
+      "ic95_lo": -0.0697303671694445,
+      "ic95_hi": 0.14202688744975042,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.14202688744975042
+    },
+    {
+      "modelo": "XGBoost",
+      "referencia": "RandomWalk",
+      "n_dias": 1030,
+      "mcc_ou_delta": 0.07713410712552941,
+      "ep_bootstrap": 0.04445882811406291,
+      "ic95_lo": -0.008021559769544636,
+      "ic95_hi": 0.16477425006480897,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.16477425006480897
+    },
+    {
+      "modelo": "LSTM-preco",
+      "referencia": "RandomWalk",
+      "n_dias": 1009,
+      "mcc_ou_delta": -0.004991789483525105,
+      "ep_bootstrap": 0.04877377118986884,
+      "ic95_lo": -0.09929829276992712,
+      "ic95_hi": 0.09117699280857532,
+      "ic_dentro_da_faixa": false,
+      "ic_contem_zero": true,
+      "efeito_maximo_compativel": 0.09929829276992712
+    }
+  ],
+  "robustez": [
+    {
+      "verificacao": "principal",
+      "coluna": "BERTimbau k=8",
+      "delta": -0.016623999485367327,
+      "ep": 0.034976876290670915,
+      "lo": -0.0816898274806317,
+      "hi": 0.05601760689228002,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "corpo_truncado",
+      "coluna": "BERTimbau k=8",
+      "delta": 0.01121002369358014,
+      "ep": 0.0301208427618021,
+      "lo": -0.045379333021409646,
+      "hi": 0.07271540136158419,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "principal",
+      "coluna": "BERTimbau k=30",
+      "delta": 0.05398848228135786,
+      "ep": 0.03560479342278225,
+      "lo": -0.012220957883598078,
+      "hi": 0.12839999618988818,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "corpo_truncado",
+      "coluna": "BERTimbau k=30",
+      "delta": 0.02651764399702461,
+      "ep": 0.04179075643056199,
+      "lo": -0.05211528664667215,
+      "hi": 0.11193426939412832,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "principal",
+      "coluna": "FinBERT sent.",
+      "delta": 0.012355662671128476,
+      "ep": 0.03058072135975528,
+      "lo": -0.04303071821530036,
+      "hi": 0.07694272649666946,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "corpo_truncado",
+      "coluna": "FinBERT sent.",
+      "delta": -0.0043582563970201126,
+      "ep": 0.031225558251774414,
+      "lo": -0.061743181562662515,
+      "hi": 0.059422656510590366,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "principal",
+      "coluna": "FinBERT emb. k=8",
+      "delta": 0.02062539745781375,
+      "ep": 0.029892822368852,
+      "lo": -0.03804614993433707,
+      "hi": 0.0791110052111623,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "corpo_truncado",
+      "coluna": "FinBERT emb. k=8",
+      "delta": -0.000903325453911516,
+      "ep": 0.03210974883988142,
+      "lo": -0.06242626520777286,
+      "hi": 0.06421626928674323,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "principal",
+      "coluna": "FinBERT emb. k=30",
+      "delta": 0.02765568599295693,
+      "ep": 0.03379786754109067,
+      "lo": -0.03923296590675922,
+      "hi": 0.0925759302517788,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "corpo_truncado",
+      "coluna": "FinBERT emb. k=30",
+      "delta": 0.02419285865795088,
+      "ep": 0.03654667550327207,
+      "lo": -0.04478600370788107,
+      "hi": 0.09955126147010661,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "corpo_chunking",
+      "coluna": "BERTimbau k=8",
+      "delta": -0.009310998802334079,
+      "ep": 0.035757843754046226,
+      "lo": -0.07978366642632129,
+      "hi": 0.06155997926405037,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "corpo_chunking",
+      "coluna": "FinBERT sent.",
+      "delta": -0.0075406251402596915,
+      "ep": 0.03437543118905321,
+      "lo": -0.07377534488152819,
+      "hi": 0.060377208816090155,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "corpo_chunking",
+      "coluna": "FinBERT emb. k=8",
+      "delta": 0.009915498619906139,
+      "ep": 0.032931884994364204,
+      "lo": -0.049945415473901765,
+      "hi": 0.079008197511303,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "xgboost_texto",
+      "coluna": "BERTimbau k=8",
+      "delta": -0.04585869320804696,
+      "ep": 0.02849090239251208,
+      "lo": -0.09833114411769397,
+      "hi": 0.014183306043217218,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "xgboost_texto",
+      "coluna": "BERTimbau k=30",
+      "delta": -0.04366349854407979,
+      "ep": 0.033343124249865824,
+      "lo": -0.10478877183100445,
+      "hi": 0.02570087255651114,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "xgboost_texto",
+      "coluna": "FinBERT sent.",
+      "delta": -0.029521477836500117,
+      "ep": 0.0181628799570304,
+      "lo": -0.061818629225585404,
+      "hi": 0.00994031401646774,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "xgboost_texto",
+      "coluna": "FinBERT emb. k=8",
+      "delta": -0.0069215634331517145,
+      "ep": 0.02577784407145316,
+      "lo": -0.0568636095393242,
+      "hi": 0.0444486223679129,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "xgboost_texto",
+      "coluna": "FinBERT emb. k=30",
+      "delta": -0.04235403698149115,
+      "ep": 0.03123703363369575,
+      "lo": -0.10188997733569886,
+      "hi": 0.019785600210631794,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "texto_D-1",
+      "coluna": "BERTimbau k=8",
+      "delta": -0.010141997169818985,
+      "ep": 0.03560473625253163,
+      "lo": -0.07832188760128711,
+      "hi": 0.059874856831971114,
+      "n_dias": 1029
+    },
+    {
+      "verificacao": "ultima_manchete",
+      "coluna": "BERTimbau k=8",
+      "delta": 0.004190377216070174,
+      "ep": 0.03327379981760513,
+      "lo": -0.06221736659018295,
+      "hi": 0.06897267249800981,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "lookback_1",
+      "coluna": "BERTimbau k=8",
+      "delta": -0.021628626603669973,
+      "ep": 0.032458191405017524,
+      "lo": -0.08149568968813539,
+      "hi": 0.04551879004380349,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "lookback_3",
+      "coluna": "BERTimbau k=8",
+      "delta": -0.02919406029759889,
+      "ep": 0.034632638013477636,
+      "lo": -0.09832844353716352,
+      "hi": 0.037080031072821845,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "lookback_5",
+      "coluna": "BERTimbau k=8",
+      "delta": -0.02382181213700743,
+      "ep": 0.03314551350774164,
+      "lo": -0.08788419145009915,
+      "hi": 0.042197170310136686,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "lookback_10",
+      "coluna": "BERTimbau k=8",
+      "delta": -0.02878937487578461,
+      "ep": 0.038289824308671866,
+      "lo": -0.10086701143780717,
+      "hi": 0.04728054905174547,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "bow",
+      "coluna": "BERTimbau k=8",
+      "delta": -0.003532912201806935,
+      "ep": 0.034265735866386815,
+      "lo": -0.06730046543975132,
+      "hi": 0.0667091523151982,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "bow",
+      "coluna": "BERTimbau k=30",
+      "delta": 0.021678912195736484,
+      "ep": 0.03964114824602076,
+      "lo": -0.052672173440870836,
+      "hi": 0.10256583524185743,
+      "n_dias": 1030
+    },
+    {
+      "verificacao": "mlp_sem_texto",
+      "coluna": "MLP vs. LSTM preço",
+      "delta": 0.021393450523117443,
+      "ep": 0.03707199348803775,
+      "lo": -0.05139508055903657,
+      "hi": 0.09213649552182523,
+      "n_dias": 1030
+    }
+  ],
+  "sensibilidade_bloco": {
+    "5": [
+      {
+        "modelo": "LSTM-BERTimbau-k8",
+        "ep_bootstrap": 0.0347,
+        "ic95_lo": -0.0829,
+        "ic95_hi": 0.0546
+      },
+      {
+        "modelo": "LSTM-BERTimbau-k30",
+        "ep_bootstrap": 0.0367,
+        "ic95_lo": -0.0157,
+        "ic95_hi": 0.1293
+      },
+      {
+        "modelo": "LSTM-FinBERT-sent",
+        "ep_bootstrap": 0.0309,
+        "ic95_lo": -0.0468,
+        "ic95_hi": 0.0748
+      },
+      {
+        "modelo": "LSTM-FinBERT-emb-k8",
+        "ep_bootstrap": 0.0306,
+        "ic95_lo": -0.0399,
+        "ic95_hi": 0.0802
+      },
+      {
+        "modelo": "LSTM-FinBERT-emb-k30",
+        "ep_bootstrap": 0.0349,
+        "ic95_lo": -0.0405,
+        "ic95_hi": 0.0959
+      },
+      {
+        "modelo": "LSTM-Copom",
+        "ep_bootstrap": 0.0326,
+        "ic95_lo": -0.0133,
+        "ic95_hi": 0.1143
+      }
+    ],
+    "10": [
+      {
+        "modelo": "LSTM-BERTimbau-k8",
+        "ep_bootstrap": 0.035,
+        "ic95_lo": -0.0817,
+        "ic95_hi": 0.056
+      },
+      {
+        "modelo": "LSTM-BERTimbau-k30",
+        "ep_bootstrap": 0.0356,
+        "ic95_lo": -0.0122,
+        "ic95_hi": 0.1284
+      },
+      {
+        "modelo": "LSTM-FinBERT-sent",
+        "ep_bootstrap": 0.0306,
+        "ic95_lo": -0.043,
+        "ic95_hi": 0.0769
+      },
+      {
+        "modelo": "LSTM-FinBERT-emb-k8",
+        "ep_bootstrap": 0.0299,
+        "ic95_lo": -0.038,
+        "ic95_hi": 0.0791
+      },
+      {
+        "modelo": "LSTM-FinBERT-emb-k30",
+        "ep_bootstrap": 0.0338,
+        "ic95_lo": -0.0392,
+        "ic95_hi": 0.0926
+      },
+      {
+        "modelo": "LSTM-Copom",
+        "ep_bootstrap": 0.0324,
+        "ic95_lo": -0.011,
+        "ic95_hi": 0.1151
+      }
+    ],
+    "20": [
+      {
+        "modelo": "LSTM-BERTimbau-k8",
+        "ep_bootstrap": 0.0343,
+        "ic95_lo": -0.08,
+        "ic95_hi": 0.0528
+      },
+      {
+        "modelo": "LSTM-BERTimbau-k30",
+        "ep_bootstrap": 0.0333,
+        "ic95_lo": -0.0059,
+        "ic95_hi": 0.1235
+      },
+      {
+        "modelo": "LSTM-FinBERT-sent",
+        "ep_bootstrap": 0.0319,
+        "ic95_lo": -0.0468,
+        "ic95_hi": 0.0786
+      },
+      {
+        "modelo": "LSTM-FinBERT-emb-k8",
+        "ep_bootstrap": 0.0285,
+        "ic95_lo": -0.0401,
+        "ic95_hi": 0.0732
+      },
+      {
+        "modelo": "LSTM-FinBERT-emb-k30",
+        "ep_bootstrap": 0.0335,
+        "ic95_lo": -0.0445,
+        "ic95_hi": 0.0874
+      },
+      {
+        "modelo": "LSTM-Copom",
+        "ep_bootstrap": 0.0301,
+        "ic95_lo": -0.0085,
+        "ic95_hi": 0.1107
+      }
+    ]
+  }
+}

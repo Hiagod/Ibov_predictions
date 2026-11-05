@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 .claude/
+
+# dados: reconstituiveis pelo codigo, disponiveis sob solicitacao
+data/

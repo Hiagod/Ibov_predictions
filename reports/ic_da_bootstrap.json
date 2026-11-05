@@ -1,0 +1,104 @@
+{
+ "B": 10000,
+ "bloco": 10,
+ "seed": 0,
+ "razao_abs_rms": 0.6580793093238289,
+ "maior_limite_superior": {
+  "modelo": "ARIMA",
+  "n_dias": 1030,
+  "da": 0.5223300970873787,
+  "ic95_lo": 0.4912621359223301,
+  "ic95_hi": 0.5533980582524272,
+  "sharpe_no_limite_superior": 1.1156654067791065
+ },
+ "modelos": [
+  {
+   "modelo": "RandomWalk",
+   "n_dias": 1030,
+   "da": 0.4854368932038835,
+   "ic95_lo": 0.45436893203883494,
+   "ic95_hi": 0.5155339805825243,
+   "sharpe_no_limite_superior": 0.32455720924483195
+  },
+  {
+   "modelo": "ARIMA",
+   "n_dias": 1030,
+   "da": 0.5223300970873787,
+   "ic95_lo": 0.4912621359223301,
+   "ic95_hi": 0.5533980582524272,
+   "sharpe_no_limite_superior": 1.1156654067791065
+  },
+  {
+   "modelo": "ARIMAX",
+   "n_dias": 1030,
+   "da": 0.5048543689320388,
+   "ic95_lo": 0.4766990291262136,
+   "ic95_hi": 0.5359223300970873,
+   "sharpe_no_limite_superior": 0.7505385463786713
+  },
+  {
+   "modelo": "XGBoost",
+   "n_dias": 1030,
+   "da": 0.5233009708737864,
+   "ic95_lo": 0.4941747572815534,
+   "ic95_hi": 0.5504854368932038,
+   "sharpe_no_limite_superior": 1.0548109300457003
+  },
+  {
+   "modelo": "LSTM-preco",
+   "n_dias": 1030,
+   "da": 0.48640776699029126,
+   "ic95_lo": 0.45436893203883494,
+   "ic95_hi": 0.5155339805825243,
+   "sharpe_no_limite_superior": 0.32455720924483195
+  },
+  {
+   "modelo": "LSTM-BERTimbau-k8",
+   "n_dias": 1030,
+   "da": 0.4786407766990291,
+   "ic95_lo": 0.44854368932038835,
+   "ic95_hi": 0.5097087378640777,
+   "sharpe_no_limite_superior": 0.2028482557780194
+  },
+  {
+   "modelo": "LSTM-BERTimbau-k30",
+   "n_dias": 1030,
+   "da": 0.5116504854368932,
+   "ic95_lo": 0.4825242718446602,
+   "ic95_hi": 0.541747572815534,
+   "sharpe_no_limite_superior": 0.8722474998454839
+  },
+  {
+   "modelo": "LSTM-FinBERT-sent",
+   "n_dias": 1030,
+   "da": 0.4893203883495146,
+   "ic95_lo": 0.46116504854368934,
+   "ic95_hi": 0.5174757281553398,
+   "sharpe_no_limite_superior": 0.36512686040043535
+  },
+  {
+   "modelo": "LSTM-FinBERT-emb-k8",
+   "n_dias": 1030,
+   "da": 0.4961165048543689,
+   "ic95_lo": 0.4650485436893204,
+   "ic95_hi": 0.5233009708737864,
+   "sharpe_no_limite_superior": 0.4868358138672456
+  },
+  {
+   "modelo": "LSTM-FinBERT-emb-k30",
+   "n_dias": 1030,
+   "da": 0.5,
+   "ic95_lo": 0.4679611650485437,
+   "ic95_hi": 0.5281553398058253,
+   "sharpe_no_limite_superior": 0.5882599417562576
+  },
+  {
+   "modelo": "LSTM-Copom",
+   "n_dias": 1030,
+   "da": 0.512621359223301,
+   "ic95_lo": 0.48349514563106794,
+   "ic95_hi": 0.5427184466019418,
+   "sharpe_no_limite_superior": 0.8925323254232866
+  }
+ ]
+}

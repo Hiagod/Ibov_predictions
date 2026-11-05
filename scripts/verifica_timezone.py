@@ -9,6 +9,11 @@ o JSON-LD usa UTC real, e a conversao para America/Sao_Paulo (via zoneinfo,
 que trata horario de verao historico) e a forma correta de obter o horario
 local, nao uma subtracao fixa de 3h.
 
+Ressalva: esse achado so vale depois da migracao do site (24/09/2019). Antes
+dela, o datePublished e hora local rotulada como +00:00, o que esta amostragem
+nao detectou. Ver corrige_carimbo_infomoney em utils/tcc_utils.py e
+diagnostico_fechamento_b3.py.
+
 Uso:
     python verifica_timezone.py [--n 12]
 """

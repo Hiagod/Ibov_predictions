@@ -1,0 +1,124 @@
+{
+ "estimadores": {
+  "fracao_open_igual_high_ou_low_indice": 0.2727882037533512,
+  "fracao_open_igual_high_ou_low_bova11": 0.08579088471849866,
+  "corr_amplitude_indice_vs_pregao_bova11": 0.8850439155442215,
+  "corr_amplitude_indice_vs_bova11_estendida_ao_fechamento_anterior": 0.9899376959126235,
+  "dias_gap_maior_1pct": 222,
+  "razao_amplitude_indice_sobre_pregao_bova11_gap_grande": 1.3242704492444113,
+  "razao_amplitude_indice_sobre_estendida_gap_grande": 0.9739692069234321,
+  "razao_amplitude_indice_sobre_pregao_bova11_gap_pequeno": 0.9726339248086242,
+  "corr_abs_gap_vs_excesso_de_amplitude": 0.7539821974265364,
+  "razao_var_parkinson_indice_sobre_bova11": 1.3044294231801146,
+  "razao_var_gk_sobre_parkinson_indice": 0.879159840779006,
+  "razao_var_gk_sobre_parkinson_bova11": 1.0459016837508877,
+  "acf1_log_parkinson_bova11": 0.5404118254052781,
+  "acf5_log_parkinson_bova11": 0.4746658795051722,
+  "acf21_log_parkinson_bova11": 0.3199363095799843
+ },
+ "componente": {
+  "variancia_explicada": [
+   0.11790324747562408,
+   0.05878948047757149,
+   0.05167387053370476,
+   0.040362194180488586,
+   0.02890358865261078,
+   0.025672374293208122,
+   0.02431713044643402,
+   0.02149798721075058
+  ],
+  "r_por_componente": {
+   "comp_0": -0.09656035000409263,
+   "comp_1": 0.43641607635897295,
+   "comp_2": 0.11812153167520016,
+   "comp_3": 0.27067702369906543,
+   "comp_4": -0.16146129800324088,
+   "comp_5": 0.37898075265526326,
+   "comp_6": -0.3382692219712211,
+   "comp_7": -0.15498543406180526
+  },
+  "r_sem_tendencia_por_componente": {
+   "comp_0": 0.04609062273353009,
+   "comp_1": 0.15832911661715046,
+   "comp_2": -0.07189931603599366,
+   "comp_3": 0.047516576261719526,
+   "comp_4": -0.08210034574581893,
+   "comp_5": -0.011583626582416654,
+   "comp_6": -0.04443119792859683,
+   "comp_7": 0.01776601418139252
+  },
+  "componente_mais_correlacionado": "comp_1",
+  "comp_vs_n_noticias": {
+   "r": 0.43641607635897295,
+   "lo": 0.3563667959039419,
+   "hi": 0.5095824427570561,
+   "p": 0.0,
+   "n_dias": 1492
+  },
+  "comp_vs_tempo": {
+   "r": 0.4383782862667681,
+   "lo": 0.37132814460362884,
+   "hi": 0.5089973430480385,
+   "p": 0.0,
+   "n_dias": 1492
+  },
+  "n_noticias_vs_tempo": {
+   "r": 0.8021020011618557,
+   "lo": 0.7620174645189686,
+   "hi": 0.8370412971962102,
+   "p": 0.0,
+   "n_dias": 1492
+  },
+  "comp_vs_n_noticias_sem_tendencia": {
+   "r": 0.15832911661715046,
+   "lo": 0.05671401649672197,
+   "hi": 0.25283858320790903,
+   "p": 0.0008,
+   "n_dias": 1429
+  }
+ },
+ "volume_de_noticias": {
+  "n_noticias_vs_mesmo_dia": {
+   "r": -0.19024431723932994,
+   "lo": -0.2747780779042655,
+   "hi": -0.09744797156020879,
+   "p": 0.0,
+   "n_dias": 1472
+  },
+  "n_noticias_vs_dia_seguinte": {
+   "r": -0.20624145556123258,
+   "lo": -0.290876461849232,
+   "hi": -0.11697869516689906,
+   "p": 0.0,
+   "n_dias": 1471
+  },
+  "n_noticias_sem_tendencia_vs_mesmo_dia": {
+   "r": 0.12179739865839341,
+   "lo": 0.053762377865244175,
+   "hi": 0.19212255595998876,
+   "p": 0.001,
+   "n_dias": 1220
+  },
+  "n_noticias_sem_tendencia_vs_dia_seguinte": {
+   "r": 0.08188440009203195,
+   "lo": 0.006494955920359748,
+   "hi": 0.15394787427152323,
+   "p": 0.0348,
+   "n_dias": 1219
+  },
+  "parte_nao_explicada_pela_vol_do_dia_vs_dia_seguinte": {
+   "r": 0.03471392277231508,
+   "lo": -0.02962320158351189,
+   "hi": 0.09813962624395774,
+   "p": 0.2832,
+   "n_dias": 1216
+  },
+  "persistencia_log_parkinson_sem_tendencia": {
+   "r": 0.39108137201359433,
+   "lo": 0.23064542167721247,
+   "hi": 0.5274981652207196,
+   "p": 0.0,
+   "n_dias": 1216
+  }
+ }
+}

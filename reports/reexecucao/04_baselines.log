@@ -1,0 +1,54 @@
+
+########## 04_baselines[0] from pathlib import Path
+Setup OK -- make_target, walk_forward_splits carregados.
+########## 04_baselines[0] concluida em 0s
+
+########## 04_baselines[1] precos = pd.read_parquet(DIRS['processed'] / 'bvsp_clean.parquet')
+Sem alvo (último dia, esperado 1): 1
+Amostras com alvo: 1492
+
+5 folds (treino expansível):
+  fold 1: treino [2019-01-02 -> 2020-01-07] (252) | teste [2020-01-08 -> 2020-11-03] (206)
+  fold 2: treino [2019-01-02 -> 2020-11-03] (458) | teste [2020-11-04 -> 2021-09-02] (206)
+  fold 3: treino [2019-01-02 -> 2021-09-02] (664) | teste [2021-09-03 -> 2022-07-04] (206)
+  fold 4: treino [2019-01-02 -> 2022-07-04] (870) | teste [2022-07-05 -> 2023-05-02] (206)
+  fold 5: treino [2019-01-02 -> 2023-05-02] (1076) | teste [2023-05-03 -> 2024-02-28] (206)
+
+Anti-vazamento OK: treino e teste disjuntos e contíguos.
+########## 04_baselines[1] concluida em 0s
+
+########## 04_baselines[5] import warnings, time
+=== ARIMA puro ===
+  fold 1: (0, 0, 0) | DA 0.490 | PT_p 0.623 | 20s
+  fold 2: (3, 0, 0) | DA 0.549 | PT_p 0.145 | 32s
+  fold 3: (2, 0, 1) | DA 0.519 | PT_p 0.267 | 131s
+  fold 4: (3, 0, 2) | DA 0.519 | PT_p 0.299 | 199s
+  fold 5: (3, 0, 0) | DA 0.534 | PT_p 0.187 | 76s
+
+=== ARIMAX (texto: n_noticias + emb_dispersao) ===
+  fold 1: (0, 0, 0) | DA 0.476 | PT_p 0.785 | 24s
+  fold 2: (3, 0, 0) | DA 0.529 | PT_p 0.496 | 50s
+  fold 3: (2, 0, 1) | DA 0.500 | PT_p 0.480 | 160s
+  fold 4: (3, 0, 2) | DA 0.510 | PT_p 0.399 | 251s
+  fold 5: (3, 0, 0) | DA 0.510 | PT_p 0.449 | 64s
+
+--- ARIMA média ---
+MAE     0.0120
+RMSE    0.0166
+DA      0.5223
+F1      0.5699
+MCC     0.0387
+PT_z    0.5561
+PT_p    0.3043
+
+--- ARIMAX média ---
+MAE     0.0126
+RMSE    0.0189
+DA      0.5049
+F1      0.5638
+MCC    -0.0048
+PT_z   -0.0696
+PT_p    0.5221
+
+Salvos.
+########## 04_baselines[5] concluida em 1010s

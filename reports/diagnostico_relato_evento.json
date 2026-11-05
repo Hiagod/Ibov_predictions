@@ -1,0 +1,394 @@
+{
+  "B": 10000,
+  "bloco": 10,
+  "seed": 0,
+  "checagem_alinhamento_dif_max": 0.0,
+  "fracao_manchetes": {
+    "evento": 0.7858,
+    "relato": 0.2142
+  },
+  "fracao_relato_por_faixa": {
+    "fim de semana": 0.029,
+    "pos-fechamento": 0.416,
+    "pre-abertura": 0.182,
+    "pregao": 0.147
+  },
+  "exemplos": {
+    "relato": [
+      "Jalles Machado (JALL3): lucro líquido no 3º trimestre da safra 2022/23 sobe 166%, a R$ 450,9 mi",
+      "Bolsas de NY fecham mistas, após alerta da Moody&#8217;s sobre fiscal nos EUA; Boeing apoia Dow Jones",
+      "SBF (SBFG3) reverte prejuízo e ações fecham em alta de 10%: veja o que animou mercado",
+      "Ação da B2W salta 8% com recomendação, Vale e siderúrgicas sobem com acordo EUA-China e só Eletrobras cai no Ibovespa",
+      "Minério de ferro fecha em leve alta na China com preocupações sobre a demanda de aço",
+      "Sabesp decide não integrar SPE da Iguá que venceu leilão da Cedae; ações fecham em alta de 5%",
+      "Dólar cai 0,36%, a R$ 5,44, na contramão do exterior após mudança de rating do Brasil",
+      "Minério de ferro cai após corte de produção na China trazer preocupação sobre demanda",
+      "Dólar cai 0,15%, a R$ 5,58, com visão de diferencial de juro mais favorável ao Brasil",
+      "Após Mercado Livre não agradar no 3T e ação cair 15%, atenções se voltam para Magalu"
+    ],
+    "evento": [
+      "PRIO (PRIO3): a sinalização da petroleira aos acionistas com o aumento de capital de R$ 2 bi",
+      "Idosos de ilha do Rio de Janeiro receberão 3ª dose de reforço até o fim deste mês",
+      "Trump e Harris batalham por eleitores negros na Geórgia, onde é preciso vencer",
+      "Petrobras eleva em 24% seu plano de investimento, que vai a US$ 68 bilhões",
+      "DOU traz MP que revoga contrato verde e amarelo; Senado cancela sessão",
+      "Argentina tem 77% de aceitação em operação para alongar dívida pública",
+      "EUA criam 278 mil vagas no setor privado em maio, mais que o esperado",
+      "J&amp;F, controladora da JBS, anuncia novo presidente",
+      "A recuperação da economia é lenta, mas sólida, diz presidente do BB",
+      "Multiplan (MULT3): por que recompra de R$ 2 bi traz ótima mensagem para minoritários?"
+    ]
+  },
+  "relato_evento": {
+    "todas": {
+      "contemporanea": {
+        "r": 0.17874778286505677,
+        "lo": 0.11247174508092656,
+        "hi": 0.242447621381303,
+        "p": 0.0,
+        "n_dias": 1492
+      },
+      "preditiva": {
+        "r": -0.03553161271908691,
+        "lo": -0.08125540931488812,
+        "hi": 0.004812761081973153,
+        "p": 0.087,
+        "n_dias": 1492,
+        "p_holm_familia_preditiva": 0.957
+      },
+      "preditiva_ortogonal_ao_dia": {
+        "r": -0.007282102001651547,
+        "lo": -0.07019879392251145,
+        "hi": 0.04780271776801734,
+        "p": 0.7608,
+        "n_dias": 1492,
+        "p_holm_familia_preditiva": 1.0
+      },
+      "dias_com_manchete": 1492
+    },
+    "relato": {
+      "contemporanea": {
+        "r": 0.25431035270251723,
+        "lo": 0.21656171771350918,
+        "hi": 0.2949799064879183,
+        "p": 0.0,
+        "n_dias": 1487
+      },
+      "preditiva": {
+        "r": -0.03679895963251242,
+        "lo": -0.08103773115251886,
+        "hi": 0.009455340112115783,
+        "p": 0.1048,
+        "n_dias": 1487,
+        "p_holm_familia_preditiva": 1.0
+      },
+      "preditiva_ortogonal_ao_dia": {
+        "r": 0.0036043581538629265,
+        "lo": -0.05692254158920554,
+        "hi": 0.05715992448269833,
+        "p": 0.9672,
+        "n_dias": 1487,
+        "p_holm_familia_preditiva": 1.0
+      },
+      "dias_com_manchete": 1487
+    },
+    "evento": {
+      "contemporanea": {
+        "r": 0.0713817185799524,
+        "lo": 0.007864400621419227,
+        "hi": 0.13106200440838237,
+        "p": 0.0252,
+        "n_dias": 1492
+      },
+      "preditiva": {
+        "r": -0.014050728382033417,
+        "lo": -0.07073016539679436,
+        "hi": 0.03323802935260568,
+        "p": 0.5748,
+        "n_dias": 1492,
+        "p_holm_familia_preditiva": 1.0
+      },
+      "preditiva_ortogonal_ao_dia": {
+        "r": -0.002729606808278175,
+        "lo": -0.06643729823629342,
+        "hi": 0.05160962382515139,
+        "p": 0.8904,
+        "n_dias": 1492,
+        "p_holm_familia_preditiva": 1.0
+      },
+      "dias_com_manchete": 1492
+    }
+  },
+  "antes_depois": {
+    "pos-fechamento": {
+      "antes (pregao anterior)": {
+        "r": 0.3980871152200182,
+        "lo": 0.34958309896006023,
+        "hi": 0.4663330338452473,
+        "p": 0.0,
+        "n_dias": 1488
+      },
+      "depois (pregao seguinte)": {
+        "r": -0.03669612425898326,
+        "lo": -0.0946094326447434,
+        "hi": 0.004539644519063947,
+        "p": 0.0746,
+        "n_dias": 1488
+      },
+      "D+1": {
+        "r": -0.012356708126291263,
+        "lo": -0.05602181273247242,
+        "hi": 0.02922501042031695,
+        "p": 0.5114,
+        "n_dias": 1488,
+        "p_holm_familia_preditiva": 1.0
+      }
+    },
+    "fim de semana": {
+      "antes (pregao anterior)": {
+        "r": 0.04551700986898812,
+        "lo": -0.05570859840596878,
+        "hi": 0.16049584581387144,
+        "p": 0.4074,
+        "n_dias": 298
+      },
+      "depois (pregao seguinte)": {
+        "r": 0.021692940944433095,
+        "lo": -0.12419033403260069,
+        "hi": 0.13297418962702223,
+        "p": 0.8232,
+        "n_dias": 298
+      },
+      "D+1": {
+        "r": -0.016531512590505025,
+        "lo": -0.1594106326923033,
+        "hi": 0.13371608196041262,
+        "p": 0.8574,
+        "n_dias": 298,
+        "p_holm_familia_preditiva": 1.0
+      }
+    },
+    "pre-abertura": {
+      "antes (pregao anterior)": {
+        "r": 0.03548350854878665,
+        "lo": -0.008031437810628669,
+        "hi": 0.08951543598646011,
+        "p": 0.1086,
+        "n_dias": 1492
+      },
+      "depois (pregao seguinte)": {
+        "r": 0.18705072794833869,
+        "lo": 0.1154384522846158,
+        "hi": 0.26793213418836015,
+        "p": 0.0,
+        "n_dias": 1492
+      },
+      "D+1": {
+        "r": -0.07157404628102082,
+        "lo": -0.12303636679383695,
+        "hi": -0.011591792938965293,
+        "p": 0.02,
+        "n_dias": 1492,
+        "p_holm_familia_preditiva": 0.28
+      },
+      "D+1 ortogonal ao dia": {
+        "r": -0.04264222568621288,
+        "lo": -0.08437307908535918,
+        "hi": 0.002597166970953769,
+        "p": 0.0622,
+        "n_dias": 1492,
+        "p_holm_familia_preditiva": 0.7464
+      }
+    },
+    "pregao": {
+      "durante (ret do dia)": {
+        "r": 0.20217695515028808,
+        "lo": 0.14656027919614864,
+        "hi": 0.25320653560401213,
+        "p": 0.0,
+        "n_dias": 1491
+      },
+      "seguinte (D+1)": {
+        "r": -0.02048513115006938,
+        "lo": -0.07438568901317467,
+        "hi": 0.024310603183381976,
+        "p": 0.367,
+        "n_dias": 1491,
+        "p_holm_familia_preditiva": 1.0
+      }
+    }
+  },
+  "pre_abertura_por_classe": {
+    "relato": {
+      "antes (pregao anterior)": {
+        "r": -0.018003570015694585,
+        "lo": -0.0693063993056097,
+        "hi": 0.04854481139622465,
+        "p": 0.6508,
+        "n_dias": 1407
+      },
+      "depois (pregao seguinte)": {
+        "r": 0.2513297983831882,
+        "lo": 0.2138134644738739,
+        "hi": 0.29784900076872317,
+        "p": 0.0,
+        "n_dias": 1407
+      },
+      "D+1": {
+        "r": -0.007744636638143323,
+        "lo": -0.05739370494840551,
+        "hi": 0.04755136908498406,
+        "p": 0.791,
+        "n_dias": 1407,
+        "p_holm_familia_preditiva": 1.0
+      },
+      "D+1 ortogonal ao dia": {
+        "r": 0.033949844350382945,
+        "lo": -0.024820316907399092,
+        "hi": 0.08404161123975522,
+        "p": 0.2584,
+        "n_dias": 1407,
+        "p_holm_familia_preditiva": 1.0
+      }
+    },
+    "evento": {
+      "antes (pregao anterior)": {
+        "r": 0.053949981628147015,
+        "lo": 0.007910665101229923,
+        "hi": 0.0962731975564089,
+        "p": 0.0218,
+        "n_dias": 1492
+      },
+      "depois (pregao seguinte)": {
+        "r": 0.0741102240620146,
+        "lo": 0.0013370315253820695,
+        "hi": 0.1502492623088692,
+        "p": 0.0444,
+        "n_dias": 1492
+      },
+      "D+1": {
+        "r": -0.06553083586543952,
+        "lo": -0.11338460199360867,
+        "hi": -0.010953006462691173,
+        "p": 0.0184,
+        "n_dias": 1492,
+        "p_holm_familia_preditiva": 0.276
+      },
+      "D+1 ortogonal ao dia": {
+        "r": -0.05391801596473,
+        "lo": -0.09857896665964863,
+        "hi": -0.004729819675785613,
+        "p": 0.0342,
+        "n_dias": 1492,
+        "p_holm_familia_preditiva": 0.4446
+      }
+    }
+  },
+  "familia_preditiva": {
+    "n_testes": 15,
+    "menor_p_holm": 0.276,
+    "testes": {
+      "todas / preditiva": 0.957,
+      "todas / preditiva ortogonal": 1.0,
+      "relato / preditiva": 1.0,
+      "relato / preditiva ortogonal": 1.0,
+      "evento / preditiva": 1.0,
+      "evento / preditiva ortogonal": 1.0,
+      "pos-fechamento / D+1": 1.0,
+      "fim de semana / D+1": 1.0,
+      "pre-abertura / D+1": 0.28,
+      "pre-abertura / D+1 ortogonal ao dia": 0.7464,
+      "pregao / seguinte (D+1)": 1.0,
+      "pre-abertura relato / D+1": 1.0,
+      "pre-abertura relato / D+1 ortogonal": 1.0,
+      "pre-abertura evento / D+1": 0.276,
+      "pre-abertura evento / D+1 ortogonal": 0.4446
+    }
+  },
+  "auditoria": {
+    "relato": [
+      "Ibovespa recua quase 2% e dólar dispara para R$ 3,90 com crise na Turquia",
+      "Ibovespa desaba 7% com coronavírus e tem pior pregão desde o “Joesley Day”; dólar bate R$ 4,44",
+      "Ibovespa futuro abre com viés de baixa, descolado do exterior; dólar aponta para terceiro dia seguido de alta",
+      "Ação da Getnet (GETT11) fecha com salto de 22,5% após anunciar intenção de fechar capital: por que empresa sairá da Bolsa?",
+      "Bolsas de NY fecham em alta, com repercussão do payroll e perspectivas para o Fed",
+      "Ibovespa Futuro opera com leve alta, com atenção aos rumos do Fed e PEC da Transição",
+      "Bitcoin e Ethereum ganham força e sobem após “susto” com decisão do Fed",
+      "Com minério em alta e China, royalties fecham 2020 com recorde de R$ 6 bilhões no Brasil",
+      "Bolsas operam mistas, sem referência de Wall Street por feriado e com acordo sobre teto da dívida dos EUA; falas de Campos Neto e mais",
+      "Bolsas europeias fecham em queda com receio sobre EUA",
+      "Bolsa de Mumbai fecha em queda de 1,74% após pandemia bater recorde na Índia",
+      "Criptomoedas caem após nova proibição da China, mas analistas veem impacto reduzido desta vez",
+      "Dow Jones Futuro cai à espera do principal dado do mercado de trabalho nos EUA",
+      "Ibovespa cai e perde os 117 mil pontos pressionado pela tensão entre EUA e Irã",
+      "Futuros dos EUA operam próximo da estabilidade às vésperas de Jackson Hole; IPCA-15 e mais assuntos do mercado hoje",
+      "Bolsas de NY fecham mistas na véspera do CPI dos EUA; Meta e Boeing têm queda forte",
+      "Ibovespa futuro vira para queda e dólar sobe mais de 1% após inflação nos EUA ficar acima do esperado",
+      "Vale (VALE3), Petrobras (PETR4) e Suzano (SUZB3) sobem e puxam alta da Bolsa; Eletrobras (ELET3) cai",
+      "Bitcoin sobe mesmo após BlackRock desmentir aprovação de ETF nos EUA",
+      "Ação da Hapvida (HAPV3) cai 5% após resultado, com caminho mais longo para normalização; sinergias com NotreDame seguem no radar",
+      "Dólar sobe 0,56% na sessão, mas encerra novembro com queda de 2,50% com alívio nos juros",
+      "Ações da Tesla despencam 7% após queda nas vendas na China em fevereiro",
+      "Ibovespa se descola do exterior e sobe, mas fica longe da máxima; dólar cai 1% de olho em pesquisas",
+      "Ações do Magazine Luiza saltam 9% após resultado surpreendente; Vale e siderúrgicas avançam com minério e B3 sobe 6%",
+      "Bitcoin e Ethereum caem 5% refletindo evento técnico e crise com “banco cripto” nos EUA",
+      "Banco do Japão avaliará subir juros e detalhará plano de redução de compra de títulos",
+      "Ibovespa Futuro cai cerca de 1% seguindo pessimismo no exterior com avanço da ômicron; votação do Orçamento no radar",
+      "Ibovespa sobe após forte criação de vagas de trabalho nos EUA em junho, mas reduz alta no início da tarde; dólar cai a R$ 5,27",
+      "Ibovespa Futuro cai mais de 1% seguindo exterior com noticiário sobre coronavírus; dólar futuro sobe a R$ 4,61",
+      "Petróleo fecha com perdas modestas, com recuperação do dólar e dados mistos, mas sobe na semana",
+      "Ibovespa sobe quase 2% e volta aos 103 mil pontos com exterior e fala de Campos Neto",
+      "Bradesco (BBDC4): após subir 26% em agosto, ânimo continuará? Mercado eleva otimismo",
+      "Ibovespa cai e fecha abaixo dos 100 mil pontos após EUA barrarem vistos de oficiais chineses",
+      "Sabesp (SBSP3) dá importante passo para privatização, mas por que ação caiu mais de 4%?",
+      "Ibovespa Futuro cai 7% com aversão a risco por conta do coronavírus voltando a pesar; dólar vai a R$ 5,12",
+      "Petróleo sobe mais de 1%, com restrição de oferta e menor temor por demanda",
+      "Ibovespa sobe com contingenciamento, mas commodities e cautela em NY limitam alta",
+      "Ibovespa recua 0,37%, com investidores aguardando Copom e Fomc; Dólar sobe 0,35%",
+      "Taxas de juros de curto prazo sobem com mercado à espera dos votos do Copom",
+      "Ações de Marfrig (MRFG3) e JBS (JBSS3) caem forte com resultados ruins da rival americana Tyson Foods"
+    ],
+    "evento": [
+      "XP rebaixa ações de BRF (BRFS3) e Marfrig (MRFG3); JBS (JBSS3) e Minerva (BEEF3) são favoritas",
+      "Ataque a faca em shopping israelense deixa um morto e uma pessoa ferida",
+      "Microsoft anuncia que interrompeu tentativas de ciberataques de espiões russos",
+      "Inflação medida pelo IPCA sobe 0,53% em junho puxada por alta da energia, mas fica um pouco abaixo do esperado",
+      "B3 está em tratativas com autoridades para manter operações durante feriadão em São Paulo",
+      "OCDE prevê melhora fiscal de A. Latina e Caribe até 2025, mas Brasil deve destoar",
+      "Guedes e Marinho selam trégua com plano mais enxuto de obras para recuperação da economia",
+      "PIB do México avança 0,9% no 3º trimestre ante trimestre anterior, acima do esperado",
+      "Prio: lucro líquido soma US$ 272 milhões no 2º trimestre",
+      "Mesmo com dinâmica sensível, arroz foi destaque da Camil no trimestre, diz analista",
+      "BlackRock: maior gestora de ativos do mundo lucra US$ 1,157 bilhão no primeiro trimestre de 2023",
+      "Covid-19: Anvisa autoriza estudo clínico com 3ª dose da vacina AstraZeneca",
+      "São Paulo vai obrigar uso de máscara em ônibus",
+      "Petrobras (PETR3;PETR4) anunciou reajuste de 11,4% no preço do querosene de aviação, diz Abear",
+      "UE não permitirá uso do euro digital por empresas ou na Web3 em um primeiro momento, afirmam autoridades do bloco",
+      "PMI de serviços dos EUA cai para 50,5 em agosto, o mais baixo desde fevereiro",
+      "Ubisoft lança plataforma de jogos com NFTs nesta quinta-feira no Brasil",
+      "Ações chinesas têm rali, mas não dissipam pessimismo de investidores",
+      "Privatização: qual o potencial de valorização das estatais caso elas saiam das mãos dos governos?",
+      "Israel bombardeia Gaza com ataques aéreos mais ferozes já realizados e diz que fronteira está segura",
+      "Durigan defende transição responsável no BC e cuidado fiscal contra desafios externos",
+      "Gol (GOLL4): atraso em entrega de aeronaves desafia empresa a aumentar oferta de assentos",
+      "Indefinição em corrida eleitoral dos EUA complica decisão do Copom em novembro",
+      "PPI dos EUA sobe 0,8% em maio e supera expectativa",
+      "PMI industrial da Alemanha cai a 44,7 em março, mas fica acima da prévia",
+      "INSS recebe aval para contratar 7.400 aposentados e militares para atendimento",
+      "Focus: Mesmo com alta da Selic, mercado eleva projeções para inflação e expansão do PIB em 2021",
+      "Analistas veem mudança de tributação a varejistas internacionais como negativa para brasileiras, mas aguardam próximos passos",
+      "Crescem os riscos para fazer negócios no Brasil, aponta KPMG",
+      "EUA: republicanos conservadores paralisam plenário da Câmara em protesto por acordo de dívida",
+      "Magazine Luiza: conselho aprova aquisição da Kabum! por R$ 1 bilhão em recursos financeiros",
+      "Plataforma cripto Nexo, que oferece 36% de juros anuais, é processada nos EUA",
+      "Esperada atualização do Ethereum é adiada, afirma desenvolvedor do projeto",
+      "Analista recomendou Tesla há doze anos e hoje colhe 14.800% de retorno – e ele ainda espera por mais",
+      "Conselho da Oi aprova aumento de capital de R$ 1,39 bi",
+      "Dólar eleva defasagem do diesel da Petrobras, mas reajuste pode esperar, dizem fontes",
+      "Braço de investimentos da FTX misturou capital com empresas do próprio grupo, mostram documentos",
+      "Inflação aquecida, renda e gastos de consumidores acendem alertas de Fed mais restritivo, dizem analistas",
+      "Brasil pode ter ao menos 44 mil mortes; isolar só idosos eleva nº para 529 mil",
+      "As grandes surpresas de Ultrapar e Mercado Livre, visões distintas sobre o BB e mais 8 balanços de destaque nesta quinta"
+    ]
+  }
+}

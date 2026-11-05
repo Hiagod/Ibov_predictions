@@ -1,0 +1,392 @@
+{
+ "B": 20000,
+ "seed": 0,
+ "n": 49,
+ "reproducao_dif_max": 0.0,
+ "anuncio_na_janela": 34,
+ "r_original": {
+  "r": 0.614964523409205,
+  "lo": 0.43599546838094855,
+  "hi": 0.750787053382234,
+  "n": 49
+ },
+ "r_original_com_anuncio_na_janela": {
+  "r": 0.7164518288162001,
+  "lo": 0.5329256380528877,
+  "hi": 0.8446560525244389,
+  "n": 34
+ },
+ "r_original_sem_anuncio_na_janela": {
+  "r": 0.16444030041543828,
+  "lo": -0.31388016302994626,
+  "hi": 0.6445550542872123,
+  "n": 15
+ },
+ "r_sem_anuncio": {
+  "r": 0.2459056596265546,
+  "lo": -0.04900973573166494,
+  "hi": 0.5037273275213053,
+  "n": 49
+ },
+ "r_estrito": {
+  "r": 0.2459056596265546,
+  "lo": -0.04900973573166494,
+  "hi": 0.5037273275213053,
+  "n": 49
+ },
+ "r_sem_anuncio_nos_que_tinham_na_janela": {
+  "r": 0.22773290307678107,
+  "lo": -0.13990590427206193,
+  "hi": 0.5439543412810143,
+  "n": 34
+ },
+ "r_estrito_nos_que_tinham_na_janela": {
+  "r": 0.22773290307678107,
+  "lo": -0.13990590427206193,
+  "hi": 0.5439543412810143,
+  "n": 34
+ },
+ "grupo_sem_anuncio_na_janela": {
+  "inicio": "2023-03-22",
+  "fim": "2024-12-11",
+  "direcao": {
+   "-1": 7,
+   "0": 5,
+   "1": 3
+  }
+ },
+ "frases_retiradas_por_comunicado": {
+  "anuncio_media": 1.6938775510204083,
+  "estrito_media": 2.306122448979592
+ },
+ "auditoria_anuncio": [
+  {
+   "reuniao": 219,
+   "frases": [
+    "O Copom decidiu, por unanimidade, manter a taxa Selic em 6,50% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela manutenção da taxa básica de juros em 6,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 220,
+   "frases": [
+    "O Copom decidiu, por unanimidade, manter a taxa Selic em 6,50% a.a.A atualização do cenário básico do Copom pode ser descrita com as seguintes observações:Indicadores recentes da atividade econômica continuam evidenciando recuperação gradual da economia brasileira;O cenário externo permanece desafiador, mas com alguma redução e alteração do perfil de riscos.&#160;",
+    "O Comitê avalia que, desde o último Copom, especialmente quanto ao cenário externo, houve arrefecimento dos riscos inflacionários.&#160;Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela manutenção da taxa básica de juros em 6,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 221,
+   "frases": [
+    "O Copom decidiu, por unanimidade, manter a taxa Selic em 6,50% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela manutenção da taxa básica de juros em 6,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 222,
+   "frases": [
+    "O Copom decidiu, por unanimidade, manter a taxa Selic em 6,50% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela manutenção da taxa básica de juros em 6,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 223,
+   "frases": [
+    "Em sua 223ª reunião, o Copom decidiu, por unanimidade, manter a taxa Selic em 6,50% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela manutenção da taxa básica de juros em 6,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 224,
+   "frases": [
+    "Em sua 224ª reunião, o Copom decidiu, por unanimidade, reduzir a taxa Selic para 6,00% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela redução da taxa básica de juros para 6,00% a.a."
+   ]
+  },
+  {
+   "reuniao": 225,
+   "frases": [
+    "Em sua 225ª reunião, o Copom decidiu, por unanimidade, reduzir a taxa Selic para 5,50% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela redução da taxa básica de juros para 5,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 226,
+   "frases": [
+    "Em sua 226ª reunião, o Copom decidiu, por unanimidade, reduzir a taxa Selic para 5,00% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela redução da taxa básica de juros para 5,00% a.a."
+   ]
+  },
+  {
+   "reuniao": 227,
+   "frases": [
+    "Em sua 227ª reunião, o Copom decidiu, por unanimidade, reduzir a taxa Selic para 4,50% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela redução da taxa básica de juros para 4,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 228,
+   "frases": [
+    "Em sua 228ª reunião, o Copom decidiu, por unanimidade, reduzir a taxa Selic para 4,25% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, pela redução da taxa básica de juros para 4,25% a.a."
+   ]
+  },
+  {
+   "reuniao": 229,
+   "frases": [
+    "Em sua 229ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, reduzir a taxa Selic para 3,75% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, reduzir a taxa básica de juros em 0,5 ponto percentual, para 3,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 230,
+   "frases": [
+    "Em sua 230ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, reduzir a taxa Selic para 3,00% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, reduzir a taxa básica de juros em 0,75 ponto percentual, para 3,00% a.a."
+   ]
+  },
+  {
+   "reuniao": 231,
+   "frases": [
+    "Em sua 231ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, reduzir a taxa Selic para 2,25% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, reduzir a taxa básica de juros em 0,75 ponto percentual, para 2,25% a.a."
+   ]
+  },
+  {
+   "reuniao": 232,
+   "frases": [
+    "Em sua 232ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, reduzir a taxa Selic para 2,00% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, reduzir a taxa básica de juros em 0,25 ponto percentual, para 2,00% a.a."
+   ]
+  },
+  {
+   "reuniao": 233,
+   "frases": [
+    "Em sua 233ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, manter a taxa Selic em 2,00% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, manter a taxa básica de juros em 2,00% a.a."
+   ]
+  },
+  {
+   "reuniao": 234,
+   "frases": [
+    "Em sua 234ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, manter a taxa Selic em 2,00% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, manter a taxa básica de juros em 2,00% a.a."
+   ]
+  },
+  {
+   "reuniao": 235,
+   "frases": [
+    "Em sua 235ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, manter a taxa Selic em 2,00% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, manter a taxa básica de juros em 2,00% a.a."
+   ]
+  },
+  {
+   "reuniao": 236,
+   "frases": [
+    "Em sua 236ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, manter a taxa Selic em 2,00% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, manter a taxa básica de juros em 2,00% a.a."
+   ]
+  },
+  {
+   "reuniao": 237,
+   "frases": [
+    "Em sua 237ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 2,75% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 0,75 ponto percentual, para 2,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 238,
+   "frases": [
+    "Em sua 238ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 3,50% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 0,75 ponto percentual, para 3,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 239,
+   "frases": [
+    "Em sua 239ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 4,25% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 0,75 ponto percentual, para 4,25% a.a."
+   ]
+  },
+  {
+   "reuniao": 240,
+   "frases": [
+    "Em sua 240ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 5,25% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 1,00 ponto percentual, para 5,25% a.a."
+   ]
+  },
+  {
+   "reuniao": 241,
+   "frases": [
+    "Em sua 241ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 6,25% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 1,00 ponto percentual, para 6,25% a.a."
+   ]
+  },
+  {
+   "reuniao": 242,
+   "frases": [
+    "Em sua 242ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 7,75% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 1,50 ponto percentual, para 7,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 243,
+   "frases": [
+    "Em sua 243ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 9,25% a.a.",
+    "Considerando o cenário básico, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 1,50 ponto percentual, para 9,25% a.a."
+   ]
+  },
+  {
+   "reuniao": 244,
+   "frases": [
+    "Em sua 244ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 10,75% a.a.",
+    "Considerando o cenário de referência, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 1,50 ponto percentual, para 10,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 245,
+   "frases": [
+    "Em sua 245ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 11,75% a.a.",
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 1,00 ponto percentual, para 11,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 246,
+   "frases": [
+    "Em sua 246ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 12,75% a.a.",
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 1,00 ponto percentual, para 12,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 247,
+   "frases": [
+    "Em sua 247ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 13,25% a.a.",
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 0,50 ponto percentual, para 13,25% a.a."
+   ]
+  },
+  {
+   "reuniao": 248,
+   "frases": [
+    "Em sua 248ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 13,75% a.a.",
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 0,50 ponto percentual, para 13,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 249,
+   "frases": [
+    "Em sua 249ª reunião, o Comitê de Política Monetária (Copom) decidiu manter a taxa Selic em 13,75% a.a.",
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu manter a taxa básica de juros em 13,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 250,
+   "frases": [
+    "Em sua 250ª reunião, o Comitê de Política Monetária (Copom) decidiu manter a taxa Selic em 13,75% a.a.",
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu manter a taxa básica de juros em 13,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 251,
+   "frases": [
+    "Em sua 251ª reunião, o Comitê de Política Monetária (Copom) decidiu manter a taxa Selic em 13,75% a.a.",
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu manter a taxa básica de juros em 13,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 252,
+   "frases": [
+    "Em sua 252ª reunião, o Comitê de Política Monetária (Copom) decidiu manter a taxa Selic em 13,75% a.a.",
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu manter a taxa básica de juros em 13,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 253,
+   "frases": [
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu manter a taxa básica de juros em 13,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 254,
+   "frases": [
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu manter a taxa básica de juros em 13,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 255,
+   "frases": [
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu manter a taxa básica de juros em 13,75% a.a."
+   ]
+  },
+  {
+   "reuniao": 256,
+   "frases": [
+    "Considerando os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu reduzir a taxa básica de juros em 0,50 ponto percentual, para 13,25% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante, que inclui o ano de 2024 e, em grau menor, o de 2025."
+   ]
+  },
+  {
+   "reuniao": 257,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu reduzir a taxa básica de juros em 0,50 ponto percentual, para 12,75% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante, que inclui o ano de 2024 e, em grau menor, o de 2025."
+   ]
+  },
+  {
+   "reuniao": 258,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu reduzir a taxa básica de juros em 0,50 ponto percentual, para 12,25% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante, que inclui o ano de 2024 e o de 2025."
+   ]
+  },
+  {
+   "reuniao": 259,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu reduzir a taxa básica de juros em 0,50 ponto percentual, para 11,75% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante, que inclui o ano de 2024 e o de 2025."
+   ]
+  },
+  {
+   "reuniao": 260,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu reduzir a taxa básica de juros em 0,50 ponto percentual, para 11,25% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante, que inclui o ano de 2024 e, em grau maior, o de 2025."
+   ]
+  },
+  {
+   "reuniao": 261,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu reduzir a taxa básica de juros em 0,50 ponto percentual, para 10,75% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante, que inclui o ano de 2024 e, em grau maior, o de 2025."
+   ]
+  },
+  {
+   "reuniao": 262,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu reduzir a taxa básica de juros em 0,25 ponto percentual, para 10,50% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante, que inclui o ano de 2025."
+   ]
+  },
+  {
+   "reuniao": 263,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu manter a taxa básica de juros em 10,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 264,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu manter a taxa básica de juros em 10,50% a.a."
+   ]
+  },
+  {
+   "reuniao": 265,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 0,25 ponto percentual, para 10,75% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante."
+   ]
+  },
+  {
+   "reuniao": 266,
+   "frases": [
+    "Considerando a evolução do processo de desinflação, os cenários avaliados, o balanço de riscos e o amplo conjunto de informações disponíveis, o Copom decidiu, por unanimidade, elevar a taxa básica de juros em 0,50 ponto percentual, para 11,25% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante."
+   ]
+  },
+  {
+   "reuniao": 267,
+   "frases": [
+    "O Copom então decidiu realizar um ajuste de maior magnitude, elevando a taxa básica de juros em 1,00 ponto percentual, para 12,25% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante."
+   ]
+  }
+ ]
+}

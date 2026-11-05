@@ -1,0 +1,897 @@
+{
+ "dif_alinhamento_v0": 0.0,
+ "evidencia_relatos_de_fechamento": {
+  "antes da virada, pregao ate 17h": {
+   "n": 40,
+   "mediana_hora_v0": 14.316666666666666,
+   "mediana_hora_v1": 17.316666666666666,
+   "antes_do_fechamento_v0": 1.0,
+   "antes_do_fechamento_v1": 0.125
+  },
+  "antes da virada, pregao ate 18h": {
+   "n": 16,
+   "mediana_hora_v0": 16.3,
+   "mediana_hora_v1": 18.3,
+   "antes_do_fechamento_v0": 1.0,
+   "antes_do_fechamento_v1": 0.125
+  },
+  "depois da virada, pregao ate 17h": {
+   "n": 534,
+   "mediana_hora_v0": 17.466666666666665,
+   "mediana_hora_v1": 17.466666666666665,
+   "antes_do_fechamento_v0": 0.003745318352059925,
+   "antes_do_fechamento_v1": 0.003745318352059925
+  },
+  "depois da virada, pregao ate 18h": {
+   "n": 262,
+   "mediana_hora_v0": 18.45,
+   "mediana_hora_v1": 18.45,
+   "antes_do_fechamento_v0": 0.015267175572519083,
+   "antes_do_fechamento_v1": 0.015267175572519083
+  }
+ },
+ "evidencia_coluna_5_assuntos": {
+  "antes da virada": {
+   "n": 211,
+   "mediana_hora_v0": 4.883333333333333,
+   "mediana_hora_v1": 7.883333333333333
+  },
+  "depois da virada": {
+   "n": 473,
+   "mediana_hora_v0": 7.733333333333333,
+   "mediana_hora_v1": 7.733333333333333
+  }
+ },
+ "manchetes_ate_a_virada_v0": 5358,
+ "tamanho": {
+  "manchetes_com_carimbo_errado": 5356,
+  "manchetes_com_carimbo_errado_no_estudo": 3033,
+  "fracao_do_corpus": 0.09296835673742862,
+  "manchetes_que_mudam_de_linha_v1": 918,
+  "manchetes_que_mudam_de_linha_v1_no_estudo": 532,
+  "linhas_do_estudo_afetadas_v1": 181,
+  "linhas_do_estudo_ate_a_virada": 183,
+  "primeira_linha_de_teste": "2020-01-08",
+  "fracao_do_treino_ate_a_virada_por_fold": [
+   0.726,
+   0.4,
+   0.276,
+   0.21,
+   0.17
+  ],
+  "manchetes_17h_18h_com_pregao_aberto_v2": 974,
+  "fracao_do_corpus_v2": 0.01690649355157869,
+  "pregoes_com_fechamento_18h_no_estudo": 0.33847184986595175
+ },
+ "efeito": {
+  "manchetes_deslocadas_vs_retorno_do_dia": {
+   "r": 0.49281978950499467,
+   "lo": 0.4025158060510035,
+   "hi": 0.6083924120556693,
+   "p": 0.0,
+   "n_dias": 181
+  },
+  "manchetes_deslocadas_vs_alvo_da_linha_errada": {
+   "r": -0.11471807802664534,
+   "lo": -0.2837048649843772,
+   "hi": -0.004484599713382631,
+   "p": 0.0438,
+   "n_dias": 181
+  },
+  "janela_ate_a_virada": {
+   "v0_contemporanea": {
+    "r": 0.5177866967601681,
+    "lo": 0.43984965587123726,
+    "hi": 0.6181984071457075,
+    "p": 0.0,
+    "n_dias": 183
+   },
+   "v0_preditiva": {
+    "r": -0.11869674477274626,
+    "lo": -0.23325238714453295,
+    "hi": -0.018362059033083758,
+    "p": 0.021,
+    "n_dias": 183
+   },
+   "v1_contemporanea": {
+    "r": 0.3767475495621665,
+    "lo": 0.2656163434186712,
+    "hi": 0.4803898628093774,
+    "p": 0.0,
+    "n_dias": 183
+   },
+   "v1_preditiva": {
+    "r": -0.12228359111212961,
+    "lo": -0.23361627163187043,
+    "hi": -0.015249160370054379,
+    "p": 0.025,
+    "n_dias": 183
+   },
+   "v0_contemporanea_lag1": {
+    "r": 0.06886369173414933,
+    "lo": -0.07386871469741862,
+    "hi": 0.23273003873930706,
+    "p": 0.318,
+    "n_dias": 183
+   }
+  },
+  "correlacao_da_serie_v0_v1": 0.9704244803483405,
+  "correlacao_da_serie_v1_v2": 0.9901919732930107
+ },
+ "versoes": {
+  "V0": {
+   "fracao_relato": 0.21422992136918298,
+   "fracao_faixa": {
+    "pregao": 0.3683,
+    "pre-abertura": 0.3674,
+    "pos-fechamento": 0.2233,
+    "fim de semana": 0.0411
+   },
+   "relato_evento": {
+    "todas": {
+     "contemporanea": {
+      "r": 0.20139463117807427,
+      "lo": 0.13942623442248742,
+      "hi": 0.26068439624029155,
+      "p": 0.0,
+      "n_dias": 1492
+     },
+     "preditiva": {
+      "r": -0.0389728865290807,
+      "lo": -0.08417116589258289,
+      "hi": 0.0011886002241265185,
+      "p": 0.0586,
+      "n_dias": 1492
+     },
+     "preditiva_ortogonal_ao_dia": {
+      "r": -0.007158786255926093,
+      "lo": -0.07207538903687541,
+      "hi": 0.05282167481259056,
+      "p": 0.7702,
+      "n_dias": 1492
+     }
+    },
+    "relato": {
+     "contemporanea": {
+      "r": 0.28298920251635246,
+      "lo": 0.2460047911803855,
+      "hi": 0.3279276930463568,
+      "p": 0.0,
+      "n_dias": 1485
+     },
+     "preditiva": {
+      "r": -0.03573438922988462,
+      "lo": -0.07946885701936118,
+      "hi": 0.011432583038111814,
+      "p": 0.1256,
+      "n_dias": 1485
+     },
+     "preditiva_ortogonal_ao_dia": {
+      "r": 0.009717862925694223,
+      "lo": -0.052743655806321,
+      "hi": 0.06672268472157798,
+      "p": 0.8128,
+      "n_dias": 1485
+     }
+    },
+    "evento": {
+     "contemporanea": {
+      "r": 0.07683403277765843,
+      "lo": 0.014003044270847705,
+      "hi": 0.13540583311339624,
+      "p": 0.0142,
+      "n_dias": 1492
+     },
+     "preditiva": {
+      "r": -0.016126984337464987,
+      "lo": -0.0733861873821531,
+      "hi": 0.03287238273741329,
+      "p": 0.5322,
+      "n_dias": 1492
+     },
+     "preditiva_ortogonal_ao_dia": {
+      "r": -0.0039452929811693484,
+      "lo": -0.06950576332552937,
+      "hi": 0.05355596907318602,
+      "p": 0.8624,
+      "n_dias": 1492
+     }
+    }
+   },
+   "antes_depois": {
+    "pos-fechamento": {
+     "antes (pregao anterior)": {
+      "r": 0.3622247370156465,
+      "lo": 0.31519800308757717,
+      "hi": 0.4321707261329854,
+      "p": 0.0,
+      "n_dias": 1350
+     },
+     "depois (pregao seguinte)": {
+      "r": -0.01791259162300273,
+      "lo": -0.07445902010883586,
+      "hi": 0.0311111963503133,
+      "p": 0.436,
+      "n_dias": 1350
+     },
+     "D+1": {
+      "r": -0.0014547197245875182,
+      "lo": -0.04718631125088131,
+      "hi": 0.043904780665171596,
+      "p": 0.9818,
+      "n_dias": 1350
+     }
+    },
+    "fim de semana": {
+     "antes (pregao anterior)": {
+      "r": 0.04551700986898812,
+      "lo": -0.05570859840596878,
+      "hi": 0.16049584581387144,
+      "p": 0.4074,
+      "n_dias": 298
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.021692940944433095,
+      "lo": -0.12419033403260069,
+      "hi": 0.13297418962702223,
+      "p": 0.8232,
+      "n_dias": 298
+     },
+     "D+1": {
+      "r": -0.016531512590505025,
+      "lo": -0.1594106326923033,
+      "hi": 0.13371608196041262,
+      "p": 0.8574,
+      "n_dias": 298
+     }
+    },
+    "pre-abertura": {
+     "antes (pregao anterior)": {
+      "r": 0.03842690798039483,
+      "lo": -0.004868284729885555,
+      "hi": 0.0968844864594708,
+      "p": 0.0796,
+      "n_dias": 1492
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.20237001002098998,
+      "lo": 0.1321774215833611,
+      "hi": 0.2824835265719835,
+      "p": 0.0,
+      "n_dias": 1492
+     },
+     "D+1": {
+      "r": -0.07567754564429477,
+      "lo": -0.1278806675909468,
+      "hi": -0.014448157968235991,
+      "p": 0.013,
+      "n_dias": 1492
+     },
+     "D+1 ortogonal ao dia": {
+      "r": -0.04448235042944513,
+      "lo": -0.0870594396207295,
+      "hi": 0.0018244865231362528,
+      "p": 0.056,
+      "n_dias": 1492
+     }
+    },
+    "pregao": {
+     "durante (ret do dia)": {
+      "r": 0.21173307730414948,
+      "lo": 0.1563649927285889,
+      "hi": 0.2553763113997387,
+      "p": 0.0,
+      "n_dias": 1492
+     },
+     "seguinte (D+1)": {
+      "r": -0.02497803866332825,
+      "lo": -0.07914756615313251,
+      "hi": 0.016821266104125647,
+      "p": 0.2432,
+      "n_dias": 1492
+     }
+    }
+   },
+   "pre_abertura_por_classe": {
+    "relato": {
+     "antes (pregao anterior)": {
+      "r": -0.017775390432932203,
+      "lo": -0.06890076134652832,
+      "hi": 0.04886904196670936,
+      "p": 0.6408,
+      "n_dias": 1439
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.2651481433943186,
+      "lo": 0.22843460772984106,
+      "hi": 0.31086271767849777,
+      "p": 0.0,
+      "n_dias": 1439
+     },
+     "D+1": {
+      "r": -0.009809531711359922,
+      "lo": -0.05840906852017194,
+      "hi": 0.04621742735570778,
+      "p": 0.7358,
+      "n_dias": 1439
+     },
+     "D+1 ortogonal ao dia": {
+      "r": 0.03309899800322761,
+      "lo": -0.025602431891476863,
+      "hi": 0.08426950637937683,
+      "p": 0.27,
+      "n_dias": 1439
+     }
+    },
+    "evento": {
+     "antes (pregao anterior)": {
+      "r": 0.05580514758223837,
+      "lo": 0.012058031999012222,
+      "hi": 0.10087616233169625,
+      "p": 0.0148,
+      "n_dias": 1492
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.07551287124776507,
+      "lo": 0.003983664066989494,
+      "hi": 0.15329297140538897,
+      "p": 0.037,
+      "n_dias": 1492
+     },
+     "D+1": {
+      "r": -0.07173072301012928,
+      "lo": -0.12089137862795367,
+      "hi": -0.015890489270327348,
+      "p": 0.0104,
+      "n_dias": 1492
+     },
+     "D+1 ortogonal ao dia": {
+      "r": -0.05991810952465181,
+      "lo": -0.1055774579303544,
+      "hi": -0.00969141238393793,
+      "p": 0.0204,
+      "n_dias": 1492
+     }
+    }
+   },
+   "familia_preditiva": {
+    "n_testes": 15,
+    "menor_p_holm": 0.156,
+    "menor": "pre_abertura_por_classe/evento/D+1",
+    "testes": {
+     "relato_evento/todas/preditiva": 0.672,
+     "relato_evento/todas/preditiva_ortogonal_ao_dia": 1.0,
+     "relato_evento/relato/preditiva": 1.0,
+     "relato_evento/relato/preditiva_ortogonal_ao_dia": 1.0,
+     "relato_evento/evento/preditiva": 1.0,
+     "relato_evento/evento/preditiva_ortogonal_ao_dia": 1.0,
+     "antes_depois/pos-fechamento/D+1": 1.0,
+     "antes_depois/fim de semana/D+1": 1.0,
+     "antes_depois/pre-abertura/D+1": 0.182,
+     "antes_depois/pre-abertura/D+1 ortogonal ao dia": 0.672,
+     "antes_depois/pregao/seguinte (D+1)": 1.0,
+     "pre_abertura_por_classe/relato/D+1": 1.0,
+     "pre_abertura_por_classe/relato/D+1 ortogonal ao dia": 1.0,
+     "pre_abertura_por_classe/evento/D+1": 0.156,
+     "pre_abertura_por_classe/evento/D+1 ortogonal ao dia": 0.2652
+    }
+   }
+  },
+  "V1": {
+   "fracao_relato": 0.21422992136918298,
+   "fracao_faixa": {
+    "pregao": 0.3749,
+    "pre-abertura": 0.3448,
+    "pos-fechamento": 0.2392,
+    "fim de semana": 0.0411
+   },
+   "relato_evento": {
+    "todas": {
+     "contemporanea": {
+      "r": 0.18209301484851115,
+      "lo": 0.11592809423953099,
+      "hi": 0.24490469949555174,
+      "p": 0.0,
+      "n_dias": 1492
+     },
+     "preditiva": {
+      "r": -0.03834927197728929,
+      "lo": -0.08472548035156804,
+      "hi": 0.00221229329734678,
+      "p": 0.0656,
+      "n_dias": 1492
+     },
+     "preditiva_ortogonal_ao_dia": {
+      "r": -0.009612306338530363,
+      "lo": -0.07282166368674216,
+      "hi": 0.047084775230101066,
+      "p": 0.709,
+      "n_dias": 1492
+     }
+    },
+    "relato": {
+     "contemporanea": {
+      "r": 0.2550131257028764,
+      "lo": 0.21726887346554558,
+      "hi": 0.29481559318370454,
+      "p": 0.0,
+      "n_dias": 1487
+     },
+     "preditiva": {
+      "r": -0.03576451931747176,
+      "lo": -0.07966091339598812,
+      "hi": 0.010501299817297981,
+      "p": 0.1174,
+      "n_dias": 1487
+     },
+     "preditiva_ortogonal_ao_dia": {
+      "r": 0.004789990505383284,
+      "lo": -0.05496177381304111,
+      "hi": 0.057895558792051556,
+      "p": 0.9284,
+      "n_dias": 1487
+     }
+    },
+    "evento": {
+     "contemporanea": {
+      "r": 0.07543735167355221,
+      "lo": 0.011557254405801439,
+      "hi": 0.1345011353586603,
+      "p": 0.018,
+      "n_dias": 1492
+     },
+     "preditiva": {
+      "r": -0.01758729105899911,
+      "lo": -0.07506257816575143,
+      "hi": 0.031050109510976552,
+      "p": 0.4972,
+      "n_dias": 1492
+     },
+     "preditiva_ortogonal_ao_dia": {
+      "r": -0.0056316325965617454,
+      "lo": -0.07110493286820609,
+      "hi": 0.051481487265664524,
+      "p": 0.8228,
+      "n_dias": 1492
+     }
+    }
+   },
+   "antes_depois": {
+    "pos-fechamento": {
+     "antes (pregao anterior)": {
+      "r": 0.38777940924495735,
+      "lo": 0.34159246963039336,
+      "hi": 0.45268372234417925,
+      "p": 0.0,
+      "n_dias": 1491
+     },
+     "depois (pregao seguinte)": {
+      "r": -0.02999847571656488,
+      "lo": -0.09007205851423998,
+      "hi": 0.01245481891316147,
+      "p": 0.1384,
+      "n_dias": 1491
+     },
+     "D+1": {
+      "r": -0.001574649175747076,
+      "lo": -0.0453610374055155,
+      "hi": 0.03920415658763758,
+      "p": 0.8902,
+      "n_dias": 1491
+     }
+    },
+    "fim de semana": {
+     "antes (pregao anterior)": {
+      "r": 0.04551700986898812,
+      "lo": -0.05570859840596878,
+      "hi": 0.16049584581387144,
+      "p": 0.4074,
+      "n_dias": 298
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.021692940944433095,
+      "lo": -0.12419033403260069,
+      "hi": 0.13297418962702223,
+      "p": 0.8232,
+      "n_dias": 298
+     },
+     "D+1": {
+      "r": -0.016531512590505025,
+      "lo": -0.1594106326923033,
+      "hi": 0.13371608196041262,
+      "p": 0.8574,
+      "n_dias": 298
+     }
+    },
+    "pre-abertura": {
+     "antes (pregao anterior)": {
+      "r": 0.03548350854878665,
+      "lo": -0.008031437810628669,
+      "hi": 0.08951543598646011,
+      "p": 0.1086,
+      "n_dias": 1492
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.18705072794833869,
+      "lo": 0.1154384522846158,
+      "hi": 0.26793213418836015,
+      "p": 0.0,
+      "n_dias": 1492
+     },
+     "D+1": {
+      "r": -0.07157404628102082,
+      "lo": -0.12303636679383695,
+      "hi": -0.011591792938965293,
+      "p": 0.02,
+      "n_dias": 1492
+     },
+     "D+1 ortogonal ao dia": {
+      "r": -0.04264222568621288,
+      "lo": -0.08437307908535918,
+      "hi": 0.002597166970953769,
+      "p": 0.0622,
+      "n_dias": 1492
+     }
+    },
+    "pregao": {
+     "durante (ret do dia)": {
+      "r": 0.20342082845051182,
+      "lo": 0.14980153906565918,
+      "hi": 0.25231726421972756,
+      "p": 0.0,
+      "n_dias": 1491
+     },
+     "seguinte (D+1)": {
+      "r": -0.025789535557128426,
+      "lo": -0.07830329291782716,
+      "hi": 0.018218026150473476,
+      "p": 0.2466,
+      "n_dias": 1491
+     }
+    }
+   },
+   "pre_abertura_por_classe": {
+    "relato": {
+     "antes (pregao anterior)": {
+      "r": -0.018003570015694585,
+      "lo": -0.0693063993056097,
+      "hi": 0.04854481139622465,
+      "p": 0.6508,
+      "n_dias": 1407
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.2513297983831882,
+      "lo": 0.2138134644738739,
+      "hi": 0.29784900076872317,
+      "p": 0.0,
+      "n_dias": 1407
+     },
+     "D+1": {
+      "r": -0.007744636638143323,
+      "lo": -0.05739370494840551,
+      "hi": 0.04755136908498406,
+      "p": 0.791,
+      "n_dias": 1407
+     },
+     "D+1 ortogonal ao dia": {
+      "r": 0.033949844350382945,
+      "lo": -0.024820316907399092,
+      "hi": 0.08404161123975522,
+      "p": 0.2584,
+      "n_dias": 1407
+     }
+    },
+    "evento": {
+     "antes (pregao anterior)": {
+      "r": 0.053949981628147015,
+      "lo": 0.007910665101229923,
+      "hi": 0.0962731975564089,
+      "p": 0.0218,
+      "n_dias": 1492
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.0741102240620146,
+      "lo": 0.0013370315253820695,
+      "hi": 0.1502492623088692,
+      "p": 0.0444,
+      "n_dias": 1492
+     },
+     "D+1": {
+      "r": -0.06553083586543952,
+      "lo": -0.11338460199360867,
+      "hi": -0.010953006462691173,
+      "p": 0.0184,
+      "n_dias": 1492
+     },
+     "D+1 ortogonal ao dia": {
+      "r": -0.05391801596473,
+      "lo": -0.09857896665964863,
+      "hi": -0.004729819675785613,
+      "p": 0.0342,
+      "n_dias": 1492
+     }
+    }
+   },
+   "familia_preditiva": {
+    "n_testes": 15,
+    "menor_p_holm": 0.276,
+    "menor": "pre_abertura_por_classe/evento/D+1",
+    "testes": {
+     "relato_evento/todas/preditiva": 0.7464,
+     "relato_evento/todas/preditiva_ortogonal_ao_dia": 1.0,
+     "relato_evento/relato/preditiva": 1.0,
+     "relato_evento/relato/preditiva_ortogonal_ao_dia": 1.0,
+     "relato_evento/evento/preditiva": 1.0,
+     "relato_evento/evento/preditiva_ortogonal_ao_dia": 1.0,
+     "antes_depois/pos-fechamento/D+1": 1.0,
+     "antes_depois/fim de semana/D+1": 1.0,
+     "antes_depois/pre-abertura/D+1": 0.28,
+     "antes_depois/pre-abertura/D+1 ortogonal ao dia": 0.7464,
+     "antes_depois/pregao/seguinte (D+1)": 1.0,
+     "pre_abertura_por_classe/relato/D+1": 1.0,
+     "pre_abertura_por_classe/relato/D+1 ortogonal ao dia": 1.0,
+     "pre_abertura_por_classe/evento/D+1": 0.276,
+     "pre_abertura_por_classe/evento/D+1 ortogonal ao dia": 0.4446
+    }
+   }
+  },
+  "V2": {
+   "fracao_relato": 0.21422992136918298,
+   "fracao_faixa": {
+    "pregao": 0.3924,
+    "pre-abertura": 0.3448,
+    "pos-fechamento": 0.2217,
+    "fim de semana": 0.0411
+   },
+   "relato_evento": {
+    "todas": {
+     "contemporanea": {
+      "r": 0.17874778286505677,
+      "lo": 0.11247174508092656,
+      "hi": 0.242447621381303,
+      "p": 0.0,
+      "n_dias": 1492
+     },
+     "preditiva": {
+      "r": -0.03553161271908691,
+      "lo": -0.08125540931488812,
+      "hi": 0.004812761081973153,
+      "p": 0.087,
+      "n_dias": 1492
+     },
+     "preditiva_ortogonal_ao_dia": {
+      "r": -0.007282102001651547,
+      "lo": -0.07019879392251145,
+      "hi": 0.04780271776801734,
+      "p": 0.7608,
+      "n_dias": 1492
+     }
+    },
+    "relato": {
+     "contemporanea": {
+      "r": 0.25431035270251723,
+      "lo": 0.21656171771350918,
+      "hi": 0.2949799064879183,
+      "p": 0.0,
+      "n_dias": 1487
+     },
+     "preditiva": {
+      "r": -0.03679895963251242,
+      "lo": -0.08103773115251886,
+      "hi": 0.009455340112115783,
+      "p": 0.1048,
+      "n_dias": 1487
+     },
+     "preditiva_ortogonal_ao_dia": {
+      "r": 0.0036043581538629265,
+      "lo": -0.05692254158920554,
+      "hi": 0.05715992448269833,
+      "p": 0.9672,
+      "n_dias": 1487
+     }
+    },
+    "evento": {
+     "contemporanea": {
+      "r": 0.0713817185799524,
+      "lo": 0.007864400621419227,
+      "hi": 0.13106200440838237,
+      "p": 0.0252,
+      "n_dias": 1492
+     },
+     "preditiva": {
+      "r": -0.014050728382033417,
+      "lo": -0.07073016539679436,
+      "hi": 0.03323802935260568,
+      "p": 0.5748,
+      "n_dias": 1492
+     },
+     "preditiva_ortogonal_ao_dia": {
+      "r": -0.002729606808278175,
+      "lo": -0.06643729823629342,
+      "hi": 0.05160962382515139,
+      "p": 0.8904,
+      "n_dias": 1492
+     }
+    }
+   },
+   "antes_depois": {
+    "pos-fechamento": {
+     "antes (pregao anterior)": {
+      "r": 0.3980871152200182,
+      "lo": 0.34958309896006023,
+      "hi": 0.4663330338452473,
+      "p": 0.0,
+      "n_dias": 1488
+     },
+     "depois (pregao seguinte)": {
+      "r": -0.03669612425898326,
+      "lo": -0.0946094326447434,
+      "hi": 0.004539644519063947,
+      "p": 0.0746,
+      "n_dias": 1488
+     },
+     "D+1": {
+      "r": -0.012356708126291263,
+      "lo": -0.05602181273247242,
+      "hi": 0.02922501042031695,
+      "p": 0.5114,
+      "n_dias": 1488
+     }
+    },
+    "fim de semana": {
+     "antes (pregao anterior)": {
+      "r": 0.04551700986898812,
+      "lo": -0.05570859840596878,
+      "hi": 0.16049584581387144,
+      "p": 0.4074,
+      "n_dias": 298
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.021692940944433095,
+      "lo": -0.12419033403260069,
+      "hi": 0.13297418962702223,
+      "p": 0.8232,
+      "n_dias": 298
+     },
+     "D+1": {
+      "r": -0.016531512590505025,
+      "lo": -0.1594106326923033,
+      "hi": 0.13371608196041262,
+      "p": 0.8574,
+      "n_dias": 298
+     }
+    },
+    "pre-abertura": {
+     "antes (pregao anterior)": {
+      "r": 0.03548350854878665,
+      "lo": -0.008031437810628669,
+      "hi": 0.08951543598646011,
+      "p": 0.1086,
+      "n_dias": 1492
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.18705072794833869,
+      "lo": 0.1154384522846158,
+      "hi": 0.26793213418836015,
+      "p": 0.0,
+      "n_dias": 1492
+     },
+     "D+1": {
+      "r": -0.07157404628102082,
+      "lo": -0.12303636679383695,
+      "hi": -0.011591792938965293,
+      "p": 0.02,
+      "n_dias": 1492
+     },
+     "D+1 ortogonal ao dia": {
+      "r": -0.04264222568621288,
+      "lo": -0.08437307908535918,
+      "hi": 0.002597166970953769,
+      "p": 0.0622,
+      "n_dias": 1492
+     }
+    },
+    "pregao": {
+     "durante (ret do dia)": {
+      "r": 0.20217695515028808,
+      "lo": 0.14656027919614864,
+      "hi": 0.25320653560401213,
+      "p": 0.0,
+      "n_dias": 1491
+     },
+     "seguinte (D+1)": {
+      "r": -0.02048513115006938,
+      "lo": -0.07438568901317467,
+      "hi": 0.024310603183381976,
+      "p": 0.367,
+      "n_dias": 1491
+     }
+    }
+   },
+   "pre_abertura_por_classe": {
+    "relato": {
+     "antes (pregao anterior)": {
+      "r": -0.018003570015694585,
+      "lo": -0.0693063993056097,
+      "hi": 0.04854481139622465,
+      "p": 0.6508,
+      "n_dias": 1407
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.2513297983831882,
+      "lo": 0.2138134644738739,
+      "hi": 0.29784900076872317,
+      "p": 0.0,
+      "n_dias": 1407
+     },
+     "D+1": {
+      "r": -0.007744636638143323,
+      "lo": -0.05739370494840551,
+      "hi": 0.04755136908498406,
+      "p": 0.791,
+      "n_dias": 1407
+     },
+     "D+1 ortogonal ao dia": {
+      "r": 0.033949844350382945,
+      "lo": -0.024820316907399092,
+      "hi": 0.08404161123975522,
+      "p": 0.2584,
+      "n_dias": 1407
+     }
+    },
+    "evento": {
+     "antes (pregao anterior)": {
+      "r": 0.053949981628147015,
+      "lo": 0.007910665101229923,
+      "hi": 0.0962731975564089,
+      "p": 0.0218,
+      "n_dias": 1492
+     },
+     "depois (pregao seguinte)": {
+      "r": 0.0741102240620146,
+      "lo": 0.0013370315253820695,
+      "hi": 0.1502492623088692,
+      "p": 0.0444,
+      "n_dias": 1492
+     },
+     "D+1": {
+      "r": -0.06553083586543952,
+      "lo": -0.11338460199360867,
+      "hi": -0.010953006462691173,
+      "p": 0.0184,
+      "n_dias": 1492
+     },
+     "D+1 ortogonal ao dia": {
+      "r": -0.05391801596473,
+      "lo": -0.09857896665964863,
+      "hi": -0.004729819675785613,
+      "p": 0.0342,
+      "n_dias": 1492
+     }
+    }
+   },
+   "familia_preditiva": {
+    "n_testes": 15,
+    "menor_p_holm": 0.276,
+    "menor": "pre_abertura_por_classe/evento/D+1",
+    "testes": {
+     "relato_evento/todas/preditiva": 0.957,
+     "relato_evento/todas/preditiva_ortogonal_ao_dia": 1.0,
+     "relato_evento/relato/preditiva": 1.0,
+     "relato_evento/relato/preditiva_ortogonal_ao_dia": 1.0,
+     "relato_evento/evento/preditiva": 1.0,
+     "relato_evento/evento/preditiva_ortogonal_ao_dia": 1.0,
+     "antes_depois/pos-fechamento/D+1": 1.0,
+     "antes_depois/fim de semana/D+1": 1.0,
+     "antes_depois/pre-abertura/D+1": 0.28,
+     "antes_depois/pre-abertura/D+1 ortogonal ao dia": 0.7464,
+     "antes_depois/pregao/seguinte (D+1)": 1.0,
+     "pre_abertura_por_classe/relato/D+1": 1.0,
+     "pre_abertura_por_classe/relato/D+1 ortogonal ao dia": 1.0,
+     "pre_abertura_por_classe/evento/D+1": 0.276,
+     "pre_abertura_por_classe/evento/D+1 ortogonal ao dia": 0.4446
+    }
+   }
+  }
+ }
+}
