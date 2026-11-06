@@ -3,7 +3,8 @@
 Cobrem as categorias descritas na metodologia do TCC: corte inclusivo, virada de fim
 de semana, feriado, horario de verao historico, o timestamp UTC vindo do JSON-LD e,
 na ultima secao, os proprios dados: relatos de fechamento precisam sair depois do
-fechamento e a rotina editorial nao pode saltar na migracao do site.
+fechamento e a rotina editorial nao pode saltar na migracao do site. Sem data/, que nao
+esta no repositorio, os testes sobre os dados sao pulados, e o resumo informa quantos.
 
 Uso:
     .venv\\Scripts\\python -m pytest utils/test_tcc_utils.py -v
@@ -11,6 +12,7 @@ ou, sem pytest instalado:
     .venv\\Scripts\\python utils/test_tcc_utils.py
 """
 import sys
+import unittest
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -185,7 +187,7 @@ def test_virada_do_carimbo_no_dia_da_migracao():
 def _corpus():
     arq = Path(__file__).parent.parent / 'data' / 'processed' / 'corpus_bucketed.parquet'
     if not arq.exists():
-        return None
+        raise unittest.SkipTest('sem data/processed/corpus_bucketed.parquet')
     c = pd.read_parquet(arq)
     t = c['ts_local'].dt.tz_localize(None)
     return c.assign(_t=t, _hora=t.dt.hour + t.dt.minute / 60, _util=t.dt.dayofweek < 5,
@@ -194,8 +196,6 @@ def _corpus():
 
 def test_dados_relatos_de_fechamento_saem_depois_do_fechamento():
     c = _corpus()
-    if c is None:
-        return
     rel = c[c['headline'].str.contains(r'Ibovespa[^.;:]{0,40}?\b(?:fecha|encerra)\b', regex=True)
             & c['_util'] & (c['_hora'] >= 12)]
     for rotulo, g in rel.groupby('_antes'):
@@ -208,8 +208,6 @@ def test_dados_relatos_de_fechamento_saem_depois_do_fechamento():
 
 def test_dados_rotina_editorial_nao_salta_na_migracao():
     c = _corpus()
-    if c is None:
-        return
     col = c[c['headline'].str.contains('Os 5 assuntos') & c['_util']]
     antes, depois = col[col['_antes']]['_hora'].median(), col[~col['_antes']]['_hora'].median()
     assert abs(antes - depois) < 1, f'coluna diaria: {antes:.2f}h antes e {depois:.2f}h depois'
@@ -217,8 +215,6 @@ def test_dados_rotina_editorial_nao_salta_na_migracao():
 
 def test_dados_linha_do_pregao_coincide_com_o_corte():
     c = _corpus()
-    if c is None:
-        return
     # nenhuma manchete entra na linha de um pregao ja encerrado quando foi publicada
     cortes = c['trading_day'] + pd.to_timedelta(hora_fechamento_b3(c['trading_day']), unit='h')
     assert (c['_t'] <= cortes).all(), 'manchete publicada depois do fechamento da propria linha'
@@ -262,14 +258,18 @@ def test_walk_forward_expanding_treino_cresce():
 
 if __name__ == '__main__':
     testes = [v for k, v in list(globals().items()) if k.startswith('test_')]
-    falhas = 0
+    falhas = pulados = 0
     for t in testes:
         try:
             t()
             print(f"OK   {t.__name__}")
+        except unittest.SkipTest as e:
+            pulados += 1
+            print(f"PULO {t.__name__}: {e}")
         except AssertionError as e:
             falhas += 1
             print(f"FAIL {t.__name__}: {e}")
-    print(f"\n{len(testes) - falhas}/{len(testes)} passaram")
+    resumo = f"{len(testes) - falhas - pulados}/{len(testes)} passaram"
+    print(f"\n{resumo}, {pulados} pulados" if pulados else f"\n{resumo}")
     if falhas:
         sys.exit(1)

@@ -33,3 +33,24 @@ atuais saem dos logs da reexecução. Frente aos notebooks do projeto principal:
 - `06_avaliacao_final.ipynb`: muda só `PROJECT`.
 
 Os demais arquivos da segunda cópia, inclusive a baseline XGBoost, vêm do projeto principal.
+
+## Para repetir em outra pasta
+
+1. Copie o projeto e ponha `corpo_completo/scripts/` e `corpo_completo/colabs/` sobre `scripts/` e `colabs/` da cópia.
+2. Troque o `PROJECT` de `colabs/05_lstm.ipynb` e `colabs/06_avaliacao_final.ipynb` pelo caminho da cópia.
+3. Obtenha o que não está no repositório:
+   - em `data/raw/`: `infomoney_corpus.parquet` e, para não coletar de novo, `shards_corpo/`;
+   - em `data/processed/`: `corpus_bucketed.parquet`, `bvsp_clean.parquet`, `features_preco.parquet` e
+     `features_copom.parquet`;
+   - também em `data/processed/`, para não extrair de novo: `emb_bertimbau_corpo_raw.npy`,
+     `emb_bertimbau_corpo_chunked_raw.npy`, `finbert_corpo_emb_raw.npy`, `finbert_corpo_chunked_emb_raw.npy`,
+     `finbert_corpo_probs_raw.npy` e `finbert_corpo_chunked_probs_raw.npy`.
+4. Rode as etapas 7 e 9 com o `reexecuta_notebooks.py` da própria cópia, sem `--corpo`: essa opção só vale para
+   `D:\tcc_ibov_corpo_completo`, e sem ela o script usa a pasta em que está.
+5. A etapa 5 só é necessária se o corpus da cópia for anterior à correção do carimbo.
+
+Para recalcular a Tabela III, ajuste `CORPO` em `scripts/ic_mcc_bootstrap.py`, que lê as previsões em
+`D:\tcc_ibov_corpo_completo\reports`.
+
+Assim, em um clone novo, sem a etapa 5 e na mesma máquina, o corpus, as variáveis, as previsões das LSTMs e as tabelas
+saíram idênticos aos originais. A extração foi conferida em 160 matérias, e a coleta não foi repetida.
