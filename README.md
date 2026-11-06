@@ -15,6 +15,7 @@ data/processed/  features derivadas, embeddings, sequências para o LSTM
 models/     checkpoints (quando salvos)
 reports/    métricas, previsões e figuras geradas pelos notebooks
 utils/      tcc_utils.py — fonte única canônica das funções centrais
+corpo_completo/  código da verificação com o corpo completo das matérias (ver o README da pasta)
 ```
 
 ## Ambiente
@@ -62,7 +63,7 @@ ao migrar de ambiente.
 
 1. `scripts/corrige_carimbo.py` — corrige o fuso e aplica o corte no fechamento efetivo da B3 (17h ou 18h); guarda os originais em `data/_v0_carimbo_original/`. Linhas e ordem do corpus não mudam, porque os embeddings são alinhados por posição. **Não reexecute `colabs/03` cel. 1 sobre embeddings já extraídos.**
 2. `scripts/regenera_features_texto.py` — reagrega as features de texto por pregão.
-3. `scripts/reexecuta_notebooks.py` — reexecuta as células de `colabs/04`, `05`, `07` e `06` que dependem do texto (logs em `reports/reexecucao/`). Com `--corpo`, usa o repositório do corpo completo, preparado por `scripts/corrige_carimbo_corpo.py`.
+3. `scripts/reexecuta_notebooks.py` — reexecuta as células de `colabs/04`, `05`, `07` e `06` que dependem do texto (logs em `reports/reexecucao/`). Com `--corpo`, usa a segunda cópia do projeto descrita em `corpo_completo/README.md`, preparada por `scripts/corrige_carimbo_corpo.py`.
 4. `scripts/sensibilidade_carimbo.py` — mede o efeito da correção, retreinando as variantes de texto com os dois carimbos.
 
 **Análises da revisão do artigo:** `scripts/coleta_janela_reacao.py` (BOVA11, Focus), `diagnostico_fechamento_b3.py`, `diagnostico_janela_abertura.py`, `modelo_abertura.py`, `diagnostico_copom_reacao.py`, `diagnostico_copom_validade.py`, `diagnostico_relato_evento.py`, `diagnostico_janela_reacao.py`, `ic_mcc_bootstrap.py`, `ic_da_bootstrap.py`, `tabela_robustez.py` e `figura_*.py`.

@@ -1545,3 +1545,5 @@ formalmente as garantias anti-vazamento descritas na Seção 3.3. A correção
 do carimbo foi aplicada sobre os dados já extraídos, sem refazer os
 embeddings (`scripts/corrige_carimbo.py`,
 `scripts/regenera_features_texto.py`, `scripts/reexecuta_notebooks.py`).
+O código da verificação com o corpo completo das matérias (Seção 5.7) está
+em `corpo_completo/`, com a ordem de execução no `README.md` da pasta.
