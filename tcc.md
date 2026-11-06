@@ -97,19 +97,18 @@ A literatura de previsão de retornos financeiros com aprendizado profundo e
 dados textuais pode ser organizada em três frentes que orientam diretamente
 as escolhas metodológicas deste trabalho.
 
-**Combinação de LSTM com embeddings financeiros.** Trabalhos recentes que
-combinam arquiteturas LSTM com representações textuais de notícias
-financeiras (GU et al., 2024) reportam ganhos modestos e inconsistentes
-entre mercados, frequentemente sem controle rigoroso de vazamento temporal
-na etapa de normalização ou seleção de variáveis — lacuna metodológica que
+**Combinação de LSTM com embeddings financeiros.** Trabalhos que combinam
+LSTM com sentimento de FinBERT reportam ganho de previsão (GU et al., 2024:
+MAPE de 0,045 contra 0,072 nas ações do NASDAQ-100), sem declarar se a
+normalização é ajustada só no treino — lacuna metodológica que
 este trabalho procura sanar ao exigir que todo ajuste estatístico (scaler,
 PCA, calibração) ocorra exclusivamente dentro do conjunto de treino de cada
 fold do walk-forward.
 
-**Comparações de modelos de sentimento em finanças.** Estudos comparativos
-sobre o uso de sentimento textual em previsão financeira (DAHAL et al.,
-2023) documentam que o poder preditivo de sentimento agregado tende a ser
-pequeno e sensível à forma de agregação temporal, o que reforça a
+**Comparações de modelos de sentimento em finanças.** Comparando LSTM e GRU
+no S&P 500, Dahal et al. (2023) concluem que incluir notícias melhora a
+previsão, com o sentimento agregado por dia e alinhado ao preço pela data,
+sem discutir se a notícia antecede o fechamento, o que reforça a
 necessidade de uma regra de corte temporal explícita e validada empiricamente
 — adotada, neste trabalho, por meio da função `assign_trading_day`, com
 corte no fechamento efetivo da B3, validada por suíte de testes
@@ -239,8 +238,11 @@ teste era afetado (o primeiro é 08/01/2020), mas o treino sim (73%, 40%,
 28%, 21% e 17% das linhas de treino dos folds 1 a 5). Retreinadas com os
 dois carimbos, na mesma máquina e nas mesmas sementes, as cinco variantes
 de texto mudam o MCC agrupado em −0,01 a +0,03, com todos os intervalos
-contendo zero, e o R² em 0,00 a +0,04, sem alterar as conclusões
-(`scripts/sensibilidade_carimbo.py`).
+contendo zero, o R² em 0,00 a +0,04 e o Sharpe bruto em −0,26 a +0,60, com
+três trocas de sinal; o líquido segue negativo nas cinco, sem alterar as
+conclusões (`scripts/sensibilidade_carimbo.py`; Sharpe em
+`reports/metricas_financeiras.parquet`, frente ao de
+`data/_v0_carimbo_original/`).
 
 ### 3.4 Comunicados do Copom
 
@@ -1226,11 +1228,11 @@ não efeitos menores (Seção 5.1).
 O resultado mais informativo não é a ausência de sinal em si, mas a
 caracterização de onde está o sinal textual (Seção 5.5): o sentimento
 acompanha o retorno do dia, sobretudo nas manchetes que relatam preços e
-nas publicadas após o fechamento, e, descontada essa parte, nada sobra para
-D+1 nem para o retorno abertura→fechamento (Seção 5.9). Esse aspecto
+nas publicadas após o fechamento, e, descontada essa parte, nada detectável
+sobra para D+1 nem para o retorno abertura→fechamento (Seção 5.9). Esse aspecto
 distingue o presente trabalho de resultados nulos não explicados e de
-trabalhos que reportam ganhos sem controle adequado de vazamento temporal,
-problema recorrente na literatura de FinBERT-LSTM discutida na Seção 2. O
+trabalhos que reportam ganhos sem declarar como evitam o vazamento temporal
+(Seção 2). O
 próprio erro de carimbo encontrado neste trabalho (Seção 3.3), detectado
 apenas ao confrontar os dados com relógios independentes, ilustra como esse
 tipo de problema escapa a testes que verificam só o código.
@@ -1251,8 +1253,8 @@ após Holm apenas frente à LSTM+FinBERT-sentimento, requer interpretação
 criteriosa: não significa que o XGBoost preveja o mercado, uma vez que seu
 MCC de +0,028 ± 0,038 também não é distinguível de zero, e seu p-valor de
 Pesaran-Timmermann, 0,727 após correção, está distante da significância.
-Significa, antes, que, entre modelos igualmente desprovidos de habilidade
-preditiva real, os modelos mais simples produzem erros de magnitude menor e
+Significa, antes, que, entre modelos sem habilidade preditiva detectável, os
+modelos mais simples produzem erros de magnitude menor e
 mais estável — argumento favorável à parcimônia como princípio de projeto
 mesmo em cenários nos quais nenhum modelo alcança sucesso preditivo.
 
