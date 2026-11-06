@@ -145,7 +145,16 @@ def main():
     magnitude['abs_gap_reacao'] = float(g[mg].mean())
     magnitude['abs_gap_demais'] = float(g[~mg].mean())
     magnitude['surpresas_nao_nulas_pela_mediana'] = int((e['surpresa_mediana'].abs() > 1e-9).sum())
-    OUT.write_text(json.dumps({'n_eventos': len(e), 'correlacoes': tabela, 'magnitude': magnitude},
+
+    # o escore antecipa a surpresa? instrumento x decisao realizada menos expectativa
+    instrumento = {}
+    for k in ('copom_hawkish_score', 'd_score', 'sem_anuncio', 'd_sem_anuncio'):
+        for sup in ('surpresa_media', 'surpresa_mediana'):
+            instrumento[f'{nomes[k]} / {nomes[sup]}'] = {
+                'r': float(np.corrcoef(e[k], e[sup])[0, 1]), 'p_perm': p_permutacao(e[k].values, e[sup].values), 'n': int(len(e))}
+    for k, v in instrumento.items():
+        print(f"{k:62s} r={v['r']:+.3f} p_perm={v['p_perm']:.3f}")
+    OUT.write_text(json.dumps({'n_eventos': len(e), 'correlacoes': tabela, 'magnitude': magnitude, 'instrumento_vs_surpresa': instrumento},
                               indent=1, ensure_ascii=False), encoding='utf-8')
     print('salvo em', OUT)
 

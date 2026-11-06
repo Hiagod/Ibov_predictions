@@ -81,7 +81,7 @@ jupyter nbconvert --to notebook --execute --inplace \
 - Sementes fixadas (`set_seed`) e determinismo CUDA travado (`cudnn.deterministic=True`) em todo treino de LSTM.
 - Modelos estocásticos (XGBoost N=10 sementes, LSTM N=5 sementes) reportam média ± desvio, nunca um único run.
 - Toda transformação dependente de dados (scaler, PCA, calibração isotônica, ordem do ARIMA) é ajustada **somente no treino de cada fold** do walk-forward — nunca na série inteira.
-- **Ressalva:** os resultados originais deste projeto foram gerados numa T4 do Google Colab; a migração para a RTX 3070 local reproduziu os mesmos números dentro da variação esperada entre sementes (diferenças de ponto flutuante entre GPUs/versões de CUDA não são bit-a-bit idênticas, mas não mudam nenhuma conclusão). Os números da RTX 3070 são os reportados como definitivos no texto do TCC. Na reexecução com o carimbo corrigido, os modelos que não dependem do carimbo (ARIMA, LSTM só-preço em todos os lookbacks, LSTM+Copom) reproduziram os resultados anteriores bit a bit.
+- **Ressalva:** os resultados originais deste projeto foram gerados numa T4 do Google Colab; a migração para a RTX 3070 local reproduziu os mesmos números dentro da variação esperada entre sementes (diferenças de ponto flutuante entre GPUs/versões de CUDA não são bit-a-bit idênticas, mas não mudam nenhuma conclusão). Os números da RTX 3070 são os reportados como definitivos no texto do TCC. Na reexecução com o carimbo corrigido, os modelos que não dependem do carimbo reproduziram os resultados anteriores: XGBoost, LSTM só-preço em todos os lookbacks e LSTM+Copom idênticos; ARIMA com diferença máxima de 2×10⁻¹⁰.
 
 ## Alvo e anti-vazamento
 

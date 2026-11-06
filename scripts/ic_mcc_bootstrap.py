@@ -135,7 +135,8 @@ def r2_fora_da_amostra(y, previsoes, nome, bloco=BLOCO):
     lo, hi = np.percentile(boot, [2.5, 97.5])
     return {'modelo': nome, 'n_dias': int(len(yy)), 'r2': pont,
             'ep_bootstrap': float(boot.std()), 'ic95_lo': float(lo), 'ic95_hi': float(hi),
-            'rmse': float(np.sqrt(num.mean())), 'rmse_rw': float(np.sqrt(den.mean()))}
+            'rmse': float(np.sqrt(num.mean())), 'rmse_rw': float(np.sqrt(den.mean())),
+            'dp_previsao': float(p.std())}
 
 
 CORPO = Path(r'D:\tcc_ibov_corpo_completo\reports')
@@ -213,7 +214,7 @@ def robustez(y):
 def main():
     y, modelos, previsoes = carrega()
     saida = {'B': B, 'seed': SEED, 'bloco': BLOCO, 'margem': MARGEM,
-             'r2_vs_rw': [], 'absoluto': [], 'vs_lstm_preco': [], 'vs_random_walk': [],
+             'r2_vs_rw': [], 'absoluto': [], 'vs_lstm_preco': [], 'vs_random_walk': [], 'vs_passeio': [],
              'robustez': robustez(y), 'sensibilidade_bloco': {}}
     for nome in modelos:
         saida['r2_vs_rw'].append(r2_fora_da_amostra(y, previsoes, nome))
@@ -224,6 +225,12 @@ def main():
             saida['vs_lstm_preco'].append(comparacao(y, modelos, nome, 'LSTM-preco'))
     for nome in ['ARIMA', 'ARIMAX', 'XGBoost', 'LSTM-preco']:
         saida['vs_random_walk'].append(comparacao(y, modelos, nome, 'RandomWalk'))
+    # persistencia (sinal do retorno de hoje) nos dias de teste de cada modelo, nao so na interseccao
+    ret_hoje = pd.read_parquet(PROJECT / 'data' / 'processed' / 'features_preco.parquet')['ret_lag0'].values
+    for nome, (pos, pred) in modelos.items():
+        if nome != 'RandomWalk':
+            par = {nome: (pos, pred), 'persistencia': (pos, ret_hoje[pos] > 0)}
+            saida['vs_passeio'].append(comparacao(y, par, nome, 'persistencia'))
     for L in (5, 10, 20):
         saida['sensibilidade_bloco'][str(L)] = [
             {k: round(v, 4) if isinstance(v, float) else v for k, v in
@@ -239,7 +246,8 @@ def main():
                 f"contem0={r['ic_contem_zero']}  dentro_faixa={r['ic_dentro_da_faixa']}")
     for chave, titulo in (('absoluto', 'MCC agrupado (vs. acaso = 0)'),
                           ('vs_lstm_preco', 'delta-MCC vs. LSTM-preco'),
-                          ('vs_random_walk', 'delta-MCC vs. Random Walk')):
+                          ('vs_random_walk', 'delta-MCC vs. Random Walk'),
+                          ('vs_passeio', 'delta-MCC vs. persistencia, dias de cada modelo')):
         print(f'\n=== {titulo} ===')
         for r in saida[chave]:
             print(linha(r))
@@ -247,7 +255,7 @@ def main():
     for r in saida['r2_vs_rw']:
         print(f"{r['modelo']:<22} R2={r['r2']:+.3f}  EP={r['ep_bootstrap']:.3f}  "
               f"IC95[{r['ic95_lo']:+.3f}, {r['ic95_hi']:+.3f}]  "
-              f"RMSE={r['rmse']:.5f} (RW={r['rmse_rw']:.5f})")
+              f"RMSE={r['rmse']:.5f} (RW={r['rmse_rw']:.5f})  dp_prev={100 * r['dp_previsao']:.3f}%")
     print('\n=== cadeia de robustez: delta-MCC vs. baseline sem texto (mesma configuracao) ===')
     exclui = 0
     for r in saida['robustez']:

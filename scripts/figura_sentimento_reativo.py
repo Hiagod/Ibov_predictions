@@ -11,6 +11,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
 import numpy as np
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -29,6 +30,7 @@ def main():
     ax.axhline(0, color='black', lw=0.8)
     ax.set_xticks(x, [NOMES[r['variavel']] for r in res])
     ax.set_ylabel('Correlação de Pearson')
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f'{v:.1f}'.replace('.', ',').replace('-', '\u2212')))
     ax.set_title('Sentimento FinBERT: reativo vs. preditivo')
     ax.legend(fontsize=7.5, loc='upper right')
     fig.tight_layout()

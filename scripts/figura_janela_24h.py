@@ -77,6 +77,9 @@ def main():
     ax.text(1.85, y0 + h0 + 0.35, 'Copom 18h30', ha='left', va='bottom', fontsize=6.3,
             color='#B03A2E')
     ax.text(24.35, y0 + h0 + 0.35, 'fechamento', ha='left', va='bottom', fontsize=6.3)
+    # ata: sai as 8h, em ate seis dias uteis depois da reuniao; marcada no relogio, nao entra nas variaveis
+    ax.plot([15, 15], [AX, y0 + h0 + 0.1], color='#6B6B6B', lw=0.9, ls='--', zorder=0)
+    ax.text(15, y0 + h0 + 0.35, 'ata 8h (não usada)', ha='center', va='bottom', fontsize=6.3, color='#555555')
 
     # --- janelas de retorno ---
     def barra(x0, x1, y, h, cor, txt, alpha=1.0, seta=False):

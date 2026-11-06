@@ -225,10 +225,10 @@ Essa regra é coberta por uma suíte de 25 testes automatizados
 (`utils/test_tcc_utils.py`): 18 sobre corte e carimbo, contemplando corte
 exatamente no fechamento, transição de sexta para segunda-feira, feriados,
 horário de verão histórico, datas de transição do fechamento e os dois
-regimes do carimbo, e 3 sobre os próprios dados, que falham com o carimbo
-original (relatos de fechamento precisam sair depois do fechamento; a
-rotina editorial não pode saltar na migração; nenhuma manchete pode entrar
-na linha de um pregão já encerrado).
+regimes do carimbo, e 3 sobre os próprios dados (relatos de fechamento
+precisam sair depois do fechamento; a rotina editorial não pode saltar na
+migração; nenhuma manchete pode entrar na linha de um pregão já encerrado),
+dos quais os dois primeiros falham com o carimbo original.
 
 Todos os resultados deste trabalho usam o carimbo corrigido, que muda a
 linha de 1.742 manchetes (3%): 918 pelo erro de fuso e 974 publicadas entre
@@ -263,7 +263,7 @@ aproximadamente 25 primeiros pregões de 2019 permaneceriam sem valor
 definido até a primeira reunião do ano, em 06/02.
 
 Optou-se pelo comunicado — nota breve, liberada no mesmo dia — em
-detrimento da ata detalhada, publicada cerca de seis dias úteis depois, com
+detrimento da ata detalhada, publicada às 8h, em até seis dias úteis, com
 timestamp de publicação próprio: o comunicado é o documento que estava
 genuinamente disponível em tempo real no fechamento do dia da decisão,
 evitando a complexidade adicional de rastrear dois eventos textuais com
@@ -593,11 +593,13 @@ métricas são médias por semente e por fold. PT = Pesaran-Timmermann, p já
 corrigido por Holm sobre a família de 11 testes de habilidade
 direcional.)*
 
-Em erro de previsão, nenhum modelo supera o passeio aleatório: o R² fora da
-amostra, 1 − EQM(modelo)/EQM(passeio aleatório), é negativo nos dez demais,
+Em erro de previsão, nenhum modelo supera o passeio aleatório, que tem o
+menor RMSE: o R² fora da amostra, 1 − EQM(modelo)/EQM(passeio aleatório), é negativo nos dez demais,
 com intervalo inteiramente abaixo de zero em nove (exceção: XGBoost,
 −0,01), de −0,08 a −0,20 nas variantes com texto ou Copom e −0,07 na LSTM
-apenas com preço. O R² de −0,37 do ARIMAX reflete sobretudo quatro
+apenas com preço. Mais insumos significam mais variância: o desvio-padrão
+das previsões (média entre sementes) sobe de 0,41% na LSTM apenas com preço
+para 0,49%–0,72% com texto ou Copom, e o erro piora. O R² de −0,37 do ARIMAX reflete sobretudo quatro
 previsões extremas (de +6% a +20%, de setembro de 2021 a janeiro de 2022):
 sem elas, −0,05. As datas dessas previsões mudam com pequenas alterações
 nas variáveis exógenas, e o ARIMA puro também tem uma (+8,8%, em novembro
@@ -605,24 +607,25 @@ de 2021); a causa não foi diagnosticada. Quanto ao acerto de sinal, nenhum
 modelo atinge significância direcional a 5% após a correção; o menor
 p-valor corrigido é o do XGBoost (0,727).
 
-| Modelo | R² fora da amostra (IC) | DA agrupada (IC) | MCC agrupado (IC) | ΔMCC vs. LSTM preço (IC) |
-|---|---|---|---|---|
-| Random Walk | 0 (referência) | 48,5% [45,4; 51,6] | −0,03 [−0,09; +0,03] | — |
-| ARIMA | −0,06 [−0,17; −0,01] | 52,2% [49,1; 55,3] | +0,04 [−0,02; +0,10] | — |
-| ARIMAX (texto linear) | −0,37 [−1,20; −0,04] | 50,5% [47,7; 53,6] | 0,00 [−0,06; +0,06] | — |
-| XGBoost (preço) | −0,01 [−0,04; +0,02] | 52,3% [49,4; 55,0] | +0,05 [−0,01; +0,10] | — |
-| LSTM (preço) | −0,07 [−0,15; −0,02] | 48,6% [45,4; 51,6] | −0,03 [−0,09; +0,03] | — |
-| LSTM + BERTimbau k=8 | −0,10 [−0,20; −0,04] | 47,9% [44,9; 51,0] | −0,05 [−0,11; +0,02] | −0,02 [−0,08; +0,06] |
-| LSTM + BERTimbau k=30 | −0,12 [−0,23; −0,06] | 51,2% [48,3; 54,2] | +0,03 [−0,03; +0,08] | +0,05 [−0,01; +0,13] |
-| LSTM + FinBERT sentimento | −0,20 [−0,48; −0,07] | 48,9% [46,1; 51,7] | −0,02 [−0,07; +0,04] | +0,01 [−0,04; +0,08] |
-| LSTM + FinBERT emb. k=8 | −0,10 [−0,23; −0,03] | 49,6% [46,5; 52,3] | −0,01 [−0,07; +0,05] | +0,02 [−0,04; +0,08] |
-| LSTM + FinBERT emb. k=30 | −0,08 [−0,17; −0,03] | 50,0% [46,8; 52,8] | 0,00 [−0,06; +0,06] | +0,03 [−0,04; +0,09] |
-| LSTM + Copom | −0,16 [−0,37; −0,04] | 51,3% [48,3; 54,3] | +0,02 [−0,04; +0,08] | +0,05 [−0,01; +0,12] |
+| Modelo | R² fora da amostra (IC) | DA agrupada (IC) | MCC agrupado (IC) | ΔMCC vs. LSTM preço (IC) | ΔMCC vs. passeio aleatório (IC) |
+|---|---|---|---|---|---|
+| Random Walk | 0 (referência) | 48,5% [45,4; 51,6] | −0,03 [−0,09; +0,03] | — | — |
+| ARIMA | −0,06 [−0,17; −0,01] | 52,2% [49,1; 55,3] | +0,04 [−0,02; +0,10] | — | +0,07 [−0,04; +0,18] |
+| ARIMAX (texto linear) | −0,37 [−1,20; −0,04] | 50,5% [47,7; 53,6] | 0,00 [−0,06; +0,06] | — | +0,03 [−0,07; +0,14] |
+| XGBoost (preço) | −0,01 [−0,04; +0,02] | 52,3% [49,4; 55,0] | +0,05 [−0,01; +0,10] | — | +0,08 [−0,01; +0,16] |
+| LSTM (preço) | −0,07 [−0,15; −0,02] | 48,6% [45,4; 51,6] | −0,03 [−0,09; +0,03] | — | 0,00 [−0,10; +0,09] |
+| LSTM + BERTimbau k=8 | −0,10 [−0,20; −0,04] | 47,9% [44,9; 51,0] | −0,05 [−0,11; +0,02] | −0,02 [−0,08; +0,06] | −0,02 [−0,11; +0,08] |
+| LSTM + BERTimbau k=30 | −0,12 [−0,23; −0,06] | 51,2% [48,3; 54,2] | +0,03 [−0,03; +0,08] | +0,05 [−0,01; +0,13] | +0,05 [−0,03; +0,14] |
+| LSTM + FinBERT sentimento | −0,20 [−0,48; −0,07] | 48,9% [46,1; 51,7] | −0,02 [−0,07; +0,04] | +0,01 [−0,04; +0,08] | +0,01 [−0,08; +0,10] |
+| LSTM + FinBERT emb. k=8 | −0,10 [−0,23; −0,03] | 49,6% [46,5; 52,3] | −0,01 [−0,07; +0,05] | +0,02 [−0,04; +0,08] | +0,02 [−0,07; +0,11] |
+| LSTM + FinBERT emb. k=30 | −0,08 [−0,17; −0,03] | 50,0% [46,8; 52,8] | 0,00 [−0,06; +0,06] | +0,03 [−0,04; +0,09] | +0,02 [−0,07; +0,11] |
+| LSTM + Copom | −0,16 [−0,37; −0,04] | 51,3% [48,3; 54,3] | +0,02 [−0,04; +0,08] | +0,05 [−0,01; +0,12] | +0,05 [−0,05; +0,14] |
 
 *(Fontes: `reports/ic_mcc_bootstrap.json` e `reports/ic_da_bootstrap.json`.
 Intervalos de 95% por block bootstrap sobre dias, blocos de 10 dias,
 B = 10.000, com a previsão média entre sementes e os cinco folds
-concatenados. ΔMCC nos mesmos dias de teste.)*
+concatenados. ΔMCC nos mesmos dias de teste; o passeio aleatório é a
+persistência nos dias de teste de cada modelo.)*
 
 O desvio entre sementes não é a incerteza relevante para essa comparação, e
 sim a amostral. Com ela, o MCC agrupado de nenhum dos onze modelos se
@@ -630,8 +633,10 @@ distingue de zero (erro-padrão de aproximadamente 0,03). Frente à LSTM
 apenas com preço, nenhuma variante com texto ou Copom tem ΔMCC distinguível
 de zero, mas nenhum intervalo cabe na margem de equivalência de ±0,05 de
 MCC (aproximadamente ±2,5 pontos percentuais de DA): os limites superiores
-vão de +0,06 a +0,13. O desenho exclui, portanto, ganhos de MCC acima de
-aproximadamente 0,13, não efeitos menores.
+vão de +0,06 a +0,13. Frente ao passeio aleatório, nenhum dos dez modelos
+se distingue de zero, com limites superiores de +0,08 a +0,18. O desenho
+exclui, portanto, ganhos do texto sobre o preço acima de aproximadamente
+0,13 de MCC, não efeitos menores.
 
 Em termos de poder estatístico, com n=1.030 observações agregadas, o
 intervalo de 95% para a DA de um classificador sem habilidade direcional é
@@ -1124,7 +1129,7 @@ o tempo (r = 0,80) e fica, no teste, de 1,3 a 2,3 desvios-padrão acima da
 média do treino, permanece nas LSTMs com embeddings e no ARIMAX, embora o
 nível do volume e da Selic seja excluído por carregar tendência estrutural.
 Retirá-lo das quatro LSTMs com embeddings não altera o resultado (ΔMCC de
-−0,04 a +0,02, IC contendo zero; o R² melhora em duas e piora em duas;
+−0,04 a +0,01, IC contendo zero; o R² melhora em duas e piora em duas;
 `scripts/sensibilidade_n_noticias.py`). O ARIMAX não foi testado sem essa
 variável.
 
@@ -1195,9 +1200,11 @@ janela, em 48 eventos:
 ICs por bootstrap não são confiáveis; os p-valores são por permutação.)*
 
 Nenhum escore textual, em nível ou em variação entre comunicados, tem
-relação detectável com o gap, o pregão seguinte ou o alvo. A surpresa
-frente ao Focus aponta na direção esperada na reação (alta acima do
-esperado → queda; r = −0,28, p = 0,05 por permutação) e quase some no alvo
+relação detectável com a surpresa frente ao Focus (escore, r = +0,19,
+p = 0,19 por permutação; variação do escore, r = +0,12, p = 0,43; menor p entre
+os oito cruzamentos, 0,13), o gap, o pregão seguinte ou o alvo. Já a surpresa
+aponta na direção esperada na reação (alta acima do esperado → queda;
+r = −0,28, p = 0,05) e quase some no alvo
 (−0,04), mas nenhuma das 40 correlações resiste à correção de Holm (menor p
 corrigido de 1,00): é indício, e só |r| ≳ 0,3 seria detectável com 48
 eventos. O |retorno| médio nos dias de reação é de 1,19%, contra 1,03% nos
@@ -1404,9 +1411,10 @@ dessa tendência.
   pelos primeiros componentes principais descreve o noticiário do dia, não
   a direção do mercado.
 - **Ambiente computacional.** Os resultados aqui reportados foram gerados
-  em GPU RTX 3070. Os modelos que não dependem do carimbo corrigido (ARIMA,
-  LSTM apenas com preço em todos os lookbacks, LSTM+Copom) reproduzem os
-  resultados anteriores bit a bit.
+  em GPU RTX 3070. Os modelos que não dependem do carimbo corrigido reproduzem os
+  resultados anteriores: XGBoost, LSTM apenas com preço em todos os
+  lookbacks e LSTM+Copom são idênticos, e o ARIMA difere em no máximo
+  2×10⁻¹⁰.
 - **Estratégia financeira estilizada.** A avaliação de Sharpe e drawdown
   emprega estratégia mecânica simples, baseada no sinal da previsão, sem
   dimensionamento de posição, sem mecanismo de *stop-loss* e sem

@@ -16,6 +16,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
 import numpy as np
 import pandas as pd
 from scipy.optimize import brentq
@@ -86,9 +87,10 @@ def main():
     for nivel, px in ((0.5, p50), (0.8, p80)):
         ax.plot([0.46, px], [nivel, nivel], color='black', lw=0.5, ls='--', zorder=1)
         ax.plot([px, px], [0, nivel], color='black', lw=0.5, ls='--', zorder=1)
-        ax.text(px + 0.0015, nivel - 0.075, f'{int(nivel*100)}% em {pct(100*px)}%',
-                fontsize=6.2, va='top', ha='left')
-    ax.text(0.4705, 0.62, 'efeitos que o desenho\nnão distingue de zero\n(poder < 80%)',
+    # 50%: acima da linha tracejada, para nao cruzar a vertical dos 80%
+    ax.text(p50 - 0.002, 0.515, f'50% em {pct(100*p50)}%', fontsize=6.2, va='bottom', ha='right')
+    ax.text(p80 + 0.0015, 0.725, f'80% em {pct(100*p80)}%', fontsize=6.2, va='top', ha='left')
+    ax.text(0.4705, 0.6, 'efeitos que o desenho\nnão distingue de zero\n(poder < 80%)',
             fontsize=6.2, va='bottom', ha='left')
     # DAs observadas (marcas no eixo)
     for i, d in enumerate(da):
@@ -104,6 +106,7 @@ def main():
     ax.set_xticklabels(['46', '48', '50', '52', '54', '56', '58'])
     ax.set_xlabel('DA verdadeira (%)')
     ax.set_ylabel('Probabilidade de rejeitar $H_0$')
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f'{v:.1f}'.replace('.', ',')))
     sec = ax.secondary_xaxis('top', functions=(sharpe, da_de_sharpe))
     sec.set_xlabel('Sharpe equivalente (≈, sem custos)')
     sec.set_xticks([-1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0])

@@ -434,5 +434,47 @@
   "abs_gap_reacao": 0.007337487571281968,
   "abs_gap_demais": 0.0059588567503390845,
   "surpresas_nao_nulas_pela_mediana": 7
+ },
+ "instrumento_vs_surpresa": {
+  "escore (nivel) / surpresa (media Focus)": {
+   "r": 0.19270459181997587,
+   "p_perm": 0.18929053547322633,
+   "n": 48
+  },
+  "escore (nivel) / surpresa (mediana Focus)": {
+   "r": 0.2164470983442931,
+   "p_perm": 0.14039298035098244,
+   "n": 48
+  },
+  "delta do escore / surpresa (media Focus)": {
+   "r": 0.11705024894789541,
+   "p_perm": 0.42827858607069647,
+   "n": 48
+  },
+  "delta do escore / surpresa (mediana Focus)": {
+   "r": 0.1465439280931201,
+   "p_perm": 0.3221338933053347,
+   "n": 48
+  },
+  "escore sem anuncio (nivel) / surpresa (media Focus)": {
+   "r": -0.09770818943309253,
+   "p_perm": 0.5169741512924354,
+   "n": 48
+  },
+  "escore sem anuncio (nivel) / surpresa (mediana Focus)": {
+   "r": -0.03500553883231738,
+   "p_perm": 0.8168091595420229,
+   "n": 48
+  },
+  "delta do escore sem anuncio / surpresa (media Focus)": {
+   "r": 0.16057129608798967,
+   "p_perm": 0.271936403179841,
+   "n": 48
+  },
+  "delta do escore sem anuncio / surpresa (mediana Focus)": {
+   "r": 0.22063815522392954,
+   "p_perm": 0.13009349532523373,
+   "n": 48
+  }
  }
 }
