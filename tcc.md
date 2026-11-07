@@ -11,12 +11,12 @@ Este trabalho avalia se embeddings de manchetes financeiras em português
 (BERTimbau e FinBERT-PT-BR; 57.611 manchetes do InfoMoney, 2018–2024) e o
 viés dos comunicados do Copom melhoram a previsão do retorno diário (D+1)
 do Ibovespa frente a passeio aleatório, ARIMA/ARIMAX, XGBoost e LSTM apenas
-com preço, em validação walk-forward com embargo de 21 dias e todo ajuste
-restrito ao treino de cada partição (fold). Nenhum modelo supera o passeio
+com preço, em validação walk-forward, com embargo de 21 dias nas LSTMs e
+normalização, PCA e calibração restritos ao treino de cada partição (fold). Nenhum modelo supera o passeio
 aleatório em erro (R² fora da amostra de −0,01 a −0,37) nem o acaso em
 direção (Pesaran-Timmermann, menor p após Holm de 0,73), o ganho do texto
 não se distingue de zero em 26 combinações de desenho e, sob custo de 5
-pontos-base por operação, dez das onze estratégias têm índice de Sharpe
+pontos-base, dez das onze estratégias têm índice de Sharpe
 negativo ou nulo. Os intervalos de 95% excluem acurácia direcional acima de
 aproximadamente 55% em qualquer modelo (5 pontos percentuais sobre o acaso;
 Sharpe bruto de aproximadamente 1,1) e ganho do texto sobre o preço acima
@@ -74,8 +74,8 @@ As contribuições deste trabalho são as seguintes:
 1. **Protocolo anti-vazamento testável:** regra de atribuição temporal ao
    fechamento efetivo da B3 (17h ou 18h, conforme o período), com fuso
    histórico, inclusive o horário de verão; 25 testes automatizados,
-   inclusive sobre os próprios dados; todo ajuste restrito ao treino de
-   cada fold; análise de poder do desenho.
+   inclusive sobre os próprios dados; normalização, PCA e calibração
+   restritos ao treino de cada fold; análise de poder do desenho.
 2. **Evidência de que o texto descreve o retorno do dia**, e de que o
    encoder de domínio faz isso melhor (correlação contemporânea máxima de
    0,19 no FinBERT-PT-BR, contra 0,08 no BERTimbau), em comparação simétrica
@@ -138,7 +138,7 @@ características fundamentalistas, árvores e redes neurais alcançam poder
 explicativo estatística e economicamente significativo sobre retornos
 mensais (GU; KELLY; XIU, 2020). Em alta frequência, tendo o livro de
 ofertas como fonte de informação, redes neurais preveem a direção do preço
-em horizonte de segundos, com acurácia estável entre ativos de diferentes
+na direção do próximo movimento de preço, com acurácia estável entre ativos de diferentes
 setores (SIRIGNANO; CONT, 2019). Em ambos os casos, o que viabiliza a
 previsibilidade é estruturalmente distinto do problema aqui tratado: poder
 estatístico massivo obtido por meio de seção transversal, no primeiro
@@ -235,8 +235,9 @@ linha de 1.742 manchetes (3%): 918 pelo erro de fuso e 974 publicadas entre
 erro de fuso era vazamento no treino: até 24/09/2019, a linha D recebia
 manchetes publicadas até as 20h de D, com o pregão encerrado. Nenhum dia de
 teste era afetado (o primeiro é 08/01/2020), mas o treino sim (73%, 40%,
-28%, 21% e 17% das linhas de treino dos folds 1 a 5). Retreinadas com os
-dois carimbos, na mesma máquina e nas mesmas sementes, as cinco variantes
+28%, 21% e 17% das linhas de treino dos folds 1 a 5). O corte fixo às 17h,
+usado antes, atingia também o teste (1,8% das manchetes). Retreinadas com as
+duas versões, na mesma máquina e nas mesmas sementes, as cinco variantes
 de texto mudam o MCC agrupado em −0,01 a +0,03, com todos os intervalos
 contendo zero, o R² em 0,00 a +0,04 e o Sharpe bruto em −0,26 a +0,60, com
 três trocas de sinal; o líquido segue negativo nas cinco, sem alterar as
@@ -502,8 +503,10 @@ que os limites de treino de cada fold coincidam exatamente entre famílias
 de modelos; o teste da LSTM constitui, por construção, um subconjunto
 deslocado, em razão do embargo, do teste do baseline no mesmo fold. Uma
 consequência dessa fórmula é que os últimos 210 pregões da série (março a
-dezembro de 2024) não integram nenhum bloco de teste: a avaliação
-fora da amostra cobre o período de janeiro de 2020 a fevereiro de 2024.
+dezembro de 2024) não integram nenhum bloco de teste dos baselines: a
+avaliação fora da amostra cobre janeiro de 2020 a fevereiro de 2024 nos
+baselines e, por causa do embargo, fevereiro de 2020 a março de 2024 nas
+LSTMs, cujos testes deixam de fora os últimos 189 pregões.
 
 ### 4.4 Validação estatística
 
@@ -564,7 +567,8 @@ fechamento da posição anterior e a abertura da nova posição em uma
 reversão completa. Reportam-se o índice de Sharpe anualizado
 ($\overline{r}/\sigma_r \times \sqrt{252}$) e o drawdown máximo sobre a
 curva de patrimônio acumulado, tanto sem custo de transação (0 pontos-base,
-referência teórica) quanto com custo de 5 pontos-base por operação —
+referência teórica) quanto com custo de 5 pontos-base por unidade de
+posição negociada (10 na inversão entre comprado e vendido) —
 estimativa conservadora de corretagem e *slippage* para operações em
 índice ou futuro do Ibovespa na B3.
 
@@ -886,16 +890,15 @@ retornos adjacentes da mesma série ($t$ e $t+1$, com autocorrelação de
 lag-1 de $-0{,}159$) — não são independentes, de modo que um teste de
 diferença entre correlações independentes (ex.: Fisher z simples) não se
 aplica. Testou-se formalmente se a diferença $\Delta = r_{\text{contemp}}
-- r_{\text{predit}}$ é distinguível de zero via bootstrap (reamostragem de
-dias com reposição, $B=20\,000$, IC percentil): para `sent_polaridade`,
-$\Delta=+0{,}214$, IC 95% $[+0{,}095,\ +0{,}337]$, $p=0{,}0005$ (bicaudal,
-$p_{\text{Holm}}=0{,}002$). O mesmo teste, repetido para as quatro
-variáveis de sentimento agregado, permanece significativo a 5% mesmo após
-correção de Holm para essa família de 4 comparações — `sent_dispersao`
-($\Delta=+0{,}126$, $p=0{,}036$, $p_{\text{Holm}}=0{,}036$),
-`sent_pos_frac` ($\Delta=+0{,}157$, $p=0{,}0006$,
-$p_{\text{Holm}}=0{,}002$) e `sent_neg_frac` ($\Delta=-0{,}184$,
-$p=0{,}006$, $p_{\text{Holm}}=0{,}013$). A assimetria entre sentimento
+- r_{\text{predit}}$ é distinguível de zero por block bootstrap sobre dias
+(blocos de 10 dias, $B=20\,000$, IC percentil), porque o sentimento diário é
+autocorrelacionado: para `sent_polaridade`, $\Delta=+0{,}214$, IC 95%
+$[+0{,}147,\ +0{,}279]$, $p<0{,}001$ (bicaudal). O mesmo teste, repetido para as
+quatro variáveis de sentimento agregado, permanece significativo a 5% mesmo
+após correção de Holm: `sent_dispersao` ($\Delta=+0{,}126$, $p_{\text{Holm}}=0{,}035$),
+`sent_pos_frac` ($\Delta=+0{,}157$, $p_{\text{Holm}}<0{,}001$) e `sent_neg_frac`
+($\Delta=-0{,}184$, $p_{\text{Holm}}<0{,}001$). Com blocos de 21 dias, só a dispersão perde
+significância ($p=0{,}07$). A assimetria entre sentimento
 contemporâneo e preditivo é, portanto, uma diferença estatisticamente
 robusta. O que ela significa é outra questão, tratada a seguir: manchetes
 financeiras descrevem o pregão, e parte da correlação contemporânea é o
@@ -920,7 +923,7 @@ variáveis.
 do que ela informa, cada manchete foi classificada por regra explícita como
 *relato de mercado* (verbo de movimento de preço, como "sobe", "fecha" ou
 "despenca", junto a um ativo, índice ou código de negociação) ou *evento*
-(as demais). Os relatos são 21% do corpus; a auditoria manual de 40
+(as demais). Os relatos são 21% do corpus; a leitura de 40
 manchetes sorteadas por classe confirmou 38 relatos e 39 eventos
 (`scripts/diagnostico_relato_evento.py`). A correlação contemporânea
 concentra-se nos relatos (+0,25, IC [+0,22; +0,29]) e é pequena nos eventos
@@ -995,8 +998,8 @@ o retorno médio diário da estratégia apresenta estatística t=0,86
 desempenho é instável entre folds — Sharpe por fold de +0,84, +1,78,
 −1,69, +0,57 e +0,18, com perda de 23,6% no terceiro fold; e (iii)
 trata-se do valor máximo observado entre 11 estratégias derivadas de
-modelos sem habilidade direcional detectável (PT p=0,27 sem correção; MCC
-+0,006±0,069), de modo que o máximo de diversos modelos nulos tende a
+modelos sem habilidade direcional detectável (PT p=0,27 sem correção; MCC agrupado de
++0,02, IC [−0,04; +0,08]), de modo que o máximo de diversos modelos nulos tende a
 apresentar-se como positivo em decorrência de efeito de seleção, e não de
 capacidade preditiva genuína. Não há, portanto, evidência de vantagem
 econômica exploravel associada a esse resultado. O Random Walk, por nunca
@@ -1251,7 +1254,7 @@ comparações.
 A vantagem do XGBoost sobre as variantes de LSTM com texto, significativa
 após Holm apenas frente à LSTM+FinBERT-sentimento, requer interpretação
 criteriosa: não significa que o XGBoost preveja o mercado, uma vez que seu
-MCC de +0,028 ± 0,038 também não é distinguível de zero, e seu p-valor de
+MCC agrupado de +0,05 (IC [−0,01; +0,10]) também não é distinguível de zero, e seu p-valor de
 Pesaran-Timmermann, 0,727 após correção, está distante da significância.
 Significa, antes, que, entre modelos sem habilidade preditiva detectável, os
 modelos mais simples produzem erros de magnitude menor e
@@ -1293,7 +1296,7 @@ dessa tendência.
   horas poderia, em princípio, capturar janela de informação ainda não
   precificada, o que está fora do escopo deste trabalho.
 - **Viés de classificação do FinBERT-PT-BR.** O modelo utilizado
-  sobrerrepresenta sentimento negativo (53% contra 21% positivo) em
+  sobrerrepresenta sentimento negativo (53% contra 22% positivo) em
   período de alta do índice. Testou-se diretamente se esse viés é
   específico do FinBERT-PT-BR, comparando-o a um segundo modelo de
   linhagem independente e sem ajuste financeiro
@@ -1346,9 +1349,9 @@ dessa tendência.
   comparados a outras fontes.
 - **Edição de matérias após a publicação original.** Verificação direta no
   corpus, comparando os campos `datePublished` e `dateModified`, indicou
-  que 4,3% das matérias foram editadas mais de 24 horas após a publicação
-  original, e 2,6% mais de 7 dias depois — risco real, ainda que reduzido,
-  de que o texto coletado anos depois não coincida exatamente com o texto
+  que, entre as matérias com data de edição registrada (59%), 7,3% foram
+  editadas mais de 24 horas após a publicação original, e 4,4% mais de 7
+  dias depois; nas demais, não há como saber. Há, portanto, risco de que o texto coletado anos depois não coincida exatamente com o texto
   publicado em tempo real, por exemplo em razão de reescrita de manchete
   para fins de otimização em mecanismos de busca.
 - **Recorrência versus capacidade.** Testou-se um perceptron multicamadas
@@ -1535,11 +1538,11 @@ Todo o código-fonte deste trabalho — notebooks, scripts de coleta e o
 módulo `utils/tcc_utils.py` (fonte única das funções de corte temporal,
 geração do alvo e particionamento walk-forward) — está publicado no
 repositório do projeto no GitHub, com instruções de execução em
-`README.md` e ambiente fixado em `requirements.txt`. Os dados brutos,
-as variáveis derivadas e os resultados reportados neste trabalho podem
-ser integralmente reconstituídos a partir desse código, seguindo a ordem
-de execução documentada; por seu volume, não são distribuídos no mesmo
-repositório, mas podem ser disponibilizados sob solicitação. A suíte de
+`README.md` e ambiente fixado em `requirements.txt`. Por seu volume, os
+dados não são distribuídos no repositório, mas podem ser disponibilizados
+sob solicitação. A partir deles, o código reconstitui as variáveis e os
+resultados, seguindo a ordem de execução documentada; a coleta depende da
+disponibilidade das fontes e não foi repetida. A suíte de
 testes automatizados `utils/test_tcc_utils.py` (25 casos, cobrindo corte
 temporal, fechamento efetivo, carimbo, horário de verão, embargo, geração
 do alvo e verificações sobre os próprios dados) documenta e verifica

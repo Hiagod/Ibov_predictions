@@ -11,6 +11,7 @@
 
 # --- coleta e dados ---
 requests==2.34.2
+beautifulsoup4==4.15.0
 pandas==3.0.5
 numpy==2.4.6
 pyarrow==25.0.0
